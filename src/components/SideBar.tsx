@@ -14,41 +14,48 @@ function SideBar() {
 
   return (
     <Container>
-      <ProfileContainer visible={visibleMypage}>
+      <ProfileContainer>
         <ProfileBox>
-          <img src=""></img>
+          <img src="" alt="프로필 이미지" />
           <h3>홍길동</h3>
           <button onClick={toggleMypage}>^</button>
         </ProfileBox>
-        <ul>
+
+        <MypageMenu visible={visibleMypage}>
           <li>마이페이지</li>
           <li>내 상점</li>
           <li>채팅 목록</li>
-        </ul>
+        </MypageMenu>
       </ProfileContainer>
+
       <CategoryContainer>
         <ul>
           <h3>여성의류</h3>
-          {womensClothes.map(item => (
-            <li>{item}</li>
-          ))}
+          {womensClothes.map(
+            (
+              item,
+              index, // Added key attribute
+            ) => (
+              <li key={index}>{item}</li>
+            ),
+          )}
         </ul>
         <ul>
           <h3>남성의류</h3>
-          {mensClothes.map(item => (
-            <li>{item}</li>
+          {mensClothes.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
         <ul>
           <h3>패션잡화</h3>
-          {fashionGoods.map(item => (
-            <li>{item}</li>
+          {fashionGoods.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
         <ul>
           <h3>주얼리</h3>
-          {jewelry.map(item => (
-            <li>{item}</li>
+          {jewelry.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
       </CategoryContainer>
@@ -58,114 +65,89 @@ function SideBar() {
 
 export default SideBar;
 
-interface ProfileContainerProps {
-  visible: boolean;
-}
-
 const Container = styled.div`
   width: 300px;
-  height: 1506px;
-  gap: 12px;
-  box-sizing: border-box;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+`;
+
+const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
-  ul {
-    list-style: none;
-  }
-  border: 1px solid red;
-`;
-
-const ProfileContainer = styled.div<ProfileContainerProps>`
-  gap: 20px;
-  box-sizing: border-box;
-
-  ul {
-    max-height: ${props => (props.visible ? '132px' : '0')};
-    transition: max-height 0.3s ease-in-out;
-    overflow: hidden;
-    gap: 12px;
-
-    li {
-      height: 36px;
-      box-sizing: border-box;
-      padding: 8px 0px 8px 0px;
-      gap: 15px;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 20px;
-    }
-  }
-  border: 1px solid blue;
+  margin-bottom: 20px;
 `;
 
 const ProfileBox = styled.div`
-  width: 145px;
-  height: 50px;
-  gap: 6px;
-  box-sizing: border-box;
-
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
 
   img {
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-  }
-  h3 {
-    width: 56px;
-    height: 20px;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 20px;
-  }
-  button {
-    width: 10.5px;
-    height: 5.25px;
-    border: 2px;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
   }
 
-  border: 1px solid green;
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+  }
+`;
+
+const MypageMenu = styled.ul`
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-height: ${props => (props.visible ? '100px' : '0')};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
 `;
 
 const CategoryContainer = styled.div`
-  position: relative;
-  height: 1292px;
-  border-radius: 12px;
-  box-sizing: border-box;
-  padding: 12px 0px 12px 0px;
-
-  gap: 12px;
+  width: 100%;
 
   ul {
-    border-radius: 12px;
-    box-sizing: border-box;
-    pad: 12px 24px 12px 24px;
-
-    border: 1px solid navy;
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
 
     h3 {
-      height: 48px;
-      box-sizing: border-box;
-      padding: 14px 12px 14px 12px;
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 20px;
+      margin: 0;
+      margin-bottom: 10px;
+      font-size: 18px;
     }
 
     li {
-      height: 44px;
-      box-sizing: border-box;
-      justify-content: space-between;
-      padding: 12px 24px 12px 16px;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
+      background-color: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 10px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
-
-  border: 1px solid tomato;
 `;
