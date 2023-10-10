@@ -75,7 +75,6 @@ const Container = styled.div`
   margin-top: 3.125rem;
 
   border: 1px solid #ccc;
-  border-radius: 8px;
 
   ul {
     list-style-type: none;
@@ -93,23 +92,28 @@ const ProfileBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 50%;
+
+  width: 9.0625rem;
+  height: 3.125rem;
 
   h3 {
-    font-size: 20px;
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 1.25rem;
   }
 
   img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50px;
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 100%;
   }
 
   button {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    font-size: 24px;
+    font-size: 1.125rem;
     line-height: 1;
   }
 `;
@@ -118,7 +122,11 @@ const MypageMenu = styled.ul<MypageMenuProps>`
   padding: 0;
   margin: 0;
   width: 100%;
-  font-size: 16px;
+
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.25rem;
 
   display: flex;
   flex-direction: column;
@@ -128,36 +136,38 @@ const MypageMenu = styled.ul<MypageMenuProps>`
   max-height: ${props => (props.visible ? '132px' : '0')};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
-
-  li {
-    padding: 8px 0px 8px 0px;
-  }
+  gap: 0.625rem;
 `;
 
 const CategoryContainer = styled.div`
-  width: 252px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 12px 24px 12px 24px;
-  box-sizing: border-box;
 
   ul {
     padding: 0;
-    width: 252px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+    box-sizing: border-box;
 
     h3 {
       margin: 0;
-      font-size: 16px;
-      padding: 14px 12px 14px 12px;
+      font-size: 1rem;
+      font-style: normal;
+      font-weight: 700;
+      line-height: 1.25rem;
+      letter-spacing: 0.00625rem;
+      padding: 0.875rem 0.75rem;
     }
 
     li {
-      padding: 12px 24px 12px 16px;
-      font-size: 14px;
+      padding: 0.75rem 1.5rem 0.75rem 1rem;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 1.25rem;
+      letter-spacing: 0.00625rem;
     }
   }
 `;

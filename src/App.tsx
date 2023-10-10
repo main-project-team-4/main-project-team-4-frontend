@@ -23,6 +23,7 @@ export default App;
 
 const Container = styled.div`
   max-width: 120rem;
+  margin: 0 auto;
 `;
 const Content = styled.div`
   display: flex;
