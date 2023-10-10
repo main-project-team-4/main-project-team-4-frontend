@@ -1,5 +1,9 @@
-function Main() {
-  return <div>Main페이지</div>;
-}
+import CardLayout from '../components/CardLayout';
 
-export default Main;
+export default function Main() {
+  return (
+    <>
+      <CardLayout />
+    </>
+  );
+}

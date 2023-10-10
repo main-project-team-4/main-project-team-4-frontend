@@ -33,8 +33,8 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1440px;
-  max-height: 802px;
+  max-width: 90rem;
+  max-height: 50.125rem;
 
   border: 1px solid red;
 `;
@@ -43,37 +43,37 @@ const InputLayout = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 50px;
+  gap: 1.25rem;
+  margin-bottom: 3.125rem;
 `;
 
 const Input = styled.input`
   box-sizing: border-box;
   border: none;
   background-color: #f4f4f4;
-  width: 500px;
-  height: 48px;
-  border-radius: 12px;
-  padding: 13px 20px;
+  width: 31.25rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  padding: 0.8125rem 1.25rem;
 `;
 
 const Btn = styled.button<FontProps>`
   border: none;
   background-color: ${props => props.color};
-  width: 500px;
-  height: 58px;
-  border-radius: 12px;
+  width: 31.25rem;
+  height: 3.625rem;
+  border-radius: 0.75rem;
   color: ${props => props.font};
-  font-size: 22px;
-  margin-bottom: 20px;
+  font-size: 1.375rem;
+  margin-bottom: 1.25rem;
   cursor: pointer;
 `;
 
 const SignUpLayout = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  width: 500px;
+  margin-top: 1.25rem;
+  width: 31.25rem;
   justify-content: space-between;
   align-items: center;
 `;
