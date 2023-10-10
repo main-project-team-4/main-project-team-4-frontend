@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 function SideBar() {
@@ -6,13 +7,18 @@ function SideBar() {
   const fashionGoods = ['가방', '지갑', '시계', '모자', '안경/선글라스', '기타'];
   const jewelry = ['반지', '목걸이', '귀걸이/피어싱', '팔찌', '기타'];
 
+  const [visibleMypage, setVisibleMypage] = useState(false);
+  const toggleMypage = () => {
+    setVisibleMypage(!visibleMypage);
+  };
+
   return (
     <Container>
-      <ProfileContainer>
+      <ProfileContainer visible={visibleMypage}>
         <ProfileBox>
           <img src=""></img>
           <h3>홍길동</h3>
-          <button>^</button>
+          <button onClick={toggleMypage}>^</button>
         </ProfileBox>
         <ul>
           <li>마이페이지</li>
@@ -52,6 +58,10 @@ function SideBar() {
 
 export default SideBar;
 
+interface ProfileContainerProps {
+  visible: boolean;
+}
+
 const Container = styled.div`
   width: 300px;
   height: 1506px;
@@ -68,13 +78,14 @@ const Container = styled.div`
   border: 1px solid red;
 `;
 
-const ProfileContainer = styled.div`
-  height: 202px;
+const ProfileContainer = styled.div<ProfileContainerProps>`
   gap: 20px;
   box-sizing: border-box;
 
   ul {
-    height: 132px;
+    max-height: ${props => (props.visible ? '132px' : '0')};
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
     gap: 12px;
 
     li {
@@ -121,6 +132,7 @@ const ProfileBox = styled.div`
 `;
 
 const CategoryContainer = styled.div`
+  position: relative;
   height: 1292px;
   border-radius: 12px;
   box-sizing: border-box;
