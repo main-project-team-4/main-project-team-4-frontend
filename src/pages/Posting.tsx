@@ -1,5 +1,7 @@
+import DetailPosting from '../components/DetailPosting';
+
 function Posting() {
-  return <div>Posting</div>;
+  return <DetailPosting />;
 }
 
 export default Posting;
