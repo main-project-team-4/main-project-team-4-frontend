@@ -32,6 +32,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {  
   max-width: 120rem;
+  padding: 0 10rem;
   /* background-color: pink; */
   line-height: 1;
 }
