@@ -17,46 +17,47 @@ const Layout = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1600px;
-  height: 78px;
-  padding: 21px, 160px;
+  width: 100%;
+  height: 4.875rem;
+  padding: 1.3125rem, 10rem;
+
   border: 1px solid red;
 `;
 
 const Logo = styled.img`
-  width: 56px;
-  height: 32px;
-  
+  width: 3.5rem;
+  height: 2rem;
+
   border: 1px solid blue;
 `;
 
 const Search = styled.div`
   box-sizing: border-box;
-  width: 395px;
-  height: 32px;
-  border-radius: 50px;
-  padding: 24px 14px;
+  width: 24.6875rem;
+  height: 2rem;
+  border-radius: 3.125rem;
+  padding: 1.5rem 0.875rem;
 
   border: 1px solid blue;
 `;
 
 const BtnLayout = styled.div`
   display: flex;
-  gap: 10px;
+  gap: 0.625rem;
 
   border: 1px solid blue;
 `;
 
 const Chat = styled.button`
-  width: 90px;
-  height: 36px;
+  width: 5.625rem;
+  height: 2.25rem;
 
   border: 1px solid red;
 `;
 
 const AddItem = styled.button`
-  width: 90px;
-  height: 36px;
+  width: 5.625rem;
+  height: 2.25rem;
 
   border: 1px solid red;
 `;

@@ -30,7 +30,10 @@ footer, header, hgroup, main, menu, nav, section {
 *[hidden] {
     display: none;
 }
-body {
+body {  
+  max-width: 120rem;
+  padding: 0 10rem;
+  /* background-color: pink; */
   line-height: 1;
 }
 menu, ol, ul {
@@ -54,8 +57,6 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  background-color:${props => props.theme.bgColor};
-  color:${props => props.theme.textColor};
   line-height: 1.2;
 }
 a {
