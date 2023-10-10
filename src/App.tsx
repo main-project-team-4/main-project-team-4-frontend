@@ -8,13 +8,14 @@ function App() {
   return (
     <>
       <GlobalStyle />
-       <Container>
+      <Container>
         <Header />
-         <Content>
+        <Content>
           <SideBar />
           <Outlet />
-         </Content>
-        </Container>
+        </Content>
+      </Container>
+    </>
   );
 }
 
