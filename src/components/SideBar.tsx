@@ -63,11 +63,16 @@ interface MypageMenuProps {
 }
 
 const Container = styled.div`
-  width: 300px;
-  padding: 10px;
+  width: 18.75rem;
+  gap: 0.75rem;
+
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+
+  margin-left: 10rem;
+  margin-top: 3.125rem;
 
   border: 1px solid #ccc;
   border-radius: 8px;

@@ -26,6 +26,9 @@ export default function Login() {
   );
 }
 
+interface FontProps {
+  font: string;
+}
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
@@ -54,7 +57,7 @@ const Input = styled.input`
   padding: 13px 20px;
 `;
 
-const Btn = styled.button`
+const Btn = styled.button<FontProps>`
   border: none;
   background-color: ${props => props.color};
   width: 500px;

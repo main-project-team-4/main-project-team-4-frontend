@@ -17,7 +17,7 @@ const Layout = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-width: 1600px;
+  max-width: 120rem;
   height: 78px;
   padding: 21px, 160px;
   border: 1px solid red;
@@ -26,7 +26,7 @@ const Layout = styled.div`
 const Logo = styled.img`
   width: 56px;
   height: 32px;
-  
+
   border: 1px solid blue;
 `;
 
