@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 
 function SideBar() {
@@ -6,43 +7,48 @@ function SideBar() {
   const fashionGoods = ['가방', '지갑', '시계', '모자', '안경/선글라스', '기타'];
   const jewelry = ['반지', '목걸이', '귀걸이/피어싱', '팔찌', '기타'];
 
+  const [visibleMypage, setVisibleMypage] = useState(false);
+  const toggleMypage = () => {
+    setVisibleMypage(!visibleMypage);
+  };
+
   return (
     <Container>
       <ProfileContainer>
         <ProfileBox>
-          <img src=""></img>
+          <img src="" alt="프로필 이미지" />
           <h3>홍길동</h3>
-          <button>^</button>
+          <button onClick={toggleMypage}>^</button>
         </ProfileBox>
-        <ul>
+        <MypageMenu visible={visibleMypage}>
           <li>마이페이지</li>
           <li>내 상점</li>
           <li>채팅 목록</li>
-        </ul>
+        </MypageMenu>
       </ProfileContainer>
       <CategoryContainer>
         <ul>
           <h3>여성의류</h3>
-          {womensClothes.map(item => (
-            <li>{item}</li>
+          {womensClothes.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
         <ul>
           <h3>남성의류</h3>
-          {mensClothes.map(item => (
-            <li>{item}</li>
+          {mensClothes.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
         <ul>
           <h3>패션잡화</h3>
-          {fashionGoods.map(item => (
-            <li>{item}</li>
+          {fashionGoods.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
         <ul>
           <h3>주얼리</h3>
-          {jewelry.map(item => (
-            <li>{item}</li>
+          {jewelry.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </ul>
       </CategoryContainer>
@@ -52,108 +58,101 @@ function SideBar() {
 
 export default SideBar;
 
+interface MypageMenuProps {
+  visible: boolean;
+}
+
 const Container = styled.div`
   width: 300px;
-  height: 1506px;
-  gap: 12px;
-  box-sizing: border-box;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
 
   ul {
-    list-style: none;
+    list-style-type: none;
   }
-  border: 1px solid red;
 `;
 
 const ProfileContainer = styled.div`
-  height: 202px;
-  gap: 20px;
-  box-sizing: border-box;
-
-  ul {
-    height: 132px;
-    gap: 12px;
-
-    li {
-      height: 36px;
-      box-sizing: border-box;
-      padding: 8px 0px 8px 0px;
-      gap: 15px;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 20px;
-    }
-  }
-  border: 1px solid blue;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ProfileBox = styled.div`
-  width: 145px;
-  height: 50px;
-  gap: 6px;
-  box-sizing: border-box;
-
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 50%;
+
+  h3 {
+    font-size: 20px;
+  }
 
   img {
     width: 50px;
     height: 50px;
-    border-radius: 100%;
-  }
-  h3 {
-    width: 56px;
-    height: 20px;
-    font-weight: 700;
-    font-size: 20px;
-    line-height: 20px;
-  }
-  button {
-    width: 10.5px;
-    height: 5.25px;
-    border: 2px;
+    border-radius: 50px;
   }
 
-  border: 1px solid green;
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+  }
+`;
+
+const MypageMenu = styled.ul<MypageMenuProps>`
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  font-size: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+
+  max-height: ${props => (props.visible ? '132px' : '0')};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+
+  li {
+    padding: 8px 0px 8px 0px;
+  }
 `;
 
 const CategoryContainer = styled.div`
-  height: 1292px;
-  border-radius: 12px;
+  width: 252px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 24px 12px 24px;
   box-sizing: border-box;
-  padding: 12px 0px 12px 0px;
-
-  gap: 12px;
 
   ul {
-    border-radius: 12px;
-    box-sizing: border-box;
-    pad: 12px 24px 12px 24px;
-
-    border: 1px solid navy;
+    padding: 0;
+    width: 252px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
     h3 {
-      height: 48px;
-      box-sizing: border-box;
-      padding: 14px 12px 14px 12px;
-      font-weight: 700;
+      margin: 0;
       font-size: 16px;
-      line-height: 20px;
+      padding: 14px 12px 14px 12px;
     }
 
     li {
-      height: 44px;
-      box-sizing: border-box;
-      justify-content: space-between;
       padding: 12px 24px 12px 16px;
       font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
     }
   }
-
-  border: 1px solid tomato;
 `;
