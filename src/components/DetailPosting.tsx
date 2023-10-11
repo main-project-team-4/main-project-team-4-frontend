@@ -31,16 +31,13 @@ export default function DetailPosting() {
 }
 
 const Container = styled.div`
-  width: 75rem;
+  width: 95rem;
   height: 40.1875rem;
-  margin: 7.745rem 10rem 6.25rem 10rem;
   box-sizing: border-box;
 
   display: flex;
   align-items: flex-start;
-  gap: 3.125rem;
-
-  border: 1px solid red;
+  gap: 3.12rem;
 `;
 
 const ImageComtainer = styled.div`
@@ -54,8 +51,6 @@ const ImageComtainer = styled.div`
   .firstImg {
     width: 37.5rem;
     height: 30.625rem;
-  }
-  .restImg {
   }
 `;
 const ImageBox = styled.div`
@@ -158,8 +153,6 @@ const PriceBox = styled.div`
     cursor: pointer;
 
     border-radius: 0.5rem;
-
-    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.04);
 
     &:hover {
     }

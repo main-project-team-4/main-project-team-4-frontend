@@ -37,6 +37,7 @@ const Layout = styled.div`
   max-height: 50.125rem;
 
   border: 1px solid red;
+  margin: auto auto;
 `;
 
 const InputLayout = styled.div`

@@ -31,7 +31,7 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {  
-  max-width: 120rem;
+  /* max-width: 120rem; */
   /* background-color: pink; */
   line-height: 1;
 }
