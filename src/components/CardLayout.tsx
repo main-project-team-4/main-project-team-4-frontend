@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Card from './Card';
+import MypageCard from './MypageCard';
 
 export default function CardLayout() {
   return (
@@ -7,7 +8,7 @@ export default function CardLayout() {
       <Layout>
         <Title>Top 20</Title>
         <CardWrapper>
-          <Card />
+          <MypageCard />
           <Card />
           <Card />
           <Card />

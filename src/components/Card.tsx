@@ -41,6 +41,11 @@ const TextLayout = styled.div`
   h1 {
     font-size: 1.5rem;
     font-weight: 500;
+    height: 2.25rem;
+    width: 16rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 `;
 
