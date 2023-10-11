@@ -119,8 +119,6 @@ const ProfileBox = styled.div`
 `;
 
 const MypageMenu = styled.ul<MypageMenuProps>`
-  padding: 0;
-  margin: 0;
   width: 100%;
 
   font-size: 1rem;
