@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
+import Store from './pages/Store';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: 'mypage',
         element: <Mypage />,
+      },
+      {
+        path: 'store',
+        element: <Store />,
       },
     ],
   },
