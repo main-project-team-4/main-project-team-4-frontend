@@ -16,41 +16,52 @@ function SideBar() {
     <Container>
       <ProfileContainer>
         <ProfileBox>
-          <img src="" alt="프로필 이미지" />
+          <span className="person-icon material-symbols-outlined">person</span>
           <h3>홍길동</h3>
-          <button onClick={toggleMypage}>^</button>
+          <button onClick={toggleMypage}>
+            <span className="expand-icon material-symbols-outlined">expand_more</span>
+          </button>
         </ProfileBox>
         <MypageMenu visible={visibleMypage}>
           <li>마이페이지</li>
           <li>내 상점</li>
           <li>채팅 목록</li>
+          <li>로그아웃</li>
         </MypageMenu>
       </ProfileContainer>
       <CategoryContainer>
-        <ul>
-          <h3>여성의류</h3>
-          {womensClothes.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-        <ul>
-          <h3>남성의류</h3>
-          {mensClothes.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-        <ul>
-          <h3>패션잡화</h3>
-          {fashionGoods.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
-        <ul>
-          <h3>주얼리</h3>
-          {jewelry.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+        <div>
+          <ul>
+            <h3>여성의류</h3>
+            {womensClothes.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <h3>남성의류</h3>
+            {mensClothes.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <h3>패션잡화</h3>
+            {fashionGoods.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <ul>
+            <h3>주얼리</h3>
+            {jewelry.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
       </CategoryContainer>
     </Container>
   );
@@ -63,7 +74,7 @@ interface MypageMenuProps {
 }
 
 const Container = styled.div`
-  width: 18.75rem;
+  width: 28.75rem;
   gap: 0.75rem;
 
   display: flex;
@@ -71,10 +82,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 
-  margin-left: 10rem;
-  margin-top: 3.125rem;
-
-  border: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 3.12rem 0rem 0rem 10rem;
 
   ul {
     list-style-type: none;
@@ -90,10 +99,11 @@ const ProfileContainer = styled.div`
 
 const ProfileBox = styled.div`
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.375rem;
 
-  width: 9.0625rem;
+  width: 9.7rem;
   height: 3.125rem;
 
   h3 {
@@ -103,10 +113,17 @@ const ProfileBox = styled.div`
     line-height: 1.25rem;
   }
 
-  img {
+  .person-icon {
+    background-color: #d9d9d9;
     width: 3.125rem;
     height: 3.125rem;
     border-radius: 100%;
+    color: #c1c7cd;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   button {
@@ -129,18 +146,26 @@ const MypageMenu = styled.ul<MypageMenuProps>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-sizing: border-box;
+  margin-top: 1.25rem;
 
   max-height: ${props => (props.visible ? '132px' : '0')};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
-  gap: 0.625rem;
+  gap: 0.75rem;
 `;
 
 const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  div {
+    width: 100%;
+
+    margin-bottom: 0.75rem;
+    background-color: #fff;
+    border-radius: 0.75rem;
+  }
 
   ul {
     padding: 0;

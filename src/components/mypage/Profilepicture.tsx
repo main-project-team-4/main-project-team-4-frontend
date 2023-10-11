@@ -4,10 +4,10 @@ function Profilepicture() {
   return (
     <Container>
       <ProfileImage>
-        <img src="https://ifh.cc/g/2j7z11.jpg" />
+        <span className="material-symbols-outlined">person</span>
       </ProfileImage>
       <PencilImage>
-        <img src="https://ifh.cc/g/J16KtK.png" />
+        <span className="material-symbols-outlined">edit</span>
       </PencilImage>
       <h3>홍길동</h3>
     </Container>
@@ -46,12 +46,18 @@ const ProfileImage = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  span {
+    font-size: 4.375rem;
+    color: #c1c7cd;
+  }
 `;
 
 const PencilImage = styled.div`
   width: 3.125rem;
   height: 3.125rem;
   flex-shrink: 0;
+  background-color: #dbdbdb;
 
   cursor: pointer;
 
@@ -60,4 +66,8 @@ const PencilImage = styled.div`
   position: absolute;
   top: 6rem;
   right: 0rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
