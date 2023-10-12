@@ -39,6 +39,7 @@ const Title = styled.p`
   font-size: 28px;
   font-weight: 600;
   line-height: 33px;
+  align-self: flex-start;
 `;
 
 const ViewAll = styled.button`
