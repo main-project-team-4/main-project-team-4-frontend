@@ -32,6 +32,7 @@ const Container = styled.div`
   width: 95.0575rem;
   height: 23.9375rem;
   margin-top: 3.75rem;
+  margin-bottom: 6.25rem;
 
   padding: 3.12rem 25.5rem 1rem 25.5rem;
   box-sizing: border-box;

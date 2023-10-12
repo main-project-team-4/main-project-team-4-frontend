@@ -3,18 +3,23 @@ import Header from './components/Header';
 import SideBar from './components/SideBar';
 import { GlobalStyle } from './styles/GlobalStyle';
 import styled from 'styled-components';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <Container>
-        <Header />
-        <Content>
-          <SideBar />
-          <Outlet />
-        </Content>
-      </Container>
+      <QueryClientProvider client={queryClient}>
+        <GlobalStyle />
+        <Container>
+          <Header />
+          <Content>
+            <SideBar />
+            <Outlet />
+          </Content>
+        </Container>
+      </QueryClientProvider>
     </>
   );
 }

@@ -1,11 +1,17 @@
 import { useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { getGoods } from '../apis/sidebar/goods';
 
 function SideBar() {
   const womensClothes = ['아우터', '상의', '하의', '원피스', '신발'];
   const mensClothes = ['아우터', '상의', '하의', '신발'];
   const fashionGoods = ['가방', '지갑', '시계', '모자', '안경/선글라스', '기타'];
   const jewelry = ['반지', '목걸이', '귀걸이/피어싱', '팔찌', '기타'];
+
+  // 카테고리 목록 가져오기
+  const { data } = useQuery('category', getGoods);
+  console.log(data);
 
   const [visibleMypage, setVisibleMypage] = useState(false);
   const toggleMypage = () => {
