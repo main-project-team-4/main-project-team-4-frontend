@@ -20,8 +20,6 @@ export default function ReviewCard() {
         </Profile>
         <Review open={open}>
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id aliquid rem beatae, sunt quisquam eum repellendus ipsam accusantium quaerat quos tenetur sed aspernatur? Nisi voluptate quae sit,
-          amet commodi quo. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa iure quidem itaque dolore facere facilis odit, harum voluptates vero. Maxime et expedita odio odit saepe
-          distinctio quo quibusdam vel maiores.
         </Review>
         <ViewAll onClick={viewHandler}>
           {open ? '접기' : '전체보기'}
@@ -74,7 +72,7 @@ const Info = styled.div`
 
 const Review = styled.div`
   font-weight: 400;
-  height: ${props => (props.open ? 'auto' : '2.25rem')};
+  height: ${props => (props.open ? 'auto' : '2.5rem')};
   overflow: hidden;
   margin-bottom: 0.625rem;
 `;

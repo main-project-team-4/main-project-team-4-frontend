@@ -1,9 +1,19 @@
 import CardLayout from '../components/CardLayout';
+import ReviewCard from '../components/ReviewCard';
+import Tab from '../components/Tab';
 
 export default function Main() {
   return (
     <>
-      <CardLayout />
+      {/* <CardLayout /> */}
+      <Tab
+        tabs={[
+          { name: '판매상품', content: <ReviewCard /> },
+          { name: '상점리뷰', content: <CardLayout /> },
+          { name: '팔로잉', content: <CardLayout /> },
+          { name: '팔로워', content: <CardLayout /> },
+        ]}
+      />
     </>
   );
 }
