@@ -23,7 +23,7 @@ export default function ReviewCard() {
         </Review>
         <ViewAll onClick={viewHandler}>
           {open ? '접기' : '전체보기'}
-          <span class="material-symbols-outlined">{open ? 'expand_less' : 'expand_more'}</span>
+          <span className="material-symbols-outlined">{open ? 'expand_less' : 'expand_more'}</span>
         </ViewAll>
       </Layout>
     </>

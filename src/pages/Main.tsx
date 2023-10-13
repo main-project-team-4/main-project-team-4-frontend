@@ -5,15 +5,15 @@ import Tab from '../components/Tab';
 export default function Main() {
   return (
     <>
-      {/* <CardLayout /> */}
-      <Tab
+      <CardLayout />
+      {/* <Tab
         tabs={[
           { name: '판매상품', content: <ReviewCard /> },
           { name: '상점리뷰', content: <CardLayout /> },
           { name: '팔로잉', content: <CardLayout /> },
           { name: '팔로워', content: <CardLayout /> },
         ]}
-      />
+      /> */}
     </>
   );
 }

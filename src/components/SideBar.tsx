@@ -22,7 +22,7 @@ function SideBar() {
             <span className="expand-icon material-symbols-outlined">expand_more</span>
           </button>
         </ProfileBox>
-        <MypageMenu visible={visibleMypage}>
+        <MypageMenu className={visibleMypage ? 'visible' : ''}>
           <li>마이페이지</li>
           <li>내 상점</li>
           <li>채팅 목록</li>
@@ -68,10 +68,6 @@ function SideBar() {
 }
 
 export default SideBar;
-
-interface MypageMenuProps {
-  visible: boolean;
-}
 
 const Container = styled.div`
   width: 28.75rem;
@@ -135,23 +131,32 @@ const ProfileBox = styled.div`
   }
 `;
 
-const MypageMenu = styled.ul<MypageMenuProps>`
+const MypageMenu = styled.ul`
   width: 100%;
-
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.25rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 1.25rem;
-
-  max-height: ${props => (props.visible ? '132px' : '0')};
+  max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
   gap: 0.75rem;
+
+  &.visible {
+    max-height: 14rem;
+  }
+
+  li {
+    padding: 0.75rem 1.5rem 0.75rem 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.25rem;
+    letter-spacing: 0.00625rem;
+  }
 `;
 
 const CategoryContainer = styled.div`
