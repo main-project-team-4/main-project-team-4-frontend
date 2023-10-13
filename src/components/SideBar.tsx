@@ -1,21 +1,40 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getGoods } from '../apis/sidebar/goods';
+import { getGoodsLarge, getGoodsMid } from '../apis/sidebar/goods';
+import { useNavigate } from 'react-router-dom';
+
+type ItemType = {
+  id: number;
+  name: string;
+};
 
 function SideBar() {
-  const womensClothes = ['아우터', '상의', '하의', '원피스', '신발'];
-  const mensClothes = ['아우터', '상의', '하의', '신발'];
-  const fashionGoods = ['가방', '지갑', '시계', '모자', '안경/선글라스', '기타'];
-  const jewelry = ['반지', '목걸이', '귀걸이/피어싱', '팔찌', '기타'];
+  const navigate = useNavigate();
 
-  // 카테고리 목록 가져오기
-  const { data } = useQuery('category', getGoods);
-  console.log(data);
+  // 카테고리 대분류 가져오기
+  const { data } = useQuery('categoryLarge', getGoodsLarge);
 
-  const [visibleMypage, setVisibleMypage] = useState(false);
+  // 클릭시 대분류 페이지로 이동
+  const onClickCategoryLarge = (categoryLargeName: string) => {
+    navigate(`${categoryLargeName}`);
+  };
+
+  // 카테고리 중분류 가져오기
+  const { data: data1 } = useQuery(['categoryMid', 1], () => getGoodsMid('1'));
+  const { data: data2 } = useQuery(['categoryMid', 2], () => getGoodsMid('2'));
+  const { data: data3 } = useQuery(['categoryMid', 3], () => getGoodsMid('3'));
+  const { data: data4 } = useQuery(['categoryMid', 4], () => getGoodsMid('4'));
+
+  const allData = [data1?.data, data2?.data, data3?.data, data4?.data];
+
+  const [visibleMypage, setVisibleMypage] = useState('0');
   const toggleMypage = () => {
-    setVisibleMypage(!visibleMypage);
+    if (visibleMypage === '0') {
+      setVisibleMypage('1');
+    } else {
+      setVisibleMypage('0');
+    }
   };
 
   return (
@@ -36,38 +55,14 @@ function SideBar() {
         </MypageMenu>
       </ProfileContainer>
       <CategoryContainer>
-        <div>
-          <ul>
-            <h3>여성의류</h3>
-            {womensClothes.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <h3>남성의류</h3>
-            {mensClothes.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <h3>패션잡화</h3>
-            {fashionGoods.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <ul>
-            <h3>주얼리</h3>
-            {jewelry.map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
-        </div>
+        {data?.data.map((item: ItemType) => {
+          return (
+            <ul key={item.id}>
+              <h3 onClick={() => onClickCategoryLarge(item.name)}>{item.name}</h3>
+              {allData[item.id - 1]?.map((subItem: ItemType) => <li key={subItem.id}>{subItem.name}</li>)}
+            </ul>
+          );
+        })}
       </CategoryContainer>
     </Container>
   );
@@ -76,7 +71,7 @@ function SideBar() {
 export default SideBar;
 
 interface MypageMenuProps {
-  visible: boolean;
+  visible: string;
 }
 
 const Container = styled.div`
@@ -154,7 +149,7 @@ const MypageMenu = styled.ul<MypageMenuProps>`
   align-items: center;
   margin-top: 1.25rem;
 
-  max-height: ${props => (props.visible ? '132px' : '0')};
+  max-height: ${props => (props.visible === '1' ? '132px' : '0')};
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
   gap: 0.75rem;
@@ -189,6 +184,9 @@ const CategoryContainer = styled.div`
       line-height: 1.25rem;
       letter-spacing: 0.00625rem;
       padding: 0.875rem 0.75rem;
+      background-color: white;
+
+      cursor: pointer;
     }
 
     li {
