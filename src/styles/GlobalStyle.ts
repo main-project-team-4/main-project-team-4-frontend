@@ -31,9 +31,9 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {  
-  /* max-width: 120rem; */
-  /* background-color: pink; */
+  max-width: 120rem;
   line-height: 1;
+  overflow: hidden;
 }
 menu, ol, ul {
   list-style: none;

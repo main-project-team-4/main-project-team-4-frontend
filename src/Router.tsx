@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp';
 import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
 import Store from './pages/Store';
+import ViewItems from './pages/ViewItems';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,12 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Main />,
+        children: [
+          {
+            path: ':items/:major?/:middle?',
+            element: <ViewItems />,
+          },
+        ],
       },
 
       {

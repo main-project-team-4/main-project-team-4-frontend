@@ -29,6 +29,7 @@ export default App;
 const Container = styled.div`
   max-width: 120rem;
   margin: 0 auto;
+  background-color: #f2f4f8;
 `;
 const Content = styled.div`
   display: flex;

@@ -80,7 +80,8 @@ const Container = styled.div`
   align-items: center;
 
   box-sizing: border-box;
-  padding: 3.12rem 0rem 0rem 10rem;
+  padding: 3.12rem 6.25rem 0rem 10rem;
+  background-color: white;
 
   ul {
     list-style-type: none;

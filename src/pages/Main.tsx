@@ -1,11 +1,16 @@
+import { Outlet } from 'react-router-dom';
 import CardLayout from '../components/CardLayout';
 import ReviewCard from '../components/ReviewCard';
 import Tab from '../components/Tab';
+
 
 export default function Main() {
   return (
     <>
       <CardLayout />
+      {/* <Link to="/top20">
+        <div>ViewItems</div>
+      </Link> */}
       {/* <Tab
         tabs={[
           { name: '판매상품', content: <ReviewCard /> },
@@ -14,6 +19,7 @@ export default function Main() {
           { name: '팔로워', content: <CardLayout /> },
         ]}
       /> */}
+      <Outlet/>
     </>
   );
 }
