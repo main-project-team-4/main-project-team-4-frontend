@@ -1,40 +1,42 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getGoodsLarge, getGoodsMid } from '../apis/sidebar/goods';
+import { getCategory } from '../apis/sidebar/goods';
 import { useNavigate } from 'react-router-dom';
 
 type ItemType = {
-  id: number;
-  name: string;
+  large_category_id: number;
+  large_category_name: string;
+  children: [
+    {
+      mid_category_id: number;
+      mid_category_name: string;
+      large_category_id: number;
+      large_category_name: string;
+    },
+  ];
 };
 
 function SideBar() {
   const navigate = useNavigate();
 
-  // 카테고리 대분류 가져오기
-  const { data } = useQuery('categoryLarge', getGoodsLarge);
+  // 카테고리 전체 가져오기
+  const { data } = useQuery('category', getCategory);
 
   // 클릭시 대분류 페이지로 이동
-  const onClickCategoryLarge = (categoryLargeName: string) => {
-    navigate(`${categoryLargeName}`);
+  const onClickLarge = (categoryName: string) => {
+    navigate(`${categoryName}`);
   };
 
-  // 카테고리 중분류 가져오기
-  const { data: data1 } = useQuery(['categoryMid', 1], () => getGoodsMid('1'));
-  const { data: data2 } = useQuery(['categoryMid', 2], () => getGoodsMid('2'));
-  const { data: data3 } = useQuery(['categoryMid', 3], () => getGoodsMid('3'));
-  const { data: data4 } = useQuery(['categoryMid', 4], () => getGoodsMid('4'));
+  // 클릭시 중분류 페이지로 이동
+  const onClickMid = (LargeCategoryName: string, MidCategoryName: string) => {
+    navigate(`${LargeCategoryName}/${MidCategoryName}`);
+  };
 
-  const allData = [data1?.data, data2?.data, data3?.data, data4?.data];
-
-  const [visibleMypage, setVisibleMypage] = useState('0');
+  // 프로필 밑에 있는 마이페이지 토글
+  const [visibleMypage, setVisibleMypage] = useState(false);
   const toggleMypage = () => {
-    if (visibleMypage === '0') {
-      setVisibleMypage('1');
-    } else {
-      setVisibleMypage('0');
-    }
+    setVisibleMypage(!visibleMypage);
   };
 
   return (
@@ -57,10 +59,14 @@ function SideBar() {
       <CategoryContainer>
         {data?.data.map((item: ItemType) => {
           return (
-            <ul key={item.id}>
-              <h3 onClick={() => onClickCategoryLarge(item.name)}>{item.name}</h3>
-              {allData[item.id - 1]?.map((subItem: ItemType) => <li key={subItem.id}>{subItem.name}</li>)}
-            </ul>
+            <div key={item.large_category_id}>
+              <ul>
+                <h3 onClick={() => onClickLarge(item.large_category_name)}>{item.large_category_name}</h3>
+                {item.children.map(item => (
+                  <li onClick={() => onClickMid(item.large_category_name, item.mid_category_name)}>{item.mid_category_name}</li>
+                ))}
+              </ul>
+            </div>
           );
         })}
       </CategoryContainer>
@@ -71,7 +77,7 @@ function SideBar() {
 export default SideBar;
 
 const Container = styled.div`
-  width: 28.75rem;
+  width: 18.75rem;
   gap: 0.75rem;
 
   display: flex;
@@ -80,8 +86,8 @@ const Container = styled.div`
   align-items: center;
 
   box-sizing: border-box;
-  padding: 3.12rem 6.25rem 0rem 10rem;
-  background-color: white;
+  padding: 0.75rem 1.5rem;
+  margin: 3.13rem 6.25rem 0rem 10rem;
 
   ul {
     list-style-type: none;
@@ -93,15 +99,16 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  gap: 1.25rem;
 `;
 
 const ProfileBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.375rem;
 
-  width: 9.7rem;
+  width: 18.75rem;
   height: 3.125rem;
 
   h3 {
@@ -109,6 +116,8 @@ const ProfileBox = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: 1.25rem;
+
+    margin-left: 0.94rem;
   }
 
   .person-icon {
@@ -134,15 +143,17 @@ const ProfileBox = styled.div`
 `;
 
 const MypageMenu = styled.ul`
-  width: 100%;
+  width: 18.75rem;
+
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: 1.25rem;
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 1.25rem;
+
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
@@ -153,7 +164,8 @@ const MypageMenu = styled.ul`
   }
 
   li {
-    padding: 0.75rem 1.5rem 0.75rem 1rem;
+    height: 2.25rem;
+    padding: 0.5rem 0rem 0.5rem 0rem;
     font-style: normal;
     font-weight: 500;
     line-height: 1.25rem;
@@ -166,11 +178,13 @@ const CategoryContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  div {
-    width: 100%;
+  gap: 0.75rem;
 
-    margin-bottom: 0.75rem;
-    background-color: #fff;
+  div {
+    background-color: white;
+    width: 18.75rem;
+    padding: 0.75rem 1.5rem;
+    box-sizing: border-box;
     border-radius: 0.75rem;
   }
 
@@ -201,6 +215,8 @@ const CategoryContainer = styled.div`
       font-weight: 500;
       line-height: 1.25rem;
       letter-spacing: 0.00625rem;
+
+      cursor: pointer;
     }
   }
 `;

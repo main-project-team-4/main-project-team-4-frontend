@@ -33,7 +33,6 @@ footer, header, hgroup, main, menu, nav, section {
 body {  
   max-width: 120rem;
   line-height: 1;
-  overflow: hidden;
 }
 menu, ol, ul {
   list-style: none;

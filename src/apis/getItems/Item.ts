@@ -5,7 +5,5 @@ import axios from 'axios';
 export const AllItems = async () => {
   const response = await axios.get('https://www.chanyoungkang.com/api/items');
 
-  console.log(response.data);
   return response.data;
 };
-
