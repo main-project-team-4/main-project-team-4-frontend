@@ -1,12 +1,22 @@
 import styled from 'styled-components';
 import InformationInput from '../components/mypage/InformationInput';
 import Profilepicture from '../components/mypage/Profilepicture';
+import Tab from '../components/Tab';
+import ReviewCard from '../components/ReviewCard';
+import CardLayout from '../components/CardLayout';
 
 function Mypage() {
   return (
     <Container>
       <Profilepicture />
       <InformationInput />
+      <Tab
+        tabs={[
+          { name: '구매내역', content: <CardLayout /> },
+          { name: '판매내역', content: <CardLayout /> },
+          { name: '찜한상품', content: <CardLayout /> },
+        ]}
+      />
     </Container>
   );
 }
