@@ -1,26 +1,39 @@
 import styled from 'styled-components';
 import Card from './Card';
-import MypageCard from './MypageCard';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { AllItems } from '../apis/getItems/Item';
 
 export default function CardLayout() {
+  const queryClient = useQueryClient();
+  const { isLoading, isError, data: items } = useQuery('items', AllItems);
+
+  if (isLoading) {
+    return <h2>로딩중입니다</h2>;
+  }
+  if (isError || !items || !items.content) {
+    return <h2>오류가 발생하였습니다</h2>;
+  }
+
+    const maps = items.content.slice(0, 4);
+
   return (
     <>
       <Layout>
         <Title>Top 20</Title>
         <CardWrapper>
-          <MypageCard />
-          <Card />
-          <Card />
-          <Card />
+          {maps.map(item => (
+            <Card key={item.item_id} img={item.image_url} title={item.item_name} price={item.price} />
+          ))}
         </CardWrapper>
         <ViewAll>
           <span>전체보기</span>
-          <span class="material-symbols-outlined">chevron_right</span>
+          <span className="material-symbols-outlined">chevron_right</span>
         </ViewAll>
       </Layout>
     </>
   );
 }
+
 
 const Layout = styled.div`
   display: flex;

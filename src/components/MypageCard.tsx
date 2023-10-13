@@ -13,11 +13,11 @@ export default function MypageCard() {
         </TextLayout>
         <BtnLayout>
           {/* <ReviewBtn>
-            <span class="material-symbols-outlined">edit</span>리뷰작성
+            <span className="material-symbols-outlined">edit</span>리뷰작성
           </ReviewBtn> */}
 
           {/* <UpdateBtn>
-            <span class="material-symbols-outlined">edit</span>리뷰수정
+            <span className="material-symbols-outlined">edit</span>리뷰수정
           </UpdateBtn> */}
 
           <Btn bgColor="#ACACAC" color="white" icon="delete">

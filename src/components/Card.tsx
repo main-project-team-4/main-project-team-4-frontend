@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 
-export default function Card() {
+interface CardProps {
+  img: string;
+  title: string;
+  price: string;
+}
+
+export default function Card({ img, title, price }: CardProps) {
   return (
     <>
       <Layout>
-        <Image src="https://www.muji.com/wp-content/uploads/sites/12/2021/02/026.jpg" />
+        <Image src={img} />
         <TextLayout>
-          <h1>바지</h1>
-          <Price>24,000원</Price>
+          <h1>{title}</h1>
+          <Price>{price}원</Price>
         </TextLayout>
       </Layout>
     </>
