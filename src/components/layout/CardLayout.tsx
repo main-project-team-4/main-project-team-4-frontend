@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Card from './Card';
+import Card from '../common/Card';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { AllItems } from '../apis/getItems/Item';
+import { AllItems } from '../../apis/getItems/Item';
 
 export default function CardLayout() {
   const queryClient = useQueryClient();
@@ -14,7 +14,7 @@ export default function CardLayout() {
     return <h2>오류가 발생하였습니다</h2>;
   }
 
-    const maps = items.content.slice(0, 4);
+  const maps = items.content.slice(0, 4);
 
   return (
     <>
@@ -33,7 +33,6 @@ export default function CardLayout() {
     </>
   );
 }
-
 
 const Layout = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Btn from './MyPageBtns/Btn';
+import Btn from './Btn';
 
 export default function MypageCard() {
   return (

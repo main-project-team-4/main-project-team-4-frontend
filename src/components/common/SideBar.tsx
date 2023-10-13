@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getCategory } from '../apis/sidebar/goods';
+import { getCategory } from '../../apis/sidebar/goods';
 import { useNavigate } from 'react-router-dom';
 
 type ItemType = {

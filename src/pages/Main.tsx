@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
-import CardLayout from '../components/CardLayout';
-import ReviewCard from '../components/ReviewCard';
-import Tab from '../components/Tab';
-
+import CardLayout from '../components/layout/CardLayout';
+import ReviewCard from '../components/store/ReviewCard';
+import Tab from '../components/common/Tab';
 
 export default function Main() {
   return (
@@ -19,7 +18,7 @@ export default function Main() {
           { name: '팔로워', content: <CardLayout /> },
         ]}
       /> */}
-      <Outlet/>
+      <Outlet />
     </>
   );
 }

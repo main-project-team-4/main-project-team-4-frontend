@@ -16,14 +16,11 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Main />,
-        children: [
-          {
-            path: ':items/:major?/:middle?',
-            element: <ViewItems />,
-          },
-        ],
       },
-
+      {
+        path: ':items/:major?/:middle?',
+        element: <ViewItems />,
+      },
       {
         path: 'posting',
         element: <Posting />,

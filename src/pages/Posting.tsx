@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import CardLayout from '../components/CardLayout';
-import DetailPosting from '../components/DetailPosting';
+import CardLayout from '../components/layout/CardLayout';
+import DetailPosting from '../components/layout/DetailPosting';
 
 function Posting() {
   return (

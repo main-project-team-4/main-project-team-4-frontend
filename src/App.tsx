@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
-import Header from './components/Header';
-import SideBar from './components/SideBar';
+import Header from './components/common/Header';
+import SideBar from './components/common/SideBar';
 import { GlobalStyle } from './styles/GlobalStyle';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';

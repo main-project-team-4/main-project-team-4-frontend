@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import InformationInput from '../components/mypage/InformationInput';
 import Profilepicture from '../components/mypage/Profilepicture';
-import Tab from '../components/Tab';
-import ReviewCard from '../components/ReviewCard';
-import CardLayout from '../components/CardLayout';
+import Tab from '../components/common/Tab';
+import ReviewCard from '../components/store/ReviewCard';
+import CardLayout from '../components/layout/CardLayout';
 
 function Mypage() {
   return (
