@@ -24,6 +24,7 @@ function Mypage() {
 export default Mypage;
 
 const Container = styled.div`
+  width: 74.9375rem;
   height: 65.0625rem;
 
   display: flex;

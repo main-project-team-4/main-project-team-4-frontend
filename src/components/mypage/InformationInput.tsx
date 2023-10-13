@@ -82,6 +82,7 @@ const NickNameBox = styled.div`
     background-color: #f4f4f4;
     border: none;
     color: #818181;
+    cursor: pointer;
   }
 `;
 const AddressBox = styled.div`
@@ -116,6 +117,7 @@ const AddressBox = styled.div`
     background-color: #f4f4f4;
     border: none;
     color: #818181;
+    cursor: pointer;
   }
 `;
 const ButtonBox = styled.button`
@@ -137,6 +139,8 @@ const ButtonBox = styled.button`
   font-weight: 600;
   line-height: normal;
   letter-spacing: 0.04rem;
+
+  cursor: pointer;
 
   div {
     display: flex;
@@ -163,9 +167,11 @@ const WithdrawalButton = styled.button`
   letter-spacing: 0.04rem;
   color: #8f8f8f;
 
-  background-color: white;
+  background-color: transparent;
   border: none;
 
   position: absolute;
   left: 65.8rem;
+
+  cursor: pointer;
 `;
