@@ -14,13 +14,11 @@ function Posting() {
 export default Posting;
 
 const Container = styled.div`
-  width: 95rem;
+  width: 75rem;
   height: 74.5625rem;
   gap: 6.25rem;
-
   display: flex;
   flex-direction: column;
 
-  padding: 7.745rem 10rem 10.94rem 10rem;
-  box-sizing: border-box;
+  margin: 7.75rem 10rem 0rem 0rem;
 `;

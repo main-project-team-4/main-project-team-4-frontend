@@ -31,7 +31,7 @@ export default function DetailPosting() {
 }
 
 const Container = styled.div`
-  width: 95rem;
+  width: 75rem;
   height: 40.1875rem;
   box-sizing: border-box;
 
@@ -43,6 +43,7 @@ const Container = styled.div`
 const ImageComtainer = styled.div`
   width: 37.5rem;
   height: 40.1875rem;
+  gap: 0.75rem;
 
   display: flex;
   flex-direction: column;
@@ -57,7 +58,6 @@ const ImageBox = styled.div`
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-
   width: 37.5rem;
   height: 8.8125rem;
 

@@ -86,7 +86,6 @@ const Container = styled.div`
   align-items: center;
 
   box-sizing: border-box;
-  padding: 0.75rem 1.5rem;
   margin: 3.13rem 6.25rem 0rem 10rem;
 
   ul {
@@ -100,7 +99,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 1.25rem;
+  gap: 0.7 5rem;
 `;
 
 const ProfileBox = styled.div`
