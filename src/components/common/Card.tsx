@@ -12,6 +12,7 @@ export default function Card({ img, title, price }: CardProps) {
       <Layout>
         <Image src={img} />
         <TextLayout>
+          <Sale> 판매중</Sale>
           <h1>{title}</h1>
           <Price>{price}원</Price>
         </TextLayout>
@@ -40,10 +41,11 @@ const Image = styled.img`
 const TextLayout = styled.div`
   display: flex;
   box-sizing: border-box;
-  width: 17.5rem;
+  width: 18.25rem;
   flex-direction: column;
   padding: 0rem 1rem;
   margin-bottom: 2.25rem;
+
   h1 {
     font-size: 1.5rem;
     font-weight: 500;
@@ -53,6 +55,25 @@ const TextLayout = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+`;
+
+const Sale = styled.div`
+  width: 4.5rem;
+  height: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 6.25rem;
+  background: #ececec;
+
+  font-size: 0.875rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.25rem;
+  letter-spacing: 0.04rem;
+  color: #838383;
 `;
 
 const Price = styled.div`

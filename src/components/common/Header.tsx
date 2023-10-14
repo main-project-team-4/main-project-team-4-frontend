@@ -21,23 +21,23 @@ const Layout = styled.div`
   height: 4.875rem;
   padding: 1.3125rem, 10rem;
 
-
-  border: 1px solid red;
+  background-color: white;
 `;
 
 const Logo = styled.img`
   width: 3.5rem;
   height: 2rem;
 
+  margin-left: 10rem;
   border: 1px solid blue;
 `;
 
 const Search = styled.div`
   box-sizing: border-box;
-  width: 24.6875rem;
+  width: 26.1875rem;
   height: 2rem;
   border-radius: 3.125rem;
-  padding: 1.5rem 0.875rem;
+  padding: 1.5rem 0.88rem;
 
   border: 1px solid blue;
 `;
@@ -46,19 +46,19 @@ const BtnLayout = styled.div`
   display: flex;
   gap: 0.625rem;
 
-  border: 1px solid blue;
+  margin-right: 10rem;
 `;
 
 const Chat = styled.button`
   width: 5.625rem;
   height: 2.25rem;
-
-  border: 1px solid red;
+  border-radius: 0.5rem;
+  border: none;
 `;
 
 const AddItem = styled.button`
   width: 5.625rem;
   height: 2.25rem;
-
-  border: 1px solid red;
+  border-radius: 0.5rem;
+  border: none;
 `;
