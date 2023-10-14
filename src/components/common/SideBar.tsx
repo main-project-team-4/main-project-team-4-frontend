@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getCategory } from '../../apis/sidebar/goods';
+import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
 
 type ItemType = {
@@ -63,7 +63,9 @@ function SideBar() {
               <ul>
                 <h3 onClick={() => onClickLarge(item.large_category_name)}>{item.large_category_name}</h3>
                 {item.children.map(item => (
-                  <li onClick={() => onClickMid(item.large_category_name, item.mid_category_name)}>{item.mid_category_name}</li>
+                  <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name)}>
+                    {item.mid_category_name}
+                  </li>
                 ))}
               </ul>
             </div>
