@@ -1,10 +1,57 @@
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { searchItems } from '../../apis/header/Header';
+import React, { useEffect, useState } from 'react';
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const goHome = () => {
+    navigate('/');
+  };
+
+  // 검색 기능
+  const { data, refetch } = useQuery('search', () => searchItems(itemName), { enabled: false });
+
+  const [itemName, setItemname] = useState('');
+  const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    setItemname(value);
+  };
+  const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      onClickSearch();
+    }
+  };
+  const onClickSearch = () => {
+    refetch();
+  };
+  useEffect(() => {
+    if (!itemName) {
+      return;
+    }
+    if (data) {
+      navigate(`search?keyword=${itemName}`, { state: data?.data });
+    }
+  }, [data, navigate]);
+
   return (
     <Layout>
-      <Logo />
-      <Search />
+      <Logo onClick={goHome} />
+      <Search>
+        <input
+          onKeyDown={event => {
+            activeEnter(event);
+          }}
+          value={itemName}
+          onChange={onChangeItem}
+          type="text"
+        />
+        <span onClick={onClickSearch} className="material-symbols-outlined">
+          search
+        </span>
+      </Search>
       <BtnLayout>
         <Chat />
         <AddItem />
@@ -30,6 +77,8 @@ const Logo = styled.img`
 
   margin-left: 10rem;
   border: 1px solid blue;
+
+  cursor: pointer;
 `;
 
 const Search = styled.div`
@@ -39,7 +88,26 @@ const Search = styled.div`
   border-radius: 3.125rem;
   padding: 1.5rem 0.88rem;
 
-  border: 1px solid blue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f4f4f4;
+
+  input {
+    width: 22.0625rem;
+    height: 2.875rem;
+    border: none;
+    outline-style: none;
+    background-color: #f4f4f4;
+  }
+
+  span {
+    font-size: 1.125rem;
+    background-color: transparent;
+
+    cursor: pointer;
+  }
 `;
 
 const BtnLayout = styled.div`
