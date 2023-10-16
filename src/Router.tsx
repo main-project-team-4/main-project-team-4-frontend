@@ -18,7 +18,7 @@ const router = createBrowserRouter([
         element: <Main />,
       },
       {
-        path: ':items/:LargeCategory?/:category?/:midCategoryId?',
+        path: ':items/:LargeCategory?/:category?/:midCategoryId?/:last?',
         element: <ViewItems />,
       },
       {
