@@ -7,6 +7,7 @@ import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
 import Store from './pages/Store';
 import ViewItems from './pages/ViewItems';
+import Kakao from './pages/Redirect';
 
 const router = createBrowserRouter([
   {
@@ -33,15 +34,11 @@ const router = createBrowserRouter([
         path: 'store',
         element: <Store />,
       },
+      {
+        path: 'kakao',
+        element: <Kakao />,
+      },
     ],
-  },
-  {
-    path: 'login',
-    element: <Login />,
-  },
-  {
-    path: 'signup',
-    element: <SignUp />,
   },
 ]);
 

@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import { CategoryItem } from '../../apis/getItems/Item';
 import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
+import { removeCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
+import LoginModal from '../login/LoginModal';
 
 type ItemType = {
   large_category_id: number;
@@ -19,9 +22,22 @@ type ItemType = {
 };
 
 function SideBar() {
+  const [modal, setModal] = useState(false);
   const [categoryId, setCategoryId] = useState('');
   const [layer, setLayer] = useState(2);
+  const [visibleMypage, setVisibleMypage] = useState(false);
+
   const navigate = useNavigate();
+  const token = getCookie('token');
+
+  // 모달 열기 함수
+  const openModal = () => {
+    setModal(true);
+  };
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setModal(false);
+  };
 
   // 카테고리별 아이템 항목 가져오기
   const { data: categoryData, refetch } = useQuery(`categoryitem-${categoryId}`, () => CategoryItem(categoryId, layer), { enabled: false });
@@ -38,12 +54,6 @@ function SideBar() {
     console.log(layer, categoryId);
   };
 
-  // useEffect(() => {
-  //   refetch();
-  //   // navigate(`category/${categoryName}/${LargeCategoryId}`);
-  // }, [categoryId, layer]);
-
-  // 클릭시 중분류 페이지로 이동
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
     setLayer(2);
     setCategoryId(MidCategoryId);
@@ -52,45 +62,75 @@ function SideBar() {
   };
 
   // 프로필 밑에 있는 마이페이지 토글
-  const [visibleMypage, setVisibleMypage] = useState(false);
   const toggleMypage = () => {
     setVisibleMypage(!visibleMypage);
   };
 
   return (
-    <Container>
-      <ProfileContainer>
-        <ProfileBox>
-          <span className="person-icon material-symbols-outlined">person</span>
-          <h3>홍길동</h3>
-          <button onClick={toggleMypage}>
-            <span className="expand-icon material-symbols-outlined">expand_more</span>
-          </button>
-        </ProfileBox>
-        <MypageMenu className={visibleMypage ? 'visible' : ''}>
-          <li>마이페이지</li>
-          <li>내 상점</li>
-          <li>채팅 목록</li>
-          <li>로그아웃</li>
-        </MypageMenu>
-      </ProfileContainer>
-      <CategoryContainer>
-        {category?.data.map((item: ItemType) => {
-          return (
-            <div key={item.large_category_id}>
-              <ul>
-                <h3 onClick={() => onClickLarge(item.large_category_name, item.large_category_id)}>{item.large_category_name}</h3>
-                {item.children.map(item => (
+    <>
+      <Container>
+        <ProfileContainer>
+          <ProfileBox>
+            {token ? (
+              <div onClick={toggleMypage}>
+                <span className="person-icon material-symbols-outlined">person</span>
+                <h3>홍길동</h3>
+                <button>
+                  <span className="expand-icon material-symbols-outlined">expand_more</span>
+                </button>
+              </div>
+            ) : (
+              <div onClick={openModal}>
+                <span className="person-icon material-symbols-outlined">person</span>
+                <h3>로그인이 필요합니다</h3>
+              </div>
+            )}
+          </ProfileBox>
+          <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
+            <li
+              onClick={() => {
+                navigate('/mypage');
+              }}
+            >
+              마이페이지
+            </li>
+            <li
+              onClick={() => {
+                navigate('/store');
+              }}
+            >
+              내 상점
+            </li>
+            <li
+              onClick={() => {
+                removeCookie('token');
+                navigate('/');
+              }}
+            >
+              로그아웃
+            </li>
+          </MypageMenu>
+        </ProfileContainer>
+        <CategoryContainer>
+          {category?.data.map((item: ItemType) => {
+            return (
+              <div key={item.large_category_id}>
+                <ul>
+                  <h3 onClick={() => onClickLarge(item.large_category_name, item.large_category_id)}>{item.large_category_name}</h3>
+                  {item.children.map(item => (
+                    <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>
+                      {item.mid_category_name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </CategoryContainer>
+      </Container>
 
-                  <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>{item.mid_category_name}</li>
-
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-      </CategoryContainer>
-    </Container>
+      {modal && <LoginModal openModal={openModal} closeModal={closeModal} />}
+    </>
   );
 }
 
@@ -102,7 +142,6 @@ const Container = styled.div`
 
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
 
   box-sizing: border-box;
@@ -123,12 +162,18 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileBox = styled.div`
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
 
   width: 18.75rem;
   height: 3.125rem;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 
   h3 {
     font-size: 1.25rem;
@@ -183,6 +228,7 @@ const MypageMenu = styled.ul`
   }
 
   li {
+    cursor: pointer;
     height: 2.25rem;
     padding: 0.5rem 0rem 0.5rem 0rem;
     font-style: normal;
