@@ -4,6 +4,7 @@ import SideBar from './components/common/SideBar';
 import { GlobalStyle } from './styles/GlobalStyle';
 import styled from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';
+// import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,8 @@ function App() {
             <Outlet />
           </Content>
         </Container>
+        {/* 캐싱된 데이터를 볼 수 있도록 해줌 */}
+        {/* <ReactQueryDevtools initialIsOpen={true} /> */}
       </QueryClientProvider>
     </>
   );
