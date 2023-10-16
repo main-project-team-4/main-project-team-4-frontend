@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 
 export default function ViewItems() {
   const params = useParams();
-  console.log('이게 파람즈', params);
+  // console.log('이게 파람즈', params);
 
   const queryClient = useQueryClient();
   const itemsData = queryClient.getQueryData('items');
