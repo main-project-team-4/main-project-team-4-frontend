@@ -1,14 +1,34 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 function Image() {
   const [images, setImages] = useState<string[]>([]);
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
     fileRef?.current?.click();
   };
+
+  const handleImageClick = (index: number) => {
+    setSelectedIndices(prev => {
+      if (prev.includes(index) || prev.length === 2) {
+        return [];
+      } else {
+        return [...prev, index];
+      }
+    });
+  };
+
+  useEffect(() => {
+    if (selectedIndices.length === 2) {
+      const [first, second] = selectedIndices;
+      const newImages = [...images];
+      [newImages[first], newImages[second]] = [newImages[second], newImages[first]];
+      setImages(newImages);
+      setSelectedIndices([]);
+    }
+  }, [selectedIndices, images]);
   const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.currentTarget.files;
 
@@ -18,44 +38,30 @@ function Image() {
     }
   };
 
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    if (!destination) return;
-    setImages(oldImage => {
-      const copyImages = [...oldImage];
-      copyImages.splice(source.index, 1);
-      copyImages.splice(destination.index, 0, draggableId);
-      return copyImages;
-    });
-  };
   return (
     <Container imageLength={images.length}>
-      {images.length !== 0 ? (
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="two">
-            {provider => (
-              <ImageBox ref={provider.innerRef} {...provider.droppableProps}>
-                {images.map((url, index) => (
-                  <Draggable key={url} draggableId={url} index={index}>
-                    {provider => (
-                      <div ref={provider.innerRef} {...provider.dragHandleProps} {...provider.draggableProps}>
-                        <img src={url} alt={`images${index}`} />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provider.placeholder}
-              </ImageBox>
-            )}
-          </Droppable>
-        </DragDropContext>
-      ) : (
+      <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
+      {images.length === 0 ? (
         <>
+          {' '}
           <ImageIcon>
             <span className="material-symbols-outlined">imagesmode</span>
           </ImageIcon>
-          <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
-          <h2>파일을 드래그하여 업로드 하세요</h2>
-          <button onClick={handleClick}>파일 열기</button>
+          <Explain>
+            <h2>파일을 드래그하여 업로드 하세요</h2>
+            <button onClick={handleClick}>파일 열기</button>
+          </Explain>
+        </>
+      ) : (
+        <>
+          {' '}
+          <ImageBox>
+            {images.map((image, index) => (
+              <Img index={index} isSelected={selectedIndices.includes(index)} onClick={() => handleImageClick(index)}>
+                <img src={image} />
+              </Img>
+            ))}
+          </ImageBox>
         </>
       )}
     </Container>
@@ -69,8 +75,11 @@ const Container = styled.div<{ imageLength: number }>`
   height: 37.5rem;
 
   box-sizing: border-box;
-
+  padding: 5.94rem 6.25rem;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 
   background-color: #ececec;
   border: 1px dashed #000;
@@ -80,7 +89,8 @@ const Container = styled.div<{ imageLength: number }>`
     width: 100%;
     height: 100%;
 
-    /* display: none; */
+    position: absolute;
+    top: 0%;
   }
 
   h2 {
@@ -108,24 +118,6 @@ const Container = styled.div<{ imageLength: number }>`
     cursor: pointer;
   }
 `;
-const ImageBox = styled.div`
-  width: 31.25rem;
-  height: 37.5rem;
-
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
-
-  > div:first-child img {
-    width: 31.25rem;
-    height: 29.2rem;
-  }
-
-  > div:not(:first-child) img {
-    width: 7.8125rem;
-    height: 7.8125rem;
-  }
-`;
 
 const ImageIcon = styled.div`
   width: 12.6rem;
@@ -138,5 +130,27 @@ const ImageIcon = styled.div`
   span {
     font-size: 3rem;
     color: #9aa0a6;
+  }
+`;
+const Explain = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  gap: 0.94rem;
+`;
+
+const ImageBox = styled.div`
+  position: absolute;
+  top: 0%;
+
+  display: flex;
+  flex-wrap: wrap;
+`;
+const Img = styled.div<{ index: number; isSelected: boolean }>`
+  img {
+    width: ${props => (props.index === 0 ? '31.25rem' : '7.8125rem')};
+    height: ${props => (props.index === 0 ? '29.25rem' : '7.8845rem')};
+    filter: ${props => (props.isSelected ? 'brightness(50%)' : 'none')};
   }
 `;
