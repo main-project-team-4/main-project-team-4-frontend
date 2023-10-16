@@ -1,34 +1,37 @@
 import styled from 'styled-components';
 import Card from '../common/Card';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { AllItems } from '../../apis/getItems/Item';
+import { useNavigate } from 'react-router-dom';
 
-export default function CardLayout() {
-  const queryClient = useQueryClient();
-  const { isLoading, isError, data: items } = useQuery('items', AllItems);
+export default function CardLayout({ title, data }) {
+  const navigate = useNavigate();
 
-  if (isLoading) {
-    return <h2>로딩중입니다</h2>;
-  }
-  if (isError || !items || !items.content) {
-    return <h2>오류가 발생하였습니다</h2>;
-  }
+  // const move = () => {
+  //   const formattedTitle = title.replace(/\s+/g, '');
+  //   navigate(`/${formattedTitle}`);
+  // };
 
-  const maps = items.content.slice(0, 4);
+    const move = () => {
+      navigate(`/${title}`);
+    };
+
 
   return (
     <>
       <Layout>
-        <Title>Top 20</Title>
-        <CardWrapper>
-          {maps.map(item => (
-            <Card key={item.item_id} img={item.image_url} title={item.item_name} price={item.price} />
-          ))}
-        </CardWrapper>
-        <ViewAll>
-          <span>전체보기</span>
-          <span className="material-symbols-outlined">chevron_right</span>
-        </ViewAll>
+        {data && (
+          <>
+            <Title>{title}</Title>
+            <CardWrapper>
+              {data.map(item => (
+                <Card key={item.item_id} img={item.image_url} title={item.item_name} price={item.price} />
+              ))}
+            </CardWrapper>
+            <ViewAll onClick={move}>
+              <span>전체보기</span>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </ViewAll>
+          </>
+        )}
       </Layout>
     </>
   );
@@ -38,13 +41,14 @@ const Layout = styled.div`
   display: flex;
   flex-direction: column;
   width: 74.875rem;
-  height: 28.125rem;
   gap: 1.25rem;
 `;
 
 const CardWrapper = styled.div`
   display: flex;
   gap: 0.625rem;
+  width: 74.875rem;
+  flex-wrap: wrap;
 `;
 
 const Title = styled.p`

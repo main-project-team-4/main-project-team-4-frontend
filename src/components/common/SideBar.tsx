@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { CategoryItem } from '../../apis/getItems/Item';
 import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,19 +19,36 @@ type ItemType = {
 };
 
 function SideBar() {
+  const [categoryId, setCategoryId] = useState('');
+  const [layer, setLayer] = useState(2);
   const navigate = useNavigate();
 
+  // 카테고리별 아이템 항목 가져오기
+  const { data: categoryData, refetch } = useQuery(`categoryitem-${categoryId}`, () => CategoryItem(categoryId, layer), { enabled: false });
+
   // 카테고리 전체 가져오기
-  const { data } = useQuery('category', getCategory);
+  const { data: category } = useQuery('category', getCategory);
 
   // 클릭시 대분류 페이지로 이동
-  const onClickLarge = (categoryName: string) => {
-    navigate(`${categoryName}`);
+  const onClickLarge = (categoryName: string, LargeCategoryId: number) => {
+    setLayer(1);
+    setCategoryId(LargeCategoryId);
+    refetch();
+    navigate(`category/${categoryName}/${LargeCategoryId}`);
+    console.log(layer, categoryId);
   };
 
+  // useEffect(() => {
+  //   refetch();
+  //   // navigate(`category/${categoryName}/${LargeCategoryId}`);
+  // }, [categoryId, layer]);
+
   // 클릭시 중분류 페이지로 이동
-  const onClickMid = (LargeCategoryName: string, MidCategoryName: string) => {
-    navigate(`${LargeCategoryName}/${MidCategoryName}`);
+  const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
+    setLayer(2);
+    setCategoryId(MidCategoryId);
+    refetch();
+    navigate(`category/${LargeCategoryName}/${MidCategoryId}/${MidCategoryName}`);
   };
 
   // 프로필 밑에 있는 마이페이지 토글
@@ -57,15 +75,15 @@ function SideBar() {
         </MypageMenu>
       </ProfileContainer>
       <CategoryContainer>
-        {data?.data.map((item: ItemType) => {
+        {category?.data.map((item: ItemType) => {
           return (
             <div key={item.large_category_id}>
               <ul>
-                <h3 onClick={() => onClickLarge(item.large_category_name)}>{item.large_category_name}</h3>
+                <h3 onClick={() => onClickLarge(item.large_category_name, item.large_category_id)}>{item.large_category_name}</h3>
                 {item.children.map(item => (
-                  <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name)}>
-                    {item.mid_category_name}
-                  </li>
+
+                  <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>{item.mid_category_name}</li>
+
                 ))}
               </ul>
             </div>
