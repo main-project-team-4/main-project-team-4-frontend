@@ -36,8 +36,7 @@ const Layout = styled.div`
   /* height: 14rem; */
   padding: 1.25rem;
   flex-direction: column;
-
-  border: 1px solid black;
+  border-bottom: 1px solid black;
 `;
 
 const Profile = styled.div`

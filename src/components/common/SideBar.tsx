@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { getCategory } from '../../apis/sidebar/goods';
 import { CategoryItem } from '../../apis/getItems/Item';
+import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
 
 type ItemType = {
@@ -81,7 +81,9 @@ function SideBar() {
               <ul>
                 <h3 onClick={() => onClickLarge(item.large_category_name, item.large_category_id)}>{item.large_category_name}</h3>
                 {item.children.map(item => (
-                  <li onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>{item.mid_category_name}</li>
+
+                  <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>{item.mid_category_name}</li>
+
                 ))}
               </ul>
             </div>
@@ -104,7 +106,6 @@ const Container = styled.div`
   align-items: center;
 
   box-sizing: border-box;
-  padding: 0.75rem 1.5rem;
   margin: 3.13rem 6.25rem 0rem 10rem;
 
   ul {
@@ -118,7 +119,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 1.25rem;
+  gap: 0.7 5rem;
 `;
 
 const ProfileBox = styled.div`
