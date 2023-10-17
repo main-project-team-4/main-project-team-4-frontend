@@ -1,18 +1,30 @@
 import styled from 'styled-components';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface CardProps {
+  key: number;
   img: string;
   title: string;
   price: string;
 }
 
-export default function Card({ img, title, price }: CardProps) {
+export default function Card({ id, img, title, price }: CardProps) {
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const path = location.pathname;
+  const renderSale = path.includes('/mypage');
+
   return (
     <>
-      <Layout>
+      <Layout
+        onClick={() => {
+          navigate(`/posting/${title}`, { state: { id } });
+        }}
+      >
         <Image src={img} />
         <TextLayout>
-          <Sale> 판매중</Sale>
+          {renderSale && <Sale>판매중</Sale>}
           <h1>{title}</h1>
           <Price>{price}원</Price>
         </TextLayout>
@@ -25,7 +37,7 @@ const Layout = styled.div`
   width: 18.25rem;
   /* height: 22.375rem; */
   border-radius: 0.75rem;
-
+  cursor: pointer;
   border: 1px solid black;
 `;
 

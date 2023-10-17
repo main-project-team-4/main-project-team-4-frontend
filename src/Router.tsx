@@ -25,7 +25,7 @@ const router = createBrowserRouter([
         element: <ViewItems />,
       },
       {
-        path: 'posting',
+        path: 'posting/:itemId',
         element: <Posting />,
       },
       {
