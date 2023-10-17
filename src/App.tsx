@@ -5,6 +5,7 @@ import { GlobalStyle } from './styles/GlobalStyle';
 import styled, { ThemeProvider } from 'styled-components';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { theme } from './styles/theme';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 const queryClient = new QueryClient();
 
@@ -22,6 +23,7 @@ function App() {
             </Content>
           </Container>
         </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>
     </>
   );

@@ -8,6 +8,7 @@ import Mypage from './pages/Mypage';
 import Store from './pages/Store';
 import ViewItems from './pages/ViewItems';
 import Kakao from './pages/Redirect';
+import Chat from './pages/Chat';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: 'kakao',
         element: <Kakao />,
+      },
+      {
+        path: 'chat',
+        element: <Chat />,
       },
     ],
   },

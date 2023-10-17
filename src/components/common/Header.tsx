@@ -9,6 +9,8 @@ import { getCookie } from '../../utils/cookie';
 
 export default function Header() {
   const [modal, setModal] = useState(false);
+  const [itemName, setItemname] = useState('');
+
   const navigate = useNavigate();
   const token = getCookie('token');
 
@@ -26,8 +28,13 @@ export default function Header() {
   };
 
   // 검색 기능
-  const { data, error, refetch } = useQuery('search', () => searchItems(itemName), { enabled: true });
-  const [itemName, setItemname] = useState('');
+  const { data, refetch, isLoading, isError } = useQuery(
+    ['search', itemName], // 쿼리 키를 배열로 사용하여 itemName에 따라 다른 쿼리를 만듭니다.
+    () => searchItems(itemName),
+    { enabled: true },
+  );
+
+  // const { data, refetch } = useQuery('search', () => searchItems(itemName), { enabled: true });
 
   const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
@@ -41,10 +48,8 @@ export default function Header() {
   const onClickSearch = () => {
     refetch();
   };
+
   useEffect(() => {
-    if (error) {
-      return <div>검색 중 오류가 발생했습니다: {error.message}</div>;
-    }
     if (!itemName) {
       return;
     }
@@ -73,7 +78,11 @@ export default function Header() {
         <BtnLayout>
           {token ? (
             <>
-              <Btn>
+              <Btn
+                onClick={() => {
+                  navigate('/chat');
+                }}
+              >
                 <span style={{ color: 'white' }} className="material-symbols-outlined">
                   chat
                 </span>
