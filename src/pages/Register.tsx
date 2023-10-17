@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import Image from '../components/registrationItem/Image';
-import Category from '../components/registrationItem/Category';
-import Price from '../components/registrationItem/Price';
-import Explanation from '../components/registrationItem/Explanation';
-import Button from '../components/registrationItem/Button';
-import Title from '../components/registrationItem/Title';
+import Image from '../components/register/Image';
+import Category from '../components/register/Category';
+import Price from '../components/register/Price';
+import Explanation from '../components/register/Explanation';
+import Button from '../components/register/Button';
+import Title from '../components/register/Title';
 
 function RegistrationItem() {
   return (

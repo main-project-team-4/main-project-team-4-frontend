@@ -3,17 +3,18 @@ import Tab from '../components/common/Tab';
 import CardLayout from '../components/layout/CardLayout';
 import ReviewLayout from '../components/layout/ReviewLayout';
 import FollowLayout from '../components/layout/FollowLayout';
+import { useLocation } from 'react-router-dom';
 
 function Store() {
+  const { state } = useLocation();
+  console.log(state);
   return (
     <Container>
       <ProfileContainer>
         <ProfileBox>
-          <Profile>
-            <span className="material-symbols-outlined">person</span>
-          </Profile>
+          <Profile>{state.member_image ? <img src={state.member_image} /> : <span className="material-symbols-outlined">person</span>}</Profile>
           <Name>
-            <h3>홍길동</h3>
+            <h3>{state.member_nickname}</h3>
             <p>중고 의류 저렴하게 팔아요 긴 글 설명이 필요해요 최대 2줄</p>
           </Name>
         </ProfileBox>

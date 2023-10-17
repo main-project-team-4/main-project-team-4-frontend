@@ -1,7 +1,10 @@
 import { setCookie } from '../../utils/cookie';
 import { baseInstance } from '../config';
 
-export const kakaoLogin = async codeParam => {
+type TokenType = {
+  codeParam: string;
+};
+export const kakaoLogin = async (codeParam: TokenType) => {
   try {
     const response = await baseInstance.get(`/api/auth/kakao/callback?code=${codeParam}`);
     if (response.status === 200) {
@@ -12,7 +15,7 @@ export const kakaoLogin = async codeParam => {
       });
     }
   } catch (error) {
-    alert(error.response.data.msg);
+    // alert(error.response.data.msg);
     return Promise.reject(error);
   }
 };
