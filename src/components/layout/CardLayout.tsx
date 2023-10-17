@@ -8,6 +8,13 @@ export default function CardLayout({ title, data }) {
   const path = location.pathname;
   const goShop = path.includes('/posting');
 
+
+  // const move = () => {
+  //   const formattedTitle = title.replace(/\s+/g, '');
+  //   navigate(`/${formattedTitle}`);
+  // };
+
+
   const move = () => {
     navigate(`/${title}`);
   };

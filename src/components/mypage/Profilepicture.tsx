@@ -1,15 +1,79 @@
+import { useEffect, useRef, useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { getCookie } from '../../utils/cookie';
+import { changeImages } from '../../apis/mypage/members';
 
-function Profilepicture() {
+type DataInfo = {
+  data: {
+    location_name: string;
+    member_id: number;
+    member_image: string;
+    member_nickname: string;
+    shop_id: number;
+  };
+};
+
+function Profilepicture({ data }: DataInfo) {
+  const [image, setImage] = useState('');
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [formData, setFormData] = useState<FormData>(new FormData());
+  const [confirm, setConfirm] = useState(false);
+
+  const token = getCookie('token');
+
+  const saveImgFile = () => {
+    if (inputRef.current) {
+      const file = inputRef.current.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setImage(reader.result as string);
+
+          const newFormData = new FormData();
+          newFormData.append('image', file);
+
+          setFormData(newFormData);
+        };
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (data?.member_image) {
+      setImage(data?.member_image);
+    }
+  }, [data?.member_image]);
+
+  // 이미지 추가
+  const { data: imageData, refetch } = useQuery(['profileImage', image], () => changeImages({ token, formData }), { enabled: false });
+  const changeImage = () => {
+    inputRef.current?.click();
+    console.log(image);
+    setConfirm(true);
+  };
+  const confirmImage = () => {
+    refetch();
+    setConfirm(false);
+  };
   return (
     <Container>
-      <ProfileImage>
-        <span className="material-symbols-outlined">person</span>
-      </ProfileImage>
+      {/* <button onClick={() => refetch()}>수정완료</button> */}
+      <ProfileImage>{image !== '' ? <img src={image} /> : <span className="material-symbols-outlined">person</span>}</ProfileImage>
       <PencilImage>
-        <span className="material-symbols-outlined">edit</span>
+        <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />
+        {confirm ? (
+          <span onClick={confirmImage} className="material-symbols-outlined">
+            done
+          </span>
+        ) : (
+          <span onClick={changeImage} className="material-symbols-outlined">
+            edit
+          </span>
+        )}
       </PencilImage>
-      <h3>홍길동</h3>
+      <h3>{data?.member_nickname}</h3>
     </Container>
   );
 }
@@ -47,6 +111,12 @@ const ProfileImage = styled.div`
   align-items: center;
   justify-content: center;
 
+  img {
+    width: 9.375rem;
+    height: 9.375rem;
+    border-radius: 100%;
+  }
+
   span {
     font-size: 4.375rem;
     color: #c1c7cd;
@@ -70,4 +140,8 @@ const PencilImage = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  input {
+    display: none;
+  }
 `;

@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function Tab({ tabs = [] }) {
+type TabType = {
+  name: string;
+  content: JSX.Element;
+};
+
+type PropsType = {
+  tabs: TabType[];
+};
+
+export default function Tab({ tabs = [] }: PropsType) {
   const [currentTab, setCurrentTab] = useState(0);
 
   return (
     <TabLayout>
       <TabMenusContainer>
         {tabs.map((tab, index) => (
-          <TabMenu key={index} onClick={() => setCurrentTab(index)} active={currentTab === index}>
+          <TabMenu key={index} onClick={() => setCurrentTab(index)} active={currentTab === index ? 0 : 1}>
             {tab.name}
           </TabMenu>
         ))}
@@ -27,7 +36,7 @@ const TabLayout = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  
+
   /* border: 1px solid black; */
 `;
 
@@ -40,7 +49,7 @@ const TabMenusContainer = styled.div`
   font-weight: 700;
 `;
 
-const TabMenu = styled.button`
+const TabMenu = styled.button<{ active: number }>`
   cursor: pointer;
   padding: 10px;
   border: none;
@@ -51,7 +60,7 @@ const TabMenu = styled.button`
     color 0.3s;
   font-size: 1rem;
   text-align: center;
-  color: ${({ active }) => (active ? 'black' : '#969696')};
+  color: ${({ active }) => (active === 0 ? 'black' : '#969696')};
   flex-grow: 1;
 
   &:hover {
