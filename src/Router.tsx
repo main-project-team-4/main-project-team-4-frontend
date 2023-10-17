@@ -7,6 +7,7 @@ import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
 import Store from './pages/Store';
 import ViewItems from './pages/ViewItems';
+import Register from './pages/Register';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: 'store',
         element: <Store />,
+      },
+      {
+        path: 'register',
+        element: <Register />,
       },
     ],
   },
