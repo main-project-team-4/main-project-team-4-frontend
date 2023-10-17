@@ -1,17 +1,34 @@
 import styled from 'styled-components';
 import CardLayout from '../components/layout/CardLayout';
 import DetailPosting from '../components/layout/DetailPosting';
+import { ShopItem } from '../apis/getItems/Item';
+import { useQuery } from 'react-query';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
-function Posting() {
+export default function Posting() {
+  const location = useLocation();
+  const { id } = location.state || {};
+
+  const { data: detailItems } = useQuery(['detailitem', id]);
+
+  const { data: shopItem, refetch } = useQuery(['shopItem', detailItems?.shop_id], () => ShopItem(detailItems?.shop_id), {
+    enabled: false,
+  });
+
+  useEffect(() => {
+    if (detailItems) {
+      refetch();
+    }
+  }, [detailItems, refetch]);
+
   return (
     <Container>
       <DetailPosting />
-      <CardLayout />
+      {shopItem && <CardLayout title={`${shopItem.content[0].member_nickname} 상점의 다른 상품`} data={shopItem.content} />}
     </Container>
   );
 }
-
-export default Posting;
 
 const Container = styled.div`
   width: 75rem;

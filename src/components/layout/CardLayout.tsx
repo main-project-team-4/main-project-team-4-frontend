@@ -1,14 +1,19 @@
 import styled from 'styled-components';
 import Card from '../common/Card';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function CardLayout({ title, data }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const path = location.pathname;
+  const goShop = path.includes('/posting');
+
 
   // const move = () => {
   //   const formattedTitle = title.replace(/\s+/g, '');
   //   navigate(`/${formattedTitle}`);
   // };
+
 
   const move = () => {
     navigate(`/${title}`);
@@ -22,13 +27,20 @@ export default function CardLayout({ title, data }) {
             <Title>{title}</Title>
             <CardWrapper>
               {data.map(item => (
-                <Card key={item.item_id} img={item.image_url} title={item.item_name} price={item.price} />
+                <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
               ))}
             </CardWrapper>
-            <ViewAll onClick={move}>
-              <span>전체보기</span>
-              <span className="material-symbols-outlined">chevron_right</span>
-            </ViewAll>
+            {goShop ? (
+              <ViewAll onClick={() => navigate('/store')}>
+                <span>상점가기</span>
+                <span className="material-symbols-outlined">chevron_right</span>
+              </ViewAll>
+            ) : (
+              <ViewAll onClick={move}>
+                <span>전체보기</span>
+                <span className="material-symbols-outlined">chevron_right</span>
+              </ViewAll>
+            )}
           </>
         )}
       </Layout>

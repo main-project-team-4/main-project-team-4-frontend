@@ -113,12 +113,12 @@ function SideBar() {
         <CategoryContainer>
           {category?.data.map((item: ItemType) => {
             return (
-              <div key={item.large_category_id}>
+              <div key={item.category_l_id}>
                 <ul>
-                  <h3 onClick={() => onClickLarge(item.large_category_name, item.large_category_id)}>{item.large_category_name}</h3>
+                  <h3 onClick={() => onClickLarge(item.category_l_name, item.category_l_id)}>{item.category_l_name}</h3>
                   {item.children.map(item => (
-                    <li key={item.mid_category_id} onClick={() => onClickMid(item.large_category_name, item.mid_category_name, item.mid_category_id)}>
-                      {item.mid_category_name}
+                    <li key={item.category_m_id} onClick={() => onClickMid(item.category_l_name, item.category_m_name, item.category_m_id)}>
+                      {item.category_m_name}
                     </li>
                   ))}
                 </ul>

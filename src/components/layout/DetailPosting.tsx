@@ -1,33 +1,49 @@
 import styled from 'styled-components';
+import { DetailItem } from '../../apis/getItems/Item';
+import { useQuery } from 'react-query';
+import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 export default function DetailPosting() {
-  return (
+  const location = useLocation();
+  const { id } = location.state || {};
+
+  const { data: detailItems } = useQuery(['detailitem', id], () => {
+    return DetailItem(id);
+  });
+  const [mainImg, setMainImg] = useState('');
+
+  useEffect(() => {
+    if (detailItems) {
+      setMainImg(detailItems.item_image_list[0]);
+    }
+  }, [detailItems]);
+
+  return detailItems ? (
     <Container>
       <ImageComtainer>
-        <img className="firstImg" src="" alt="게시물"></img>
-        <ImageBox>
-          <img src="" alt="게시물"></img>
-          <img src="" alt="게시물"></img>
-          <img src="" alt="게시물"></img>
-          <img src="" alt="게시물"></img>
-        </ImageBox>
+        <img className="firstImg" src={mainImg} alt="게시물"></img>
+        <ImageBox>{detailItems.item_image_list?.map(item => <img src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
       </ImageComtainer>
       <PostingContainer>
         <PostingBox>
-          <h1>제목</h1>
-          <h3>카테고리</h3>
-          <div>설명</div>
+          <h1>{detailItems.item_name}</h1>
+          <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
+          <div>{detailItems.item_comment}</div>
         </PostingBox>
         <PriceBox>
-          <h1>19,000</h1>
+          <h1>{Number(detailItems.item_price).toLocaleString()} 원</h1>
+
           <div>
-            <button className="Follow-Button">❤︎</button>
+            <button className="Follow-Button">
+              <span class="material-symbols-outlined">favorite</span>
+            </button>
             <button className="Chat-Button">채팅하기</button>
           </div>
         </PriceBox>
       </PostingContainer>
     </Container>
-  );
+  ) : null;
 }
 
 const Container = styled.div`
@@ -44,7 +60,6 @@ const ImageComtainer = styled.div`
   width: 37.5rem;
   height: 40.1875rem;
   gap: 0.75rem;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -52,6 +67,7 @@ const ImageComtainer = styled.div`
   .firstImg {
     width: 37.5rem;
     height: 30.625rem;
+    border-radius: 0.75rem;
   }
 `;
 const ImageBox = styled.div`
@@ -64,6 +80,7 @@ const ImageBox = styled.div`
   img {
     width: 8.8125rem;
     height: 8.8125rem;
+    border-radius: 0.75rem;
   }
 `;
 
@@ -127,6 +144,7 @@ const PriceBox = styled.div`
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    margin-bottom: 0.75rem;
   }
 
   .Follow-Button {
@@ -138,6 +156,7 @@ const PriceBox = styled.div`
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    border-radius: 0.5rem;
 
     &:hover {
     }
@@ -151,9 +170,11 @@ const PriceBox = styled.div`
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
-
     border-radius: 0.5rem;
-
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
     &:hover {
     }
   }
