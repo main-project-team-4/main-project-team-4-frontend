@@ -29,6 +29,7 @@ function Image() {
       setSelectedIndices([]);
     }
   }, [selectedIndices, images]);
+
   const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.currentTarget.files;
 
@@ -88,7 +89,7 @@ const Container = styled.div<{ imageLength: number }>`
   input {
     width: 100%;
     height: 100%;
-
+    display: none;
     position: absolute;
     top: 0%;
   }

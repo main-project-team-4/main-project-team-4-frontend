@@ -11,6 +11,7 @@ export default function ViewItems() {
   const location = useLocation();
   const queryClient = useQueryClient();
   const itemsData = queryClient.getQueryData('items');
+
   // const categoryData = queryClient.getQueryData(`categoryitem-${params.category}`);
   // const searchItemsData = queryClient.getQueryData('search');
 
@@ -39,7 +40,7 @@ export default function ViewItems() {
     dataToRender = CategoryItems;
   }
   if (params.items == 'search') {
-    dataToRender = location;
+    dataToRender = location.state;
   }
 
   // if (isLoading) {

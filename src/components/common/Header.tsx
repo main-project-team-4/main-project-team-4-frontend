@@ -31,7 +31,7 @@ export default function Header() {
   const { data, refetch, isLoading, isError } = useQuery(
     ['search', itemName], // 쿼리 키를 배열로 사용하여 itemName에 따라 다른 쿼리를 만듭니다.
     () => searchItems(itemName),
-    { enabled: true },
+    { enabled: false },
   );
 
   // const { data, refetch } = useQuery('search', () => searchItems(itemName), { enabled: true });
@@ -54,7 +54,7 @@ export default function Header() {
       return;
     }
     if (data) {
-      navigate(`search?keyword=${itemName}`, { state: data?.data });
+      navigate(`search?keyword=${itemName}`, { state: data?.content });
     }
   }, [data, navigate]);
 

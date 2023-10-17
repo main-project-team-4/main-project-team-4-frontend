@@ -51,7 +51,6 @@ function SideBar() {
     setCategoryId(LargeCategoryId);
     refetch();
     navigate(`category/${categoryName}/${LargeCategoryId}`);
-    console.log(layer, categoryId);
   };
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {

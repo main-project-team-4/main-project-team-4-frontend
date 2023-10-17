@@ -1,21 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useQuery } from 'react-query';
 import styled from 'styled-components';
+import { changeNickName } from '../../apis/mypage/members';
+import { getCookie } from '../../utils/cookie';
+import { useNavigate } from 'react-router-dom';
 
-function InformationInput() {
+type DataInfo = {
+  data: {
+    location_name: string;
+    member_id: number;
+    member_image: string;
+    member_nickname: string;
+    shop_id: number;
+  };
+};
+
+function InformationInput({ data }: DataInfo) {
+  const token = getCookie('token');
+  const navigate = useNavigate();
+
+  // 닉네임 변경
+  const [nickName, setNickName] = useState('');
+
+  const { data: nickNameData, refetch, isSuccess } = useQuery('changeNick', () => changeNickName({ token, nickName }), { enabled: false });
+  const onChangeNick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.currentTarget;
+    setNickName(value);
+  };
+  const onClickNick = () => {
+    refetch();
+    if (isSuccess) {
+      alert(nickNameData?.data.msg);
+      console.log(nickNameData);
+    }
+  };
+
+  // 내 상점으로 이동
+  const goMyStore = () => {
+    navigate(`../store/${data.shop_id}`, { state: data });
+  };
+
   return (
     <Container>
       <NickNameBox>
         <h3>닉네임</h3>
         {/* <p>123</p> */}
-        <input placeholder="닉네임" />
-        <button>수정하기</button>
+        <input onChange={onChangeNick} placeholder="닉네임" />
+        <button onClick={onClickNick}>수정하기</button>
       </NickNameBox>
       <AddressBox>
         <h3>주소</h3>
         <input placeholder="주소" />
         <button>위치수정</button>
       </AddressBox>
-      <ButtonBox>
+      <ButtonBox onClick={goMyStore}>
         내 상점 가기
         <div>
           <span className="material-symbols-outlined">chevron_right</span>

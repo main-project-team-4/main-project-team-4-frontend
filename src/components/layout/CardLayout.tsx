@@ -10,10 +10,9 @@ export default function CardLayout({ title, data }) {
   //   navigate(`/${formattedTitle}`);
   // };
 
-    const move = () => {
-      navigate(`/${title}`);
-    };
-
+  const move = () => {
+    navigate(`/${title}`);
+  };
 
   return (
     <>
