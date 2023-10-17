@@ -11,7 +11,6 @@ import Kakao from './pages/Redirect';
 import Chat from './pages/Chat';
 import Register from './pages/Register';
 
-
 const router = createBrowserRouter([
   {
     path: '/',
@@ -48,7 +47,6 @@ const router = createBrowserRouter([
       {
         path: 'register',
         element: <Register />,
-       },
       },
     ],
   },
