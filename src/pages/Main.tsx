@@ -9,8 +9,6 @@ import { AllItems, TopItems, CategoryItem } from '../apis/getItems/Item';
 export default function Main() {
   const { isLoading, isError, data: items } = useQuery('items', AllItems);
   // const { data: topitems } = useQuery('topitems', TopItems);
-  //카테고리
-  const { data: category } = useQuery('categoryitem', () => CategoryItem());
 
   if (isLoading) {
     return <h2>로딩중입니다</h2>;

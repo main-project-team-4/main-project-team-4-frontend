@@ -7,7 +7,10 @@ import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
 import Store from './pages/Store';
 import ViewItems from './pages/ViewItems';
+import Kakao from './pages/Redirect';
+import Chat from './pages/Chat';
 import Register from './pages/Register';
+
 
 const router = createBrowserRouter([
   {
@@ -35,18 +38,19 @@ const router = createBrowserRouter([
         element: <Store />,
       },
       {
+        path: 'kakao',
+        element: <Kakao />,
+      },
+      {
+        path: 'chat',
+        element: <Chat />,
+      },
+      {
         path: 'register',
         element: <Register />,
+       },
       },
     ],
-  },
-  {
-    path: 'login',
-    element: <Login />,
-  },
-  {
-    path: 'signup',
-    element: <SignUp />,
   },
 ]);
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { AllItems, CategoryItem } from '../apis/getItems/Item';
+import { AllItems, CategoryItem, searchItems } from '../apis/getItems/Item';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 export default function ViewItems() {
   const params = useParams();
   // console.log('이게 파람즈', params);
-
+  const location = useLocation();
   const queryClient = useQueryClient();
   const itemsData = queryClient.getQueryData('items');
   // const categoryData = queryClient.getQueryData(`categoryitem-${params.category}`);
@@ -28,7 +28,7 @@ export default function ViewItems() {
 
   // const { isLoading, isError, data: items } = useQuery('items', AllItems, { stale: true });
   const { data: CategoryItems } = useQuery(`categoryitem-${params.category}`, { stale: true });
-  const { data: searchItems } = useQuery('search');
+  // const { data: searchItems } = useQuery(`search-${params.category}`);
 
   let dataToRender;
 
@@ -39,7 +39,7 @@ export default function ViewItems() {
     dataToRender = CategoryItems;
   }
   if (params.items == 'search') {
-    dataToRender = searchItems;
+    dataToRender = location;
   }
 
   // if (isLoading) {
@@ -58,7 +58,7 @@ export default function ViewItems() {
         {dataToRender && (
           <CardWrapper>
             {dataToRender.map(item => (
-              <Card key={item.item_id} img={item.image_url} title={item.item_name} price={item.price} />
+              <Card key={item.id} img={item.image_url} title={item.item_name} price={item.price} />
             ))}
           </CardWrapper>
         )}
