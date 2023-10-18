@@ -8,6 +8,8 @@ import ViewItems from './pages/ViewItems';
 import Kakao from './pages/Redirect';
 import Chat from './pages/Chat';
 import Register from './pages/Register';
+import Info from './pages/Info';
+import Root from './pages/Root';
 
 const router = createBrowserRouter([
   {
@@ -15,36 +17,46 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
+        path: 'info',
+        element: <Info />,
+      },
+      {
         path: '',
-        element: <Main />,
-      },
-      {
-        path: ':items/:LargeCategory?/:category?/:midCategoryId?/:last?',
-        element: <ViewItems />,
-      },
-      {
-        path: 'posting/:itemId',
-        element: <Posting />,
-      },
-      {
-        path: 'mypage',
-        element: <Mypage />,
-      },
-      {
-        path: 'store/:storeId',
-        element: <Store />,
-      },
-      {
-        path: 'kakao',
-        element: <Kakao />,
-      },
-      {
-        path: 'chat',
-        element: <Chat />,
-      },
-      {
-        path: 'register',
-        element: <Register />,
+        element: <Root />,
+        children: [
+          {
+            path: '',
+            element: <Main />,
+          },
+          {
+            path: ':items/:LargeCategory?/:category?/:midCategoryId?/:last?',
+            element: <ViewItems />,
+          },
+          {
+            path: 'posting/:itemId',
+            element: <Posting />,
+          },
+          {
+            path: 'mypage',
+            element: <Mypage />,
+          },
+          {
+            path: 'store/:storeId',
+            element: <Store />,
+          },
+          {
+            path: 'kakao',
+            element: <Kakao />,
+          },
+          {
+            path: 'chat',
+            element: <Chat />,
+          },
+          {
+            path: 'register',
+            element: <Register />,
+          },
+        ],
       },
     ],
   },
