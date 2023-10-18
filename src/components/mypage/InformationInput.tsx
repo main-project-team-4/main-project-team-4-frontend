@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { changeNickName } from '../../apis/mypage/members';
+import { changeLocation, changeNickName } from '../../apis/mypage/members';
 import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -40,6 +40,19 @@ function InformationInput({ data }: DataInfo) {
     navigate(`../store/${data.shop_id}`, { state: data });
   };
 
+  // 주소 상태 관리
+  const [address, setAddress] = useState<string>('');
+
+  const handleAddressClick = () => {
+    if (window.daum && window.daum.Postcode) {
+      new window.daum.Postcode({
+        oncomplete: function (data: any) {
+          setAddress(data.address);
+        },
+      }).open();
+    }
+  };
+
   return (
     <Container>
       <NickNameBox>
@@ -50,8 +63,8 @@ function InformationInput({ data }: DataInfo) {
       </NickNameBox>
       <AddressBox>
         <h3>주소</h3>
-        <input placeholder="주소" />
-        <button>위치수정</button>
+        <input value={address} placeholder="주소" readOnly />
+        <button onClick={handleAddressClick}>위치수정</button>
       </AddressBox>
       <ButtonBox onClick={goMyStore}>
         내 상점 가기

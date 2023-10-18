@@ -32,6 +32,7 @@ function Mypage() {
     setState(true);
     console.log(myData);
   }, [myData]);
+
   return (
     <>
       {isSuccess ? (
