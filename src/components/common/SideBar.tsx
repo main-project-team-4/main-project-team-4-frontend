@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { removeCookie } from '../../utils/cookie';
 import { getCookie } from '../../utils/cookie';
 import LoginModal from '../login/LoginModal';
+import { getMyInfo } from '../../apis/mypage/members';
 
 type ItemType = {
   large_category_id: number;
@@ -52,6 +53,16 @@ function SideBar() {
     refetch();
     navigate(`category/${categoryName}/${LargeCategoryId}`);
   };
+
+  // 유저 정보 가져오기
+  const [state, setState] = useState(false);
+  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token), { enabled: state });
+  console.log(myData);
+
+  useEffect(() => {
+    setState(true);
+  }, [myData]);
+  console.log(myData);
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
     setLayer(2);

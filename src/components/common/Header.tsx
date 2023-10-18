@@ -5,9 +5,14 @@ import { searchItems } from '../../apis/header/Header';
 import React, { useEffect, useState } from 'react';
 import { DefaultTheme } from 'styled-components';
 import LoginModal from '../login/LoginModal';
-import { getCookie } from '../../utils/cookie';
+import { getCookie, setCookie } from '../../utils/cookie';
 
 export default function Header() {
+  setCookie('token', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJleHAiOjMyNTA2MzU4NDAwLCJpYXQiOjE2OTc2MDM3NzN9.xgmcg_mTF5p8V6IA0gHyC_4wloij74Pc6vmBfJLauto', {
+    path: '/',
+    secure: true,
+    maxAge: 3000,
+  });
   const [modal, setModal] = useState(false);
   const [itemName, setItemname] = useState('');
 

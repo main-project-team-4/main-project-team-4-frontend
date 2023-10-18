@@ -13,16 +13,16 @@ function Mypage() {
   const token = getCookie('token');
 
   //구매내역 조회
-  // const { data: orderData } = useQuery('orders', () => getOrders(token));
-  // // console.log('order', orderData);
+  const { data: orderData } = useQuery('orders', () => getOrders(token));
+  const ordered = orderData?.data.content;
 
-  // // 판매내역 조회
-  // const { data: salesData } = useQuery('sales', () => getSales(token));
-  // // console.log('sales', salesData);
+  // 판매내역 조회
+  const { data: salesData } = useQuery('sales', () => getSales(token));
+  const sales = salesData?.data.content;
 
-  // // 찜한 상품 조회
-  // const { data: wishlistData } = useQuery('wishlist', () => getWishList(token));
-  // // console.log('wish', wishlistData);
+  // 찜한 상품 조회
+  const { data: wishlistData } = useQuery('wishlist', () => getWishList(token));
+  const wishlist = wishlistData?.data;
 
   // 내 정보 조회
   const [state, setState] = useState(false);
@@ -30,7 +30,6 @@ function Mypage() {
 
   useEffect(() => {
     setState(true);
-    console.log(myData);
   }, [myData]);
 
   return (
@@ -41,9 +40,9 @@ function Mypage() {
           <InformationInput data={myData?.data} />
           <Tab
             tabs={[
-              { name: '구매내역', content: <CardLayout /> },
-              { name: '판매내역', content: <CardLayout /> },
-              { name: '찜한상품', content: <CardLayout /> },
+              { name: '구매내역', content: <CardLayout title="" data={ordered} /> },
+              { name: '판매내역', content: <CardLayout title="" data={sales} /> },
+              { name: '찜한상품', content: <CardLayout title="" data={wishlist} /> },
             ]}
           />
         </Container>
