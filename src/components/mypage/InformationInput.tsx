@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+import React, { useState, useEffect, useRef } from 'react';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
-import { changeLocation, changeNickName } from '../../apis/mypage/members';
+import { changeLocation, changeNickName, deleteID } from '../../apis/mypage/members';
 import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,21 +18,64 @@ type DataInfo = {
 function InformationInput({ data }: DataInfo) {
   const token = getCookie('token');
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  // 닉네임 변경
-  const [nickName, setNickName] = useState('');
+  // 닉네임(상점이름) 변경
+  const [nickName, setNickName] = useState(data.shop_name);
+  const [nickBtnState, setNickBtnState] = useState(true);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data: nickNameData, refetch, isSuccess } = useQuery('changeNick', () => changeNickName({ token, nickName }), { enabled: false });
+  const mutationNick = useMutation(changeNickName, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('myinfo');
+      queryClient.invalidateQueries('changeNick');
+    },
+  });
   const onChangeNick = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setNickName(value);
   };
   const onClickNick = () => {
-    refetch();
-    if (isSuccess) {
-      alert(nickNameData?.data.msg);
-      console.log(nickNameData);
+    setNickBtnState(false);
+  };
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
+  }, [nickBtnState]);
+  const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      completeNick();
+    }
+  };
+  const completeNick = () => {
+    mutationNick.mutate({ token, nickName });
+    setNickBtnState(true);
+  };
+
+  // 주소 변경
+  const [address, setAddress] = useState<string>(data.location_name);
+  const [locBtnState, setLocBtnState] = useState(true);
+
+  const mutationLoc = useMutation(changeLocation, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('myinfo');
+      queryClient.invalidateQueries('changeLocation');
+    },
+  });
+  const handleAddressClick = () => {
+    if (window.daum && window.daum.Postcode) {
+      new window.daum.Postcode({
+        oncomplete: function (data) {
+          setAddress(data.address);
+          setLocBtnState(false);
+        },
+      }).open();
+    }
+  };
+  const completeLocation = () => {
+    mutationLoc.mutate({ token, location: address });
+    setLocBtnState(true);
   };
 
   // 내 상점으로 이동
@@ -40,31 +83,56 @@ function InformationInput({ data }: DataInfo) {
     navigate(`../store/${data.shop_id}`, { state: data });
   };
 
-  // 주소 상태 관리
-  const [address, setAddress] = useState<string>('');
-
-  const handleAddressClick = () => {
-    if (window.daum && window.daum.Postcode) {
-      new window.daum.Postcode({
-        oncomplete: function (data: any) {
-          setAddress(data.address);
-        },
-      }).open();
+  // 회원 탈퇴
+  const mutationDel = useMutation(deleteID, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('delete');
+    },
+  });
+  const onClickDelete = () => {
+    const userResponse = confirm('정말로 계정을 삭제하시겠습니까?');
+    if (userResponse) {
+      mutationDel.mutate(token);
+    } else {
+      return;
     }
   };
 
   return (
     <Container>
       <NickNameBox>
-        <h3>닉네임</h3>
-        {/* <p>123</p> */}
-        <input onChange={onChangeNick} placeholder="닉네임" />
-        <button onClick={onClickNick}>수정하기</button>
+        <h3>상점명</h3>
+        {nickBtnState ? (
+          <>
+            <p>{nickName}</p> <button onClick={onClickNick}>수정하기</button>
+          </>
+        ) : (
+          <>
+            <input
+              onKeyDown={event => {
+                activeEnter(event);
+              }}
+              ref={inputRef}
+              onChange={onChangeNick}
+              placeholder="상점명"
+            />
+            <button onClick={completeNick}>수정완료</button>
+          </>
+        )}
       </NickNameBox>
       <AddressBox>
         <h3>주소</h3>
-        <input value={address} placeholder="주소" readOnly />
-        <button onClick={handleAddressClick}>위치수정</button>
+        {locBtnState ? (
+          <>
+            <p>{address}</p>
+            <button onClick={handleAddressClick}>위치수정</button>
+          </>
+        ) : (
+          <>
+            <input value={address} placeholder="주소" readOnly />
+            <button onClick={completeLocation}>수정완료</button>
+          </>
+        )}
       </AddressBox>
       <ButtonBox onClick={goMyStore}>
         내 상점 가기
@@ -72,7 +140,7 @@ function InformationInput({ data }: DataInfo) {
           <span className="material-symbols-outlined">chevron_right</span>
         </div>
       </ButtonBox>
-      <WithdrawalButton>회원탈퇴</WithdrawalButton>
+      <WithdrawalButton onClick={onClickDelete}>회원탈퇴</WithdrawalButton>
     </Container>
   );
 }
@@ -102,9 +170,7 @@ const NickNameBox = styled.div`
 
   h3 {
     font-size: 1.25rem;
-    font-style: normal;
     font-weight: 700;
-    line-height: normal;
     letter-spacing: 0.04rem;
 
     margin-right: 1.25rem;
@@ -115,7 +181,10 @@ const NickNameBox = styled.div`
     border-radius: 0.75rem;
     margin-right: 0.5rem;
 
+    font-size: 1.25rem;
+
     display: flex;
+    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
     align-items: center;
   }
   input {
@@ -124,7 +193,11 @@ const NickNameBox = styled.div`
     border-radius: 0.75rem;
     margin-right: 0.5rem;
     border: none;
-    background-color: #f4f4f4;
+    font-size: 1.25rem;
+
+    display: flex;
+    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
+    align-items: center;
   }
   button {
     width: 7.5rem;
@@ -146,12 +219,22 @@ const AddressBox = styled.div`
 
   h3 {
     font-size: 1.25rem;
-    font-style: normal;
     font-weight: 700;
-    line-height: normal;
     letter-spacing: 0.04rem;
 
     margin-right: 2.44rem;
+  }
+  p {
+    width: 31.25rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    margin-right: 0.5rem;
+
+    font-size: 1.25rem;
+
+    display: flex;
+    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
+    align-items: center;
   }
   input {
     width: 31.25rem;
@@ -159,7 +242,12 @@ const AddressBox = styled.div`
     border-radius: 0.75rem;
     margin-right: 0.5rem;
     border: none;
-    background-color: #f4f4f4;
+
+    font-size: 1.25rem;
+
+    display: flex;
+    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
+    align-items: center;
   }
   button {
     width: 7.5rem;

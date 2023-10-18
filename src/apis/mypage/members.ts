@@ -8,7 +8,7 @@ export const getMyInfo = async (token: string) => {
         Authorization: token,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
@@ -27,7 +27,7 @@ export const changeImages = async ({ token, formData }: ImagesType) => {
         Authorization: token,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }
@@ -42,7 +42,7 @@ export const changeNickName = async ({ token, nickName }: NickNameType) => {
   try {
     const response = await baseInstance.put(
       `/api/auth/members/me`,
-      { member_nickname: nickName },
+      { shop_name: nickName },
       {
         headers: {
           Authorization: token,
@@ -59,14 +59,13 @@ export const changeNickName = async ({ token, nickName }: NickNameType) => {
 type LocationType = {
   token: string;
   location: string;
-  locationId: number;
 };
-export const changeLocation = async ({ token, location, locationId }: LocationType) => {
+export const changeLocation = async ({ token, location }: LocationType) => {
   try {
     const response = await baseInstance.put(
-      `/api/auth/members/me/locations/${locationId}`,
+      `/api/auth/members/me/locations`,
       {
-        location,
+        location_name: location,
       },
       {
         headers: {
@@ -75,6 +74,20 @@ export const changeLocation = async ({ token, location, locationId }: LocationTy
       },
     );
     return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 회원 탈퇴
+export const deleteID = async (token: string) => {
+  try {
+    const response = await baseInstance.delete('/api/auth/members/me', {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response.data;
   } catch (error) {
     console.log(error);
   }
