@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { getCookie } from '../../utils/cookie';
 import { changeImages } from '../../apis/mypage/members';
@@ -19,6 +19,7 @@ function Profilepicture({ data }: DataInfo) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [confirm, setConfirm] = useState(false);
+  const queryClient = useQueryClient();
 
   const token = getCookie('token');
 
@@ -35,11 +36,11 @@ function Profilepicture({ data }: DataInfo) {
           newFormData.append('image', file);
 
           setFormData(newFormData);
+          setConfirm(true);
         };
       }
     }
   };
-
   useEffect(() => {
     if (data?.member_image) {
       setImage(data?.member_image);
@@ -47,19 +48,20 @@ function Profilepicture({ data }: DataInfo) {
   }, [data?.member_image]);
 
   // 이미지 추가
-  const { data: imageData, refetch } = useQuery(['profileImage', image], () => changeImages({ token, formData }), { enabled: false });
+  const mutation = useMutation(changeImages, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('profileImage');
+    },
+  });
   const changeImage = () => {
     inputRef.current?.click();
-    console.log(image);
-    setConfirm(true);
   };
   const confirmImage = () => {
-    refetch();
+    mutation.mutate({ token, formData });
     setConfirm(false);
   };
   return (
     <Container>
-      {/* <button onClick={() => refetch()}>수정완료</button> */}
       <ProfileImage>{image !== '' ? <img src={image} /> : <span className="material-symbols-outlined">person</span>}</ProfileImage>
       <PencilImage>
         <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />

@@ -55,14 +55,9 @@ function SideBar() {
   };
 
   // 유저 정보 가져오기
-  const [state, setState] = useState(false);
-  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token), { enabled: state });
-  console.log(myData);
+  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token));
 
-  useEffect(() => {
-    setState(true);
-  }, [myData]);
-  console.log(myData);
+  useEffect(() => {}, [myData]);
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
     setLayer(2);
@@ -80,22 +75,25 @@ function SideBar() {
     <>
       <Container>
         <ProfileContainer>
-          <ProfileBox>
-            {token ? (
-              <div onClick={toggleMypage}>
-                <span className="person-icon material-symbols-outlined">person</span>
-                <h3>홍길동</h3>
-                <button>
-                  <span className="expand-icon material-symbols-outlined">expand_more</span>
-                </button>
-              </div>
-            ) : (
-              <div onClick={openModal}>
-                <span className="person-icon material-symbols-outlined">person</span>
-                <h3>로그인이 필요합니다</h3>
-              </div>
-            )}
-          </ProfileBox>
+          {isSuccess ? (
+            <ProfileBox>
+              {token ? (
+                <div onClick={toggleMypage}>
+                  <span className="person-icon material-symbols-outlined">person</span>
+                  <h3>{myData.member_nickname}</h3>
+                  <button>
+                    <span className="expand-icon material-symbols-outlined">expand_more</span>
+                  </button>
+                </div>
+              ) : (
+                <div onClick={openModal}>
+                  <span className="person-icon material-symbols-outlined">person</span>
+                  <h3>로그인이 필요합니다</h3>
+                </div>
+              )}
+            </ProfileBox>
+          ) : null}
+
           <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
             <li
               onClick={() => {
