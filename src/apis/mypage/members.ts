@@ -27,6 +27,7 @@ export const changeImages = async ({ token, formData }: ImagesType) => {
         Authorization: token,
       },
     });
+    console.log('asdasd');
     return response.data;
   } catch (error) {
     console.log(error);
@@ -51,7 +52,7 @@ export const changeNickName = async ({ token, nickName }: NickNameType) => {
     );
     return response;
   } catch (error) {
-    console.log(error);
+    return Promise.reject(error);
   }
 };
 

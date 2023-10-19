@@ -8,7 +8,6 @@ export default function CardLayout({ title, data }) {
   const path = location.pathname;
   const goShop = path.includes('/posting');
   // console.log(data);
-  console.log('location', path);
 
   // const move = () => {
   //   const formattedTitle = title.replace(/\s+/g, '');
@@ -35,7 +34,7 @@ export default function CardLayout({ title, data }) {
                 <span>상점가기</span>
                 <span className="material-symbols-outlined">chevron_right</span>
               </ViewAll>
-            ) : path === '/mypage' ? null : (
+            ) : path === '/mypage' || path === '/store' ? null : (
               <ViewAll onClick={move}>
                 <span>전체보기</span>
                 <span className="material-symbols-outlined">chevron_right</span>
