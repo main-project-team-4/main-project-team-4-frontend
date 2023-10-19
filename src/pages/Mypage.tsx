@@ -24,20 +24,16 @@ function Mypage() {
   const { data: wishlistData } = useQuery('wishlist', () => getWishList(token));
   const wishlist = wishlistData?.data;
 
-  // 내 정보 조회
-  const [state, setState] = useState(false);
-  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token), { enabled: state });
-
-  useEffect(() => {
-    setState(true);
-  }, [myData]);
+  // 내 정보 가져오기
+  const { data: myData, isSuccess } = useQuery('myinfo', () => getMyInfo(token));
+  useEffect(() => {}, [myData]);
 
   return (
     <>
       {isSuccess ? (
         <Container>
-          <Profilepicture data={myData?.data} />
-          <InformationInput data={myData?.data} />
+          <Profilepicture data={myData} />
+          <InformationInput data={myData} />
           <Tab
             tabs={[
               { name: '구매내역', content: <CardLayout title="" data={ordered} /> },
@@ -46,14 +42,12 @@ function Mypage() {
             ]}
           />
         </Container>
-      ) : (
-        <div> 로딩중...</div>
-      )}
+      ) : null}
     </>
   );
 }
 
-export default React.memo(Mypage);
+export default Mypage;
 
 const Container = styled.div`
   width: 74.9375rem;
