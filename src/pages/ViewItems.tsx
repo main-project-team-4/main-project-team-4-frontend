@@ -1,54 +1,61 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { AllItems, CategoryItem, searchItems } from '../apis/getItems/Item';
+import { AllItems, CategoryItem, searchItems, TopItems } from '../apis/getItems/Item';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
 
 export default function ViewItems() {
+  const [keyword, setKeyword] = useState('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const key = params.get('keyword');
+    console.log('URL Keyword: ', key); // URL에서 얻은 keyword를 출력
+    setKeyword(key);
+  }, []);
+
+  useEffect(() => {
+    console.log('State Keyword: ', keyword); // 상태로 설정된 keyword를 출력
+  }, [keyword]);
+
   const params = useParams();
   // console.log('이게 파람즈', params);
   const location = useLocation();
-  const queryClient = useQueryClient();
-  const itemsData = queryClient.getQueryData('items');
+  const [layer, setLayer] = useState(2);
 
-  // const categoryData = queryClient.getQueryData(`categoryitem-${params.category}`);
-  // const searchItemsData = queryClient.getQueryData('search');
+  useEffect(() => {
+    if (!params.midCategoryId) {
+      setLayer(1);
+    } else {
+      setLayer(2);
+    }
+  }, [params.midCategoryId]);
 
-  // let dataToRender;
+  const { data: items } = useQuery('items', AllItems, { stale: true });
+  const { data: topItems } = useQuery('topItems', TopItems, { stale: true });
+  const { data: categoryData } = useQuery(`categoryitem-${params.category}`, () => CategoryItem(params.category, layer));
+  const { data: searchItems } = useQuery(['search', keyword], () => searchItems(keyword), {
+    enabled: !!keyword,
+  });
 
-  // if (params.items == '최신 상품') {
-  //   dataToRender = itemsData;
-  // }
-  // if (params.items == 'category') {
-  //   dataToRender = categoryData;
-  // }
-  // if (params.items == 'search') {
-  //   dataToRender = searchItemsData;
-  // }
-
-  // const { isLoading, isError, data: items } = useQuery('items', AllItems, { stale: true });
-  const { data: CategoryItems } = useQuery(`categoryitem-${params.category}`, { stale: true });
-  // const { data: searchItems } = useQuery(`search-${params.category}`);
+  console.log(searchItems);
 
   let dataToRender;
 
   if (params.items == '최신 상품') {
-    dataToRender = itemsData;
+    dataToRender = items;
+  }
+  if (params.items == '인기 상품') {
+    dataToRender = topItems;
   }
   if (params.items == 'category') {
-    dataToRender = CategoryItems;
+    dataToRender = categoryData;
   }
   if (params.items == 'search') {
-    dataToRender = location.state;
+    dataToRender = searchItems;
   }
 
-  // if (isLoading) {
-  //   return <h2>로딩중입니다</h2>;
-  // }
-  // if (isError || !items) {
-  //   return <h2>오류가 발생하였습니다</h2>;
-  // }
   return (
     <>
       <Layout>

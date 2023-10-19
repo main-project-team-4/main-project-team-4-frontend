@@ -71,7 +71,6 @@ const TabMenu = styled.button<{ active: number }>`
 
 const Info = styled.div`
   flex-grow: 1;
-  padding: 20px;
   /* border-top: 1px solid #e0e0e0; */
   display: flex;
   align-items: center;

@@ -1,24 +1,30 @@
 import styled from 'styled-components';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { Outlet } from 'react-router-dom';
 import CardLayout from '../components/layout/CardLayout';
 import ReviewCard from '../components/store/ReviewCard';
 import Tab from '../components/common/Tab';
 import { AllItems, TopItems, CategoryItem } from '../apis/getItems/Item';
+import { useQueries } from 'react-query';
 
 export default function Main() {
-  const { isLoading, isError, data: items } = useQuery('items', AllItems);
-  // const { data: topitems } = useQuery('topitems', TopItems);
+  const queryResults = useQueries([
+    { queryKey: 'items', queryFn: AllItems },
+    { queryKey: 'topitems', queryFn: TopItems },
+  ]);
 
-  if (isLoading) {
+  const itemsResult = queryResults[0];
+  const topItemsResult = queryResults[1];
+
+  if (itemsResult.isLoading || topItemsResult.isLoading) {
     return <h2>로딩중입니다</h2>;
   }
-  if (isError || !items) {
+
+  if (itemsResult.isError || !itemsResult.data || topItemsResult.isError || !topItemsResult.data) {
     return <h2>오류가 발생하였습니다</h2>;
   }
 
-  const top = items.slice(0, 4);
-  const newest = items.slice(0, 8);
+  const top = topItemsResult.data.slice(0, 4);
+  const newest = itemsResult.data.slice(0, 8);
 
   return (
     <>

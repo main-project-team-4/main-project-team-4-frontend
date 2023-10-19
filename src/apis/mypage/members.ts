@@ -8,7 +8,7 @@ export const getMyInfo = async (token: string) => {
         Authorization: token,
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     console.log(error);
   }

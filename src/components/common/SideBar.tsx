@@ -56,13 +56,10 @@ function SideBar() {
 
   // 유저 정보 가져오기
   const [state, setState] = useState(false);
-  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token), { enabled: state });
-  console.log(myData);
+  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token));
+  // console.log('myData', myData);
 
-  useEffect(() => {
-    setState(true);
-  }, [myData]);
-  console.log(myData);
+  useEffect(() => {}, [myData]);
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
     setLayer(2);
@@ -106,7 +103,7 @@ function SideBar() {
             </li>
             <li
               onClick={() => {
-                navigate('/store');
+                navigate(`/store/${myData.shop_name}`, { state: myData });
               }}
             >
               내 상점

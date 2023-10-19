@@ -1,39 +1,38 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-function FollowerCard() {
+function FollowerCard({ img, name, shop, checkMine, follow }) {
+  const handleDeleteButtonClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleFollowButtonClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const navigate = useNavigate();
   return (
-    // <Container>
-    <FollowerBox>
-      <ProfileBox>
-        <span className="material-symbols-outlined">imagesmode</span>
-      </ProfileBox>
+    <FollowerBox onClick={() => navigate(`/store/${name}`, { state: shop })}>
+      <ProfileBox src={img || 'https://ifh.cc/g/APoRmB.jpg'}></ProfileBox>
+
       <NameBox>
-        <h3>전우치</h3>
-        <p>상품 개수</p>
+        <h3>{name}</h3>
+        <p>상품 : 3개</p>
+        {checkMine && (follow === 'followers' ? <button onClick={handleDeleteButtonClick}>삭제</button> : <button onClick={handleFollowButtonClick}>팔로잉</button>)}
       </NameBox>
     </FollowerBox>
-    // </Container>
   );
 }
 
 export default FollowerCard;
 
-// const Container = styled.div`
-//   width: 95rem;
-
-//   padding: 1.87rem 10rem 9.12rem 10rem;
-//   box-sizing: border-box;
-// `;
-
 const FollowerBox = styled.div`
   width: 15.625rem;
-  height: 24.125rem;
-  padding-top: 2.25rem;
-  padding-bottom: 2.25rem;
-
+  margin: 2.25rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 `;
 const ProfileBox = styled.div`
   width: 9.375rem;
@@ -47,6 +46,10 @@ const ProfileBox = styled.div`
   background-color: #ececec;
   border-radius: 100%;
   margin-bottom: 1.5rem;
+  background-image: url(${props => props.src || 'https://ifh.cc/g/APoRmB.jpg'});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover; // or 'contain' depending on your requirement
 
   span {
     font-size: 3rem;
@@ -55,16 +58,12 @@ const ProfileBox = styled.div`
 `;
 
 const NameBox = styled.div`
-  width: 15.625rem;
-  height: 8.75rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;
 
   h3 {
     font-size: 1.5rem;
-    font-style: normal;
     font-weight: 700;
     line-height: 2.25rem; /* 150% */
     letter-spacing: -0.015rem;
@@ -75,12 +74,28 @@ const NameBox = styled.div`
 
   p {
     font-size: 1rem;
-    font-style: normal;
     font-weight: 500;
     line-height: 1.5rem; /* 150% */
     letter-spacing: -0.015rem;
-    margin-bottom: 1rem;
 
     color: #7a7a7a;
+  }
+
+  button {
+    all: unset;
+    width: 9.375rem;
+    padding: 0.75rem 1rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    background: #717171;
+    color: white;
+    margin-top: 1rem;
+    margin-bottom: 2.25rem;
+    transition: background-color 0.3s ease-in-out;
+    &:hover {
+      background-color: #404040;
+    }
   }
 `;
