@@ -12,12 +12,15 @@ export const AllItems = async () => {
 };
 
 // 인기 상품 모두 조회
-// export const TopItems = async () => {
-//   const response = await baseInstance.get('/api/top-items');
-//   console.log(response.data.content);
+export const TopItems = async () => {
+  try {
+    const response = await baseInstance.get('/api/top-items');
 
-//   return response.data.content;
-// };
+    return response.data.content;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 //카테고리별 아이템 조회
 export const CategoryItem = async (categoryID, layer) => {
@@ -41,12 +44,11 @@ export const DetailItem = async id => {
 };
 
 // 상점별 아이템 조회
-export const ShopItem = async shopId => {
+export const ShopItem = async ({ shopId, size }) => {
   try {
-    const response = await baseInstance.get(`/api/shops/${shopId}/items?page=0&size=4`);
-    return response.data;
+    const response = await baseInstance.get(`/api/shops/${shopId}/items?page=0&size=${size}`);
+    return response.data.content;
     console.log('response.data', response.data);
-    
   } catch (error) {
     console.error(error);
     throw error;

@@ -57,6 +57,7 @@ function SideBar() {
   // 유저 정보 가져오기
   const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token));
 
+
   useEffect(() => {}, [myData]);
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
@@ -104,7 +105,7 @@ function SideBar() {
             </li>
             <li
               onClick={() => {
-                navigate('/store');
+                navigate(`/store/${myData.shop_name}`, { state: myData });
               }}
             >
               내 상점

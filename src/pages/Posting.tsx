@@ -12,7 +12,7 @@ export default function Posting() {
 
   const { data: detailItems } = useQuery(['detailitem', id]);
 
-  const { data: shopItem, refetch } = useQuery(['shopItem', detailItems?.shop_id], () => ShopItem(detailItems?.shop_id), {
+  const { data: shopItem, refetch } = useQuery(['shopItem', detailItems?.shop_id], () => ShopItem({ shopId: detailItems?.shop_id, size: 4 }), {
     enabled: false,
   });
 
@@ -25,7 +25,7 @@ export default function Posting() {
   return (
     <Container>
       <DetailPosting />
-      {shopItem && <CardLayout title={`${shopItem.content[0].member_nickname} 상점의 다른 상품`} data={shopItem.content} />}
+      {shopItem && <CardLayout title={`${shopItem[0].member_nickname} 상점의 다른 상품`} data={shopItem} />}
     </Container>
   );
 }

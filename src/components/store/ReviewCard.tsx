@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-export default function ReviewCard() {
+export default function ReviewCard({ img, name, item, review }) {
   const [open, setOpen] = useState(false);
 
   const viewHandler = useCallback(() => {
@@ -12,15 +12,13 @@ export default function ReviewCard() {
     <>
       <Layout>
         <Profile>
-          <img src="" alt="profile" />
+          <img src={img} alt="profile" />
           <Info>
-            <span>홍길동</span>
-            <p>상품명</p>
+            <span>{name}</span>
+            <p>{item}</p>
           </Info>
         </Profile>
-        <Review open={open}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id aliquid rem beatae, sunt quisquam eum repellendus ipsam accusantium quaerat quos tenetur sed aspernatur? Nisi voluptate quae sit,
-        </Review>
+        <Review open={open}>{review}</Review>
         <ViewAll onClick={viewHandler}>
           {open ? '접기' : '전체보기'}
           <span className="material-symbols-outlined">{open ? 'expand_less' : 'expand_more'}</span>
@@ -60,6 +58,7 @@ const Info = styled.div`
   span {
     font-size: 1.5rem;
     font-weight: 700;
+    text-align: left;
   }
   p {
     overflow: hidden;
@@ -71,9 +70,10 @@ const Info = styled.div`
 
 const Review = styled.div`
   font-weight: 400;
-  height: ${props => (props.open ? 'auto' : '2.5rem')};
+  height: ${props => (props.open ? 'auto' : '1.5rem')};
   overflow: hidden;
   margin-bottom: 0.625rem;
+  text-align: left;
 `;
 
 const ViewAll = styled.button`
