@@ -10,6 +10,7 @@ import Chat from './pages/Chat';
 import Register from './pages/Register';
 import Info from './pages/Info';
 import Root from './pages/Root';
+import SignUp from './pages/SignUp';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: 'info',
         element: <Info />,
+      },
+      {
+        path: 'signup',
+        element: <SignUp />,
       },
       {
         path: '',

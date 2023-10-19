@@ -25,7 +25,7 @@ export default function Header() {
 
   // 모달 열기 함수
   const openModal = () => {
-    setModal(true);
+    // setModal(true);
   };
   // 모달 닫기 함수
   const closeModal = () => {
