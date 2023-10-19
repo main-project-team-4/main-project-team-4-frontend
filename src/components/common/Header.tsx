@@ -8,11 +8,11 @@ import LoginModal from '../login/LoginModal';
 import { getCookie, setCookie } from '../../utils/cookie';
 
 export default function Header() {
-  setCookie('token', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJleHAiOjMyNTA2MzU4NDAwLCJpYXQiOjE2OTc2MDM3NzN9.xgmcg_mTF5p8V6IA0gHyC_4wloij74Pc6vmBfJLauto', {
-    path: '/',
-    secure: true,
-    maxAge: 3000,
-  });
+  // setCookie('token', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJleHAiOjMyNTA2MzU4NDAwLCJpYXQiOjE2OTc2MDM3NzN9.xgmcg_mTF5p8V6IA0gHyC_4wloij74Pc6vmBfJLauto', {
+  //   path: '/',
+  //   secure: true,
+  //   maxAge: 3000,
+  // });
   const [modal, setModal] = useState(false);
   const [itemName, setItemname] = useState('');
 
@@ -25,7 +25,7 @@ export default function Header() {
 
   // 모달 열기 함수
   const openModal = () => {
-    // setModal(true);
+    setModal(true);
   };
   // 모달 닫기 함수
   const closeModal = () => {

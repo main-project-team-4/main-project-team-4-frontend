@@ -2,12 +2,11 @@ import styled from 'styled-components';
 import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function CardLayout({ title, data }) {
+export default function CardLayout({ title, data, shop_Id }) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const goShop = path.includes('/posting');
-  // console.log(data);
 
   // const move = () => {
   //   const formattedTitle = title.replace(/\s+/g, '');
@@ -29,12 +28,13 @@ export default function CardLayout({ title, data }) {
                 <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
               ))}
             </CardWrapper>
+
             {goShop ? (
-              <ViewAll onClick={() => navigate('/store')}>
+              <ViewAll onClick={() => navigate(`/store/${shop_Id}`, { state: shop_Id })}>
                 <span>상점가기</span>
                 <span className="material-symbols-outlined">chevron_right</span>
               </ViewAll>
-            ) : path === '/mypage' || path === '/store' ? null : (
+            ) : path === '/mypage' || path === `${path}` ? null : (
               <ViewAll onClick={move}>
                 <span>전체보기</span>
                 <span className="material-symbols-outlined">chevron_right</span>

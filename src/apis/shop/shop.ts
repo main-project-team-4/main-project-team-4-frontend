@@ -20,11 +20,14 @@ export const Followings = async shopId => {
 
 export const Follow = async ({ shopId, token }) => {
   try {
-    const response = await baseInstance.post(`/api/shops/${shopId}/follows`, {
-      headers: { Authorization: token },
-    });
+    const response = await baseInstance.post(
+      `/api/shops/${shopId}/follows`,
+      {},
+      {
+        headers: { Authorization: token },
+      },
+    );
     return response;
-    console.log('이게 follow 함수', response);
   } catch (error) {
     console.log(error);
   }

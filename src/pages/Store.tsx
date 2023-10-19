@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import Tab from '../components/common/Tab';
 import ReviewLayout from '../components/layout/ReviewLayout';
 import FollowLayout from '../components/layout/FollowLayout';
-import { useLocation } from 'react-router-dom';
-import { ShopInfo, Follow, FollowCheck, Reviews, Followers, Followings } from '../apis/shop/shop';
+import { useLocation, useParams } from 'react-router-dom';
+import { ShopInfo, FollowCheck, Reviews, Followers, Followings, Follow } from '../apis/shop/shop';
 import { ShopItem } from '../apis/getItems/Item';
-import { useMutation, useQuery, useQueries } from 'react-query';
+import { useQuery, useQueries, useMutation, useQueryClient } from 'react-query';
 import { getCookie } from '../utils/cookie';
 import { useState, useEffect } from 'react';
 import { getMyInfo } from '../apis/mypage/members';
@@ -14,29 +14,44 @@ import CardLayout from '../components/layout/CardLayout';
 export default function Store() {
   const [checkMine, setCheckMine] = useState(false);
   const { state } = useLocation();
-  console.log('state', state);
-
+  const queryClient = useQueryClient();
   const token = getCookie('token');
+  const { storeId } = useParams();
+  useEffect(() => {}, [storeId]);
+
+  // 팔로우 상태 관리
+  const { data: followCheck, refetch: followCheckRefetch } = useQuery(['followCheck', state], () => FollowCheck(state, token), { enabled: !!token });
+  const [isFollow, setIsFollow] = useState(followCheck);
+
+  useEffect(() => {
+    setIsFollow(followCheck);
+  }, [followCheck]);
 
   const followMutation = useMutation(Follow, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['followCheck', state.member_id]);
+    onSuccess: ({ data }) => {
+      queryClient.invalidateQueries(['followCheck', state]);
+      followCheckRefetch();
+      shopInfoRefetch();
+      if (data.is_following) {
+        setIsFollow(false);
+      } else {
+        setIsFollow(true);
+      }
     },
   });
 
-  const { data: followCheck } = useQuery(['followCheck', state.member_id], () => FollowCheck(state.shop_id, token), { enabled: !!token });
-
   const queryResults = useQueries([
     { queryKey: ['myInfo'], queryFn: () => getMyInfo(token) },
-    { queryKey: ['shopInfo', state.shop_id], queryFn: () => ShopInfo(state.shop_id) },
-    { queryKey: ['review', state.shop_id], queryFn: () => Reviews(state.shop_id) },
-    { queryKey: ['followers', state.shop_id], queryFn: () => Followers(state.shop_id) },
-    { queryKey: ['followings', state.shop_id], queryFn: () => Followings(state.shop_id) },
-    { queryKey: ['shopItem', state.shop_id], queryFn: () => ShopItem({ shopId: state.shop_id }) },
+    { queryKey: ['shopInfo', state], queryFn: () => ShopInfo(state) },
+    { queryKey: ['review', state], queryFn: () => Reviews(state) },
+    { queryKey: ['followers', state], queryFn: () => Followers(state) },
+    { queryKey: ['followings', state], queryFn: () => Followings(state) },
+    { queryKey: ['shopItem', state], queryFn: () => ShopItem({ shopId: state, size: 4 }) },
   ]);
 
   const myData = queryResults[0].data;
   const shopInfo = queryResults[1].data;
+  const shopInfoRefetch = queryResults[1].refetch;
   const reviewData = queryResults[2].data;
   const followers = queryResults[3].data;
   const followings = queryResults[4].data;
@@ -44,9 +59,9 @@ export default function Store() {
 
   useEffect(() => {
     if (myData) {
-      setCheckMine(state.member_nickname === myData.member_nickname);
+      setCheckMine(state === myData.shop_id);
     }
-  }, [state.member_nickname, myData?.member_nickname]);
+  }, [state, myData?.shop_id]);
 
   const isLoading = queryResults.some(result => result.isLoading);
 
@@ -59,7 +74,7 @@ export default function Store() {
   }
 
   const handleFollow = () => {
-    followMutation.mutate({ shopId: state.shop_id, token: token });
+    followMutation.mutate({ shopId: state, token: token });
   };
 
   return (
@@ -87,30 +102,28 @@ export default function Store() {
               </FollowPart>
             </div>
             {!checkMine &&
-              (followCheck ? (
+              (isFollow ? (
                 <Button
                   onClick={() => {
-                    console.log('클릭');
                     handleFollow();
                   }}
                 >
-                  팔로잉
+                  팔로우 취소
                 </Button>
               ) : (
                 <Button
                   onClick={() => {
-                    console.log('클릭');
                     handleFollow();
                   }}
                 >
-                  팔로우
+                  팔로우 하기
                 </Button>
               ))}
           </FollowBox>
         </ProfileContainer>
         <Tab
           tabs={[
-            { name: '판매상품', content: <CardLayout data={shopItem} /> },
+            { name: '판매상품', content: <CardLayout data={shopItem} title="" shop_Id="" /> },
             { name: '상점리뷰', content: <ReviewLayout reviewData={reviewData} /> },
             { name: '팔로워', content: <FollowLayout data={followers} checkMine={checkMine} follow={'followers'} /> },
             { name: '팔로잉', content: <FollowLayout data={followings} checkMine={checkMine} follow={'followings'} /> },

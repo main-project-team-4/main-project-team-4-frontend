@@ -10,21 +10,20 @@ import LoginModal from '../login/LoginModal';
 import { getMyInfo } from '../../apis/mypage/members';
 
 type ItemType = {
-  large_category_id: number;
-  large_category_name: string;
-  children: [
-    {
-      mid_category_id: number;
-      mid_category_name: string;
-      large_category_id: number;
-      large_category_name: string;
-    },
-  ];
+  category_l_id: number;
+  category_l_name: string;
+  children: ItemChildType[];
+};
+type ItemChildType = {
+  category_m_id: number;
+  category_m_name: string;
+  category_l_id: number;
+  category_l_name: string;
 };
 
 function SideBar() {
   const [modal, setModal] = useState(false);
-  const [categoryId, setCategoryId] = useState('');
+  const [categoryId, setCategoryId] = useState(0);
   const [layer, setLayer] = useState(2);
   const [visibleMypage, setVisibleMypage] = useState(false);
 
@@ -41,7 +40,7 @@ function SideBar() {
   };
 
   // 카테고리별 아이템 항목 가져오기
-  const { data: categoryData, refetch } = useQuery(`categoryitem-${categoryId}`, () => CategoryItem(categoryId, layer), { enabled: false });
+  const { refetch } = useQuery(`categoryitem-${categoryId}`, () => CategoryItem(categoryId, layer), { enabled: false });
 
   // 카테고리 전체 가져오기
   const { data: category } = useQuery('category', getCategory);
@@ -55,9 +54,7 @@ function SideBar() {
   };
 
   // 유저 정보 가져오기
-  const { data: myData, isSuccess } = useQuery('myInfo', () => getMyInfo(token));
-
-
+  const { data: myData, isLoading } = useQuery('myInfo', () => getMyInfo(token));
   useEffect(() => {}, [myData]);
 
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
@@ -72,28 +69,29 @@ function SideBar() {
     setVisibleMypage(!visibleMypage);
   };
 
+  if (isLoading) {
+    return <div> ... 로딩중</div>;
+  }
   return (
     <>
       <Container>
         <ProfileContainer>
-          {isSuccess ? (
-            <ProfileBox>
-              {token ? (
-                <div onClick={toggleMypage}>
-                  <span className="person-icon material-symbols-outlined">person</span>
-                  <h3>{myData.member_nickname}</h3>
-                  <button>
-                    <span className="expand-icon material-symbols-outlined">expand_more</span>
-                  </button>
-                </div>
-              ) : (
-                <div onClick={openModal}>
-                  <span className="person-icon material-symbols-outlined">person</span>
-                  <h3>로그인이 필요합니다</h3>
-                </div>
-              )}
-            </ProfileBox>
-          ) : null}
+          <ProfileBox>
+            {token ? (
+              <div onClick={toggleMypage}>
+                <span className="person-icon material-symbols-outlined">person</span>
+                <h3>{myData.member_nickname}</h3>
+                <button>
+                  <span className="expand-icon material-symbols-outlined">expand_more</span>
+                </button>
+              </div>
+            ) : (
+              <div onClick={openModal}>
+                <span className="person-icon material-symbols-outlined">person</span>
+                <h3>로그인이 필요합니다</h3>
+              </div>
+            )}
+          </ProfileBox>
 
           <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
             <li
@@ -105,7 +103,7 @@ function SideBar() {
             </li>
             <li
               onClick={() => {
-                navigate(`/store/${myData.shop_name}`, { state: myData });
+                navigate(`/store/${myData.shop_id}`, { state: myData.shop_id });
               }}
             >
               내 상점
@@ -126,7 +124,7 @@ function SideBar() {
               <div key={item.category_l_id}>
                 <ul>
                   <h3 onClick={() => onClickLarge(item.category_l_name, item.category_l_id)}>{item.category_l_name}</h3>
-                  {item.children.map(item => (
+                  {item.children.map((item: ItemChildType) => (
                     <li key={item.category_m_id} onClick={() => onClickMid(item.category_l_name, item.category_m_name, item.category_m_id)}>
                       {item.category_m_name}
                     </li>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { AllItems, CategoryItem, searchItems, TopItems } from '../apis/getItems/Item';
+import { AllItems, CategoryItem, TopItems } from '../apis/getItems/Item';
+import { searchItems } from '../apis/header/Header';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
@@ -11,12 +12,12 @@ export default function ViewItems() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const key = params.get('keyword');
-    console.log('URL Keyword: ', key); // URL에서 얻은 keyword를 출력
+    // console.log('URL Keyword: ', key); // URL에서 얻은 keyword를 출력
     setKeyword(key);
   }, []);
 
   useEffect(() => {
-    console.log('State Keyword: ', keyword); // 상태로 설정된 keyword를 출력
+    // console.log('State Keyword: ', keyword); // 상태로 설정된 keyword를 출력
   }, [keyword]);
 
   const params = useParams();
@@ -38,8 +39,6 @@ export default function ViewItems() {
   const { data: searchItems } = useQuery(['search', keyword], () => searchItems(keyword), {
     enabled: !!keyword,
   });
-
-  console.log(searchItems);
 
   let dataToRender;
 

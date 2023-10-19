@@ -21,13 +21,12 @@ type ImagesType = {
 };
 export const changeImages = async ({ token, formData }: ImagesType) => {
   try {
-    const response = await baseInstance.put(`/api/auth/members/me/images`, formData, {
+    const response = await baseInstance.post(`/api/auth/members/me/images`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: token,
       },
     });
-    console.log('asdasd');
     return response.data;
   } catch (error) {
     console.log(error);

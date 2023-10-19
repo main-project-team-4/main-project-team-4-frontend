@@ -14,6 +14,7 @@ export const kakaoLogin = async (codeParam: TokenType) => {
         maxAge: 3000,
       });
     }
+    return response.data;
   } catch (error) {
     // alert(error.response.data.msg);
     return Promise.reject(error);
