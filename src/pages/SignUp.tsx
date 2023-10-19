@@ -24,12 +24,15 @@ function SignUp() {
   const nicknameMutation = useMutation(changeNickName, {
     onSuccess: () => {
       queryClient.invalidateQueries('changeNick');
+      alert('사용가능한 아이디입니다.');
       setNickDuplicated(false);
     },
     onError: error => {
       console.log(error);
       setNickDuplicated(true);
       alert(error?.response.data.msg);
+      console.log(error?.response);
+
       setNickName('');
     },
   });
@@ -58,6 +61,7 @@ function SignUp() {
   // 메인 페이지로 이동
   const goMain = () => {
     if (!nickDuplicated && address.length > 0) {
+      alert('회원가입이 완료되었습니다.');
       navigate('/');
     } else {
       alert('정보를 모두 입력해주세요.');
@@ -143,6 +147,8 @@ const InputBox = styled.div`
     border-radius: 0.75rem;
     border: none;
     background-color: #f4f4f4;
+
+    cursor: pointer;
   }
 `;
 

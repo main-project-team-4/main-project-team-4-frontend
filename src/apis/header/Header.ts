@@ -9,7 +9,6 @@
 //   }
 // };
 
-import { useQuery } from 'react-query';
 import { baseInstance } from '../config';
 
 export const searchItems = async (itemName: string) => {

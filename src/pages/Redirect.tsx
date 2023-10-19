@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -19,7 +18,11 @@ function Kakao() {
     return <div>카카오 로그인 처리 중...</div>;
   }
   if (isSuccess) {
-    navigate('/');
+    if (data.first) {
+      navigate('/signup');
+    } else {
+      navigate('/');
+    }
   }
   if (isError) {
     return <div>에러 발생</div>;

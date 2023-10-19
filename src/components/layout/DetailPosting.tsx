@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import { DetailItem } from '../../apis/getItems/Item';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { putWishes, checkWishes } from '../../apis/posting/posting';
+import { getCookie } from '../../utils/cookie';
 
 export default function DetailPosting() {
   const location = useLocation();
   const { id } = location.state || {};
+  const token = getCookie('token');
 
   const { data: detailItems } = useQuery(['detailitem', id], () => {
     return DetailItem(id);
@@ -19,11 +22,33 @@ export default function DetailPosting() {
     }
   }, [detailItems]);
 
+  //찜하기
+  const [wishState, setWishState] = useState(false);
+  const queryClient = useQueryClient();
+  const mutation = useMutation(putWishes, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['putwishes', detailItems.item_id]);
+      setWishState(!wishState);
+    },
+  });
+  const onClickHeart = () => {
+    mutation.mutate({ token, itemId: detailItems.item_id });
+    setWishState(wishState);
+  };
+
+  // 찜여부 확인
+  const { data: isWishing } = useQuery(['checkWishes', location.state.id], () => checkWishes({ token, itemId: location.state.id }));
+  useEffect(() => {
+    if (isWishing !== undefined && isWishing !== null) {
+      setWishState(isWishing.is_wishing);
+    }
+  }, [isWishing]);
+
   return detailItems ? (
     <Container>
       <ImageComtainer>
         <img className="firstImg" src={mainImg} alt="게시물"></img>
-        <ImageBox>{detailItems.item_image_list?.map(item => <img src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
+        <ImageBox>{detailItems.item_image_list?.map((item: string, index: number) => <img key={index} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
       </ImageComtainer>
       <PostingContainer>
         <PostingBox>
@@ -31,12 +56,11 @@ export default function DetailPosting() {
           <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
           <div>{detailItems.item_comment}</div>
         </PostingBox>
-        <PriceBox>
+        <PriceBox state={wishState ? 1 : 0}>
           <h1>{Number(detailItems.item_price).toLocaleString()} 원</h1>
-
           <div>
-            <button className="Follow-Button">
-              <span class="material-symbols-outlined">favorite</span>
+            <button onClick={onClickHeart} className="Follow-Button">
+              <span className="material-symbols-outlined">favorite</span>
             </button>
             <button className="Chat-Button">채팅하기</button>
           </div>
@@ -124,7 +148,7 @@ const PostingBox = styled.div`
   }
 `;
 
-const PriceBox = styled.div`
+const PriceBox = styled.div<{ state: number }>`
   margin-top: 1.5rem;
   width: 34.375rem;
   height: 8.5rem;
@@ -157,6 +181,10 @@ const PriceBox = styled.div`
     gap: 0.5rem;
     cursor: pointer;
     border-radius: 0.5rem;
+
+    span {
+      color: ${props => (props.state === 1 ? 'red' : 'none')};
+    }
 
     &:hover {
     }
