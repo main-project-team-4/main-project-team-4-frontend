@@ -26,6 +26,10 @@ const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
+        path: 'kakao',
+        element: <Kakao />,
+      },
+      {
         path: '',
         element: <Root />,
         children: [
@@ -49,10 +53,7 @@ const router = createBrowserRouter([
             path: 'store/:storeId',
             element: <Store />,
           },
-          {
-            path: 'kakao',
-            element: <Kakao />,
-          },
+
           {
             path: 'chat',
             element: <Chat />,

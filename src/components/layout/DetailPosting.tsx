@@ -48,7 +48,7 @@ export default function DetailPosting() {
     <Container>
       <ImageComtainer>
         <img className="firstImg" src={mainImg} alt="게시물"></img>
-        <ImageBox>{detailItems.item_image_list?.map((item: string, index: number) => <img key={index} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
+        <ImageBox>{detailItems.item_image_list?.map((item: string, index: number) => <img key={index} src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
       </ImageComtainer>
       <PostingContainer>
         <PostingBox>
