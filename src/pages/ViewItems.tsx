@@ -1,45 +1,31 @@
 import { useEffect, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { AllItems, CategoryItem, TopItems } from '../apis/getItems/Item';
-import { searchItems } from '../apis/header/Header';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
+import { theme } from '../styles/theme';
 
 export default function ViewItems() {
-  const [keyword, setKeyword] = useState('');
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const key = params.get('keyword');
-    // console.log('URL Keyword: ', key); // URL에서 얻은 keyword를 출력
-    setKeyword(key);
-  }, []);
-
-  useEffect(() => {
-    // console.log('State Keyword: ', keyword); // 상태로 설정된 keyword를 출력
-  }, [keyword]);
-
   const params = useParams();
-  // console.log('이게 파람즈', params);
   const location = useLocation();
-  const [layer, setLayer] = useState(2);
+
+  // 검색 키워드 관리
+  const [keyword, setKeyword] = useState('');
+  const key = location.search.split('=')[1];
+  useEffect(() => {
+    setKeyword(key);
+  }, [key]);
+
+  const { data: items } = useQuery('items', AllItems);
+  const { data: topItems } = useQuery('topItems', TopItems);
+  const { data: categoryData, refetch } = useQuery([`categoryitem`, location.state?.id, location.state?.layer], () => CategoryItem(location.state.id, location.state.layer), { enabled: false });
+
+  const shouldFetch = location.state;
 
   useEffect(() => {
-    if (!params.midCategoryId) {
-      setLayer(1);
-    } else {
-      setLayer(2);
-    }
-  }, [params.midCategoryId]);
-
-  const { data: items } = useQuery('items', AllItems, { stale: true });
-  const { data: topItems } = useQuery('topItems', TopItems, { stale: true });
-  const { data: categoryData } = useQuery(`categoryitem-${params.category}`, () => CategoryItem(params.category, layer));
-  const { data: searchItems } = useQuery(['search', keyword], () => searchItems(keyword), {
-    enabled: !!keyword,
-  });
-
+    refetch();
+  }, [shouldFetch]);
   let dataToRender;
 
   if (params.items == '최신 상품') {
@@ -52,27 +38,47 @@ export default function ViewItems() {
     dataToRender = categoryData;
   }
   if (params.items == 'search') {
-    dataToRender = searchItems;
+    dataToRender = location.state;
   }
 
   return (
-    <>
-      <Layout>
-        <Title>
-          {params.LargeCategory}
-          {params.midCategoryId && ` - ${params.midCategoryId}`}
-        </Title>
-        {dataToRender && (
+    <Layout>
+      <Title>
+        {params.items === 'search' ? (
+          <h4>
+            <span>{keyword}</span>의 검색결과 {dataToRender?.length}개
+          </h4>
+        ) : (
+          <>
+            {/* {params.items} */}
+            {params.LargeCategory}
+            {params.midCategoryId && ` - ${params.midCategoryId}`}
+          </>
+        )}
+      </Title>
+      {dataToRender?.length === 0 ? (
+        <NotExits>
+          <h3>{keyword}</h3>
+          <p>에 대한 검색결과가 없습니다.</p>
+        </NotExits>
+      ) : (
+        dataToRender && (
           <CardWrapper>
-            {dataToRender.map(item => (
-              <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
+            {dataToRender.map((item: ItemType) => (
+              <Card key={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
             ))}
           </CardWrapper>
-        )}
-      </Layout>
-    </>
+        )
+      )}
+    </Layout>
   );
 }
+type ItemType = {
+  item_id: number;
+  item_name: string;
+  item_main_image: string;
+  item_price: string;
+};
 
 const Layout = styled.div`
   display: flex;
@@ -95,4 +101,25 @@ const Title = styled.p`
   font-weight: 600;
   line-height: 33px;
   align-self: flex-start;
+
+  span {
+    font-size: 2rem;
+    color: ${theme.pointColor};
+  }
+`;
+
+const NotExits = styled.div`
+  margin-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h3 {
+    font-size: 4rem;
+    color: ${theme.pointColor};
+  }
+  p {
+    font-size: 2rem;
+  }
 `;

@@ -18,7 +18,7 @@ function Kakao() {
     return <div>카카오 로그인 처리 중...</div>;
   }
   if (isSuccess) {
-    if (data.first) {
+    if (!data.first) {
       navigate('/signup');
     } else {
       navigate('/');
