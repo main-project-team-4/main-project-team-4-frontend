@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
-import { CategoryItem } from '../../apis/getItems/Item';
 import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
 import { removeCookie } from '../../utils/cookie';
@@ -23,8 +22,7 @@ type ItemChildType = {
 
 function SideBar() {
   const [modal, setModal] = useState(false);
-  const [categoryId, setCategoryId] = useState(0);
-  const [layer, setLayer] = useState(2);
+  const [layer, setLayer] = useState(1);
   const [visibleMypage, setVisibleMypage] = useState(false);
 
   const navigate = useNavigate();
@@ -39,30 +37,45 @@ function SideBar() {
     setModal(false);
   };
 
-  // 카테고리별 아이템 항목 가져오기
-  const { refetch } = useQuery(`categoryitem-${categoryId}`, () => CategoryItem(categoryId, layer), { enabled: false });
-
   // 카테고리 전체 가져오기
   const { data: category } = useQuery('category', getCategory);
-
-  // 클릭시 대분류 페이지로 이동
-  const onClickLarge = (categoryName: string, LargeCategoryId: number) => {
-    setLayer(1);
-    setCategoryId(LargeCategoryId);
-    refetch();
-    navigate(`category/${categoryName}/${LargeCategoryId}`);
-  };
 
   // 유저 정보 가져오기
   const { data: myData, isLoading } = useQuery('myInfo', () => getMyInfo(token));
   useEffect(() => {}, [myData]);
 
+  // 클릭시 대분류 페이지로 이동
+  const [largeId, setLargeID] = useState(0);
+  const [largeName, setLargeName] = useState('');
+  const onClickLarge = (categoryName: string, LargeCategoryId: number) => {
+    setLayer(1);
+    setLargeID(LargeCategoryId);
+    setLargeName(categoryName);
+  };
+  useEffect(() => {
+    if (largeId && largeName) {
+      navigate(`category/${largeName}`, { state: { layer, id: largeId } });
+      setLargeName('');
+    }
+  }, [largeId, largeName]);
+
+  // 클릭시 중분류 페이지로 이동
+  const [midState, setMidState] = useState(false);
+  const [midId, setMidId] = useState(0);
+  const [midName, setMidName] = useState('');
+  const [largeName2, setLargeName2] = useState('');
   const onClickMid = (LargeCategoryName: string, MidCategoryName: string, MidCategoryId: number) => {
     setLayer(2);
-    setCategoryId(MidCategoryId);
-    refetch();
-    navigate(`category/${LargeCategoryName}/${MidCategoryId}/${MidCategoryName}`);
+    setMidId(MidCategoryId);
+    setMidName(MidCategoryName);
+    setLargeName2(LargeCategoryName);
+    setMidState(!midState);
   };
+  useEffect(() => {
+    if (midId && midName) {
+      navigate(`category/${largeName2}/${midName}`, { state: { layer, id: midId } });
+    }
+  }, [midId, midName, midState]);
 
   // 프로필 밑에 있는 마이페이지 토글
   const toggleMypage = () => {
