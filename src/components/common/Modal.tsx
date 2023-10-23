@@ -35,7 +35,7 @@ const Overlay = styled.div`
 const Container = styled.div`
   width: 25rem;
   height: 10rem;
-  background-color: ${theme.white};
+  background-color: white;
   border: 1px solid ${theme.outline};
   border-radius: 0.75rem;
 
@@ -64,7 +64,7 @@ const Confirm = styled.button`
   border-radius: 0.5rem;
   background: ${theme.navy};
   border: none;
-  color: ${theme.white};
+  color: white
 
   cursor: pointer;
 `;

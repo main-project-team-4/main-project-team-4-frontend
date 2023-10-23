@@ -128,7 +128,7 @@ function Welcome() {
 export default Welcome;
 
 const Container = styled.div`
-  background-color: ${theme.white};
+  background-color: white;
   width: 90rem;
   height: 51.125rem;
 
@@ -193,7 +193,7 @@ const InputBox = styled.div`
     border-radius: 0.75rem;
     border: none;
     background-color: ${theme.navy};
-    color: ${theme.white};
+    color: white;
 
     cursor: pointer;
   }
@@ -215,7 +215,7 @@ const SignUpBtn = styled.button`
 
   border-radius: 0.5rem;
   background-color: ${theme.pointColor};
-  color: ${theme.white};
+  color: white;
   border: none;
 
   cursor: pointer;
