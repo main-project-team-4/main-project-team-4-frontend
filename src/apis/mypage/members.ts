@@ -63,7 +63,7 @@ type LocationType = {
 export const changeLocation = async ({ token, location }: LocationType) => {
   try {
     const response = await baseInstance.put(
-      `/api/auth/members/me/locations`,
+      `/api/auth/members/me`,
       {
         location_name: location,
       },

@@ -4,7 +4,7 @@ import Profilepicture from '../components/mypage/Profilepicture';
 import Tab from '../components/common/Tab';
 import CardLayout from '../components/layout/CardLayout';
 import { useQuery } from 'react-query';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getOrders, getSales, getWishList } from '../apis/mypage/items';
 import { getCookie } from '../utils/cookie';
 import { getMyInfo } from '../apis/mypage/members';

@@ -20,7 +20,7 @@ export default function Root() {
 const Container = styled.div`
   max-width: 120rem;
   margin: 0 auto;
-  background-color: #f2f4f8;
+  background-color: ${props => props.theme.bgColor};
 `;
 const Content = styled.div`
   display: flex;

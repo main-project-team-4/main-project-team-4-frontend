@@ -1,12 +1,29 @@
 import styled from 'styled-components';
-import { Outlet } from 'react-router-dom';
 import CardLayout from '../components/layout/CardLayout';
 import ReviewCard from '../components/store/ReviewCard';
 import Tab from '../components/common/Tab';
 import { AllItems, TopItems, CategoryItem } from '../apis/getItems/Item';
-import { useQueries } from 'react-query';
+import { useQueries, useQuery } from 'react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getMyInfo } from '../apis/mypage/members';
+import { getCookie } from '../utils/cookie';
 
 export default function Main() {
+  const navigate = useNavigate();
+  const token = getCookie('token');
+  const { state } = useLocation();
+
+  const { data } = useQuery('myinfo', () => getMyInfo(token));
+
+  useEffect(() => {
+    if (state) {
+      if (!data?.shop_name || !data?.location_name) {
+        navigate('welcome');
+      }
+    }
+  }, [data]);
+
   const queryResults = useQueries([
     { queryKey: 'items', queryFn: AllItems },
     { queryKey: 'topitems', queryFn: TopItems },
@@ -25,7 +42,6 @@ export default function Main() {
 
   const top = topItemsResult.data.slice(0, 4);
   const newest = itemsResult.data.slice(0, 8);
-
   return (
     <>
       <Layout>
