@@ -168,5 +168,5 @@ const Btn = styled.button`
 
   gap: 0.375rem;
   color: white;
-  background-color: ${props => props.theme.btnColor};
+  background-color: ${props => props.theme.navy};
 `;

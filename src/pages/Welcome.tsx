@@ -192,7 +192,7 @@ const InputBox = styled.div`
     height: 3rem;
     border-radius: 0.75rem;
     border: none;
-    background-color: ${theme.mainColor};
+    background-color: ${theme.navy};
     color: ${theme.white};
 
     cursor: pointer;
@@ -214,8 +214,8 @@ const SignUpBtn = styled.button`
   justify-content: center;
 
   border-radius: 0.5rem;
-  background-color: ${props => props.theme.pointColor};
-  color: ${props => props.theme.white};
+  background-color: ${theme.pointColor};
+  color: ${theme.white};
   border: none;
 
   cursor: pointer;

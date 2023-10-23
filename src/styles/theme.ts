@@ -4,10 +4,8 @@ import { DefaultTheme } from 'styled-components';
 
 // DefaultTheme은 styled.d.ts에서 정의한 interface
 export const theme: DefaultTheme = {
-  bgColor: '#E7E8EA',
-  textColor: '#f5f6fa',
-  mainColor: '#0F172A',
-  btnColor: '#272E3F',
+  bgColor: '#fafafa',
+  navy: '#272E3F',
   pointColor: '#2667FF',
   white: '#FAFAFA',
   inputColor: '#F4F4F4',

@@ -62,7 +62,7 @@ const Confirm = styled.button`
   padding: 0.625rem 2.5rem;
 
   border-radius: 0.5rem;
-  background: #9aa0a6;
+  background: ${theme.navy};
   border: none;
   color: ${theme.white};
 
