@@ -10,7 +10,7 @@ import Chat from './pages/Chat';
 import Register from './pages/Register';
 import Info from './pages/Info';
 import Root from './pages/Root';
-import SignUp from './pages/SignUp';
+import Welcome from './pages/Welcome';
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
         element: <Info />,
       },
       {
-        path: 'signup',
-        element: <SignUp />,
+        path: 'welcome',
+        element: <Welcome />,
       },
       {
         path: 'kakao',
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
             element: <Main />,
           },
           {
-            path: ':items/:LargeCategory?/:category?/:midCategoryId?/:last?',
+            path: ':items/:LargeCategory?/:midCategoryId?/:last?',
             element: <ViewItems />,
           },
           {

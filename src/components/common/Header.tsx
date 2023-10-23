@@ -2,24 +2,19 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { searchItems } from '../../apis/header/Header';
-import React, { useEffect, useState } from 'react';
-import { DefaultTheme } from 'styled-components';
+import React, { useState } from 'react';
+
 import LoginModal from '../login/LoginModal';
-import { getCookie, setCookie } from '../../utils/cookie';
+import { getCookie } from '../../utils/cookie';
 
 export default function Header() {
-  // setCookie('token', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiYXV0aCI6IlVTRVIiLCJleHAiOjMyNTA2MzU4NDAwLCJpYXQiOjE2OTc2MDM3NzN9.xgmcg_mTF5p8V6IA0gHyC_4wloij74Pc6vmBfJLauto', {
-  //   path: '/',
-  //   secure: true,
-  //   maxAge: 3000,
-  // });
   const [modal, setModal] = useState(false);
   const [itemName, setItemname] = useState('');
-
   const navigate = useNavigate();
   const token = getCookie('token');
 
   const goHome = () => {
+    setItemname('');
     navigate('/');
   };
 
@@ -33,13 +28,7 @@ export default function Header() {
   };
 
   // 검색 기능
-  const { data, refetch, isLoading, isError } = useQuery(
-    ['search', itemName], // 쿼리 키를 배열로 사용하여 itemName에 따라 다른 쿼리를 만듭니다.
-    () => searchItems(itemName),
-    { enabled: false },
-  );
-
-  // const { data, refetch } = useQuery('search', () => searchItems(itemName), { enabled: true });
+  const { refetch } = useQuery('search', () => searchItems(itemName), { enabled: false });
 
   const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
@@ -50,32 +39,23 @@ export default function Header() {
       onClickSearch();
     }
   };
-  const onClickSearch = () => {
-    refetch();
+  const onClickSearch = async () => {
+    try {
+      const { data: refetchedData } = await refetch();
+      if (refetchedData && itemName) {
+        navigate(`search?keyword=${itemName}`, { state: refetchedData });
+      }
+    } catch (error) {
+      console.error('Error refetching data:', error);
+    }
   };
-
-  useEffect(() => {
-    if (!itemName) {
-      return;
-    }
-    if (data) {
-      navigate(`search?keyword=${itemName}`, { state: data?.content });
-    }
-  }, [data, navigate]);
 
   return (
     <>
       <Layout>
         <Logo onClick={goHome} />
         <Search>
-          <input
-            onKeyDown={event => {
-              activeEnter(event);
-            }}
-            value={itemName}
-            onChange={onChangeItem}
-            type="text"
-          />
+          <input onKeyDown={activeEnter} value={itemName} onChange={onChangeItem} type="text" />
           <span onClick={onClickSearch} className="material-symbols-outlined">
             search
           </span>
@@ -185,8 +165,8 @@ const Btn = styled.button`
   /* padding: 0.625rem 1.5rem; */
   justify-content: center;
   align-items: center;
-  line-height:;
+
   gap: 0.375rem;
   color: white;
-  background-color: ${props => props.theme.btnColor};
+  background-color: ${props => props.theme.navy};
 `;

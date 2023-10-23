@@ -13,15 +13,15 @@ function Kakao() {
   const codeParam = searchParams.get('code');
 
   const { isSuccess, isLoading, isError, data } = useQuery('kakao ', () => kakaoLogin(codeParam));
-
+  console.log(data);
   if (isLoading) {
     return <div>카카오 로그인 처리 중...</div>;
   }
   if (isSuccess) {
     if (data.first) {
-      navigate('/signup');
+      navigate('/welcome');
     } else {
-      navigate('/');
+      navigate('/', { state: data.first });
     }
   }
   if (isError) {
