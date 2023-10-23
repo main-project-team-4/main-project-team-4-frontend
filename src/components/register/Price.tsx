@@ -76,7 +76,7 @@ const Delivery = styled.button<ButtonType>`
   font-weight: 500;
 
   &.active {
-    background-color: red;
+    background-color: #909090;
   }
 
   cursor: pointer;

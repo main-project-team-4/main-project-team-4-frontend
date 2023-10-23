@@ -18,7 +18,7 @@ function FollowerCard({ img, name, shop, checkMine, follow }) {
       <NameBox>
         <h3>{name}</h3>
         <p>상품 : 3개</p>
-        {checkMine && (follow === 'followers' ? <button onClick={handleDeleteButtonClick}>삭제</button> : <button onClick={handleFollowButtonClick}>팔로잉</button>)}
+        {checkMine && (follow === 'followers' ? <button onClick={handleDeleteButtonClick}>팔로잉</button> : <button onClick={handleFollowButtonClick}>팔로잉</button>)}
       </NameBox>
     </FollowerBox>
   );
@@ -83,8 +83,6 @@ const NameBox = styled.div`
 
   button {
     all: unset;
-    width: 9.375rem;
-    padding: 0.75rem 1rem;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
@@ -93,6 +91,10 @@ const NameBox = styled.div`
     color: white;
     margin-top: 1rem;
     margin-bottom: 2.25rem;
+    display: flex;
+    width: 7.5rem;
+    padding: 0.625rem 1rem;
+
     transition: background-color 0.3s ease-in-out;
     &:hover {
       background-color: #404040;

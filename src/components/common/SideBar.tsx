@@ -80,7 +80,7 @@ function SideBar() {
             {token ? (
               <div onClick={toggleMypage}>
                 <span className="person-icon material-symbols-outlined">person</span>
-                <h3>{myData.member_nickname}</h3>
+                <h3>{myData?.member_nickname}</h3>
                 <button>
                   <span className="expand-icon material-symbols-outlined">expand_more</span>
                 </button>
