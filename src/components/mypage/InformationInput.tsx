@@ -80,7 +80,7 @@ function InformationInput({ data }: DataInfo) {
 
   // 내 상점으로 이동
   const goMyStore = () => {
-    navigate(`../store/${data.shop_id}`, { state: data });
+    navigate(`../store/${data.shop_id}`, { state: data.shop_id });
   };
 
   // 회원 탈퇴

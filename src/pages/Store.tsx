@@ -86,7 +86,7 @@ export default function Store() {
             <Profile src={state.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
 
             <Name>
-              <h3>{shopInfo.member_nickname}</h3>
+              <h3>{shopInfo.shop_name}</h3>
               <p>{shopInfo.shop_intro}</p>
             </Name>
           </ProfileBox>
