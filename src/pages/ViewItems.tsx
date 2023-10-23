@@ -65,7 +65,7 @@ export default function ViewItems() {
         dataToRender && (
           <CardWrapper>
             {dataToRender.map((item: ItemType) => (
-              <Card key={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
+              <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
             ))}
           </CardWrapper>
         )
