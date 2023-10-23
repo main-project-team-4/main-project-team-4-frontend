@@ -62,6 +62,7 @@ body {
   font-weight: 300;
   font-family: 'Pretendard-Regular', 'Source Sans Pro', sans-serif;
   line-height: 1.2;
+  background-color: ${props => props.theme.bgColor};
 }
 a {
   text-decoration:none;
