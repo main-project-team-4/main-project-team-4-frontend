@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import Main from '../../pages/Main';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { theme } from '../../styles/theme';
 
-function Image() {
+function Image({ setMainImg, setSubImg }) {
   const [images, setImages] = useState<string[]>([]);
   const [selectedPicture, setSelectedPicture] = useState('');
   const [viewAlert, setViewAlert] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
@@ -33,19 +34,29 @@ function Image() {
     }
   };
 
-  const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.currentTarget.files;
+const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const files = event.currentTarget.files;
 
-    if (files) {
-      const imageArray = Array.from(files).map(file => URL.createObjectURL(file));
-      if (imageArray.length + images.length <= 5) {
-        setImages(prevImages => [...prevImages, ...imageArray]);
-        setSelectedPicture(imageArray[0]);
-      } else {
-        setViewAlert(true);
-      }
+  if (files && files.length > 0) {
+    const fileArray = Array.from(files);
+
+    if (fileArray.length + images.length <= 5) {
+      const imageArray = fileArray.map(file => URL.createObjectURL(file));
+      setImages(prevImages => [...prevImages, ...imageArray]);
+      setSelectedPicture(imageArray[0]);
+
+      setMainImg(fileArray[0]); // File 객체를 직접 설정
+      setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
+
+      console.log('fileArray.slice(1)', fileArray.slice(1));
+      event.currentTarget.value = null;
+
+    } else {
+      setViewAlert(true);
     }
-  };
+  }
+};
+
 
   useEffect(() => {
     if (viewAlert) {
@@ -53,7 +64,7 @@ function Image() {
         setViewAlert(false);
       }, 3000); // 3000ms = 3s
 
-      return () => clearTimeout(timerId); 
+      return () => clearTimeout(timerId);
     }
   }, [viewAlert]);
 
@@ -68,8 +79,15 @@ function Image() {
     setImages(reorderedImages);
   };
 
+  const showHoverAlert = () => {
+    setHovered(true);
+    setTimeout(() => {
+      setHovered(false);
+    }, 5000);
+  };
+
   return (
-    <Container imageLength={images.length}>
+    <Container imagelength={images.length}>
       {images.length === 0 ? (
         <>
           {viewAlert && <Notice>사진 첨부는 5개까지 가능합니다</Notice>}
@@ -94,7 +112,7 @@ function Image() {
           </MainImg>
 
           <DragDropContext onDragEnd={onDragEnd}>
-            <ImgsLayout>
+            <ImgsLayout onMouseEnter={showHoverAlert}>
               <Droppable droppableId="droppable" direction="horizontal">
                 {provided => (
                   <Imgs ref={provided.innerRef} {...provided.droppableProps}>
@@ -115,7 +133,7 @@ function Image() {
                   </Imgs>
                 )}
               </Droppable>
-              {images.length < 5 && ( 
+              {images.length < 5 && (
                 <AddPictures onClick={handleClick}>
                   <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
                   <span className="material-symbols-outlined">add_photo_alternate</span>
@@ -124,6 +142,7 @@ function Image() {
               )}
             </ImgsLayout>
           </DragDropContext>
+          {hovered && <Alert>드래그하면 이미지를 옮길 수 있어요</Alert>}
         </>
       )}
     </Container>
@@ -131,7 +150,7 @@ function Image() {
 }
 export default Image;
 
-const Container = styled.div<{ imageLength: number }>`
+const Container = styled.div<{ imagelength: number }>`
   width: 31.25rem;
   /* height: 32.5rem; */
   display: flex;
@@ -186,8 +205,9 @@ const Layout = styled.div`
   justify-content: center;
   align-items: center;
   background-color: #ececec;
-  border: 1px dashed #000;
-
+  border: 1px dashed ${theme.deactivateBtn};
+  margin-top: 1.3rem;
+  border-radius: 0.75rem;
   input {
     width: 100%;
     height: 100%;
@@ -220,11 +240,13 @@ const MainImg = styled.div`
   position: relative;
   width: 31.25rem;
   height: 31.25rem;
+  border-radius: 0.75rem;
   margin-bottom: 1.5rem;
   background-color: white;
   img {
     width: 100%;
     height: 100%;
+    border-radius: 0.75rem;
   }
   span {
     position: absolute;
@@ -261,7 +283,7 @@ const AddPictures = styled.button`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #9aa0a6;
+  background-color: ${theme.cancelBtn};
   width: 5rem;
   height: 5rem;
   margin-left: 0.8rem;
@@ -317,4 +339,9 @@ const Img = styled.div`
     color: white;
     background-color: #59595974;
   }
+`;
+
+const Alert = styled.div`
+  margin-top: 1rem;
+  color: ${theme.cancelBtn};
 `;

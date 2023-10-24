@@ -60,8 +60,8 @@ function Category() {
           {largeIsOpen && (
             <Options>
               {data?.data.map((option: LargeOptionType) => (
-                <li key={option.large_category_id} onClick={() => LargeOptionClick(option.large_category_name, option.large_category_id)}>
-                  {option.large_category_name}
+                <li key={option.category_l_name} onClick={() => LargeOptionClick(option.category_l_name, option.category_l_id)}>
+                  {option.category_l_name}
                 </li>
               ))}
             </Options>
@@ -74,8 +74,8 @@ function Category() {
           {largeSelected !== '대분류' && midIsOpen && (
             <Options>
               {data?.data[categoryID - 1]?.children.map((option: MidOptionType) => (
-                <li key={option.mid_category_id} onClick={() => MidOptionClick(option.mid_category_name)}>
-                  {option.mid_category_name}
+                <li key={option.category_m_id} onClick={() => MidOptionClick(option.category_m_name)}>
+                  {option.category_m_name}
                 </li>
               ))}
             </Options>
@@ -89,9 +89,7 @@ function Category() {
 export default Category;
 
 const Container = styled.div`
-  width: 14.375rem;
-  height: 4.4375rem;
-
+  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.62rem;
@@ -105,26 +103,31 @@ const Container = styled.div`
 const SelectBox = styled.div`
   display: flex;
   gap: 0.62rem;
+  font-size: 0.875rem;
 `;
+
 const Select = styled.div`
-  width: 6.875rem;
-  height: 2.4375rem;
-  position: relative;
-
-  cursor: pointer;
   display: flex;
-  align-items: center;
+  padding: 0.625rem 1.5rem;
   justify-content: center;
-
-  border: 1px solid #ddd;
-  border-radius: 10px;
-
+  align-items: center;
   gap: 0.3125rem;
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+
+  span {
+    font-size: 1.125rem;
+  }
 `;
 
 const Options = styled.ul`
   position: absolute;
-  top: 100%;
+  top: 115%;
   left: 0%;
   right: 75%;
   border: 1px solid #ddd;
