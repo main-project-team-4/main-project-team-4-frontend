@@ -10,5 +10,5 @@ export const theme: DefaultTheme = {
   cancelBtn: '#AFB2B7',
   deactivateBtn: '#E7E8EA',
   inputColor: '#F4F4F4',
-  outline: '#D9D9D9',
+  outline: '#E7E8EA',
 };

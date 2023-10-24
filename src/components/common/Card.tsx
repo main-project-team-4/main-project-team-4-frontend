@@ -43,7 +43,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
       >
         <Image src={img} />
         <TextLayout>
-          {categoryTitle !== 'TOP 20' && categoryTitle !== '최신 상품' && <Sale>{displayItemState}</Sale>}
+          {categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && <Sale>{displayItemState}</Sale>}
           <h1>{itemTitle}</h1>
           <Price>{formattedPrice}원</Price>
         </TextLayout>
@@ -54,8 +54,8 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
 
 const Layout = styled.div`
   width: 19.0625rem;
-  /* height: 18.75rem; */
-  border-radius: 0.75rem;
+  height: 20rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid ${theme.outline};
   background-color: white;
@@ -63,30 +63,31 @@ const Layout = styled.div`
 
 const Image = styled.img`
   width: 19.0625rem;
-  height: 13rem;
-  border-radius: 0.75rem;
+  height: 14.25rem;
   margin-bottom: 1rem;
-
+  border-radius: 0.5rem 0.5rem 0rem 0rem;
   border: 1px solid black;
 `;
 
 const TextLayout = styled.div`
   display: flex;
-  box-sizing: border-box;
-  width: 18.25rem;
-  flex-direction: column;
   padding: 0rem 1rem;
+  box-sizing: border-box;
+  flex-direction: column;
+
+  width: 19.0625rem;
+
   margin-bottom: 1.25rem;
   gap: 0.62rem;
 
   h1 {
-    font-size: 1.5rem;
-    font-weight: 500;
-    height: 2.25rem;
-    width: 16rem;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    height: 1.375rem;
+    width: 17rem;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     text-align: left;
   }
 `;

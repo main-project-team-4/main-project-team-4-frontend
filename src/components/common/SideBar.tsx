@@ -92,7 +92,7 @@ function SideBar() {
           <ProfileBox>
             {token ? (
               <div onClick={toggleMypage}>
-                <img src={myData?.member_image} />
+                <img className="my-img" src={myData?.member_image} />
                 <h3>{myData?.member_nickname}</h3>
                 <button>
                   <span className="expand-icon material-symbols-outlined">expand_more</span>
@@ -100,12 +100,11 @@ function SideBar() {
               </div>
             ) : (
               <div onClick={openModal}>
-                <span className="person-icon material-symbols-outlined">person</span>
+                <img src="https://ifh.cc/g/mH1B10.png" />
                 <h3>로그인이 필요합니다</h3>
               </div>
             )}
           </ProfileBox>
-
           <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
             <li
               onClick={() => {
@@ -157,15 +156,14 @@ function SideBar() {
 export default SideBar;
 
 const Container = styled.div`
-  width: 18.75rem;
-  gap: 0.75rem;
+  width: 15.625rem;
+  /* gap: 0.62rem; */
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  box-sizing: border-box;
-  margin: 3.13rem 6.25rem 0rem 10rem;
+  margin: 3.13rem 6.25rem 3.13rem 10rem;
 
   ul {
     list-style-type: none;
@@ -178,7 +176,7 @@ const ProfileContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 0.7 5rem;
+  gap: 0.62rem;
 `;
 
 const ProfileBox = styled.div`
@@ -186,8 +184,9 @@ const ProfileBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: red; */
 
-  width: 18.75rem;
+  width: 15.625rem;
   height: 3.125rem;
 
   div {
@@ -204,19 +203,6 @@ const ProfileBox = styled.div`
     margin-left: 0.94rem;
   }
 
-  .person-icon {
-    background-color: #d9d9d9;
-    width: 3.125rem;
-    height: 3.125rem;
-    border-radius: 100%;
-    color: #c1c7cd;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
   button {
     background-color: transparent;
     border: none;
@@ -224,16 +210,16 @@ const ProfileBox = styled.div`
     font-size: 1.125rem;
     line-height: 1;
   }
-  img {
-    width: 2.125rem;
-    height: 2.125rem;
+  .my-img {
+    width: 1.875rem;
+    height: 1.875rem;
     border-radius: 100%;
     color: #c1c7cd;
   }
 `;
 
 const MypageMenu = styled.ul`
-  width: 18.75rem;
+  width: 15.625rem;
 
   font-size: 1rem;
   font-style: normal;
@@ -247,7 +233,7 @@ const MypageMenu = styled.ul`
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease-in-out;
-  gap: 0.75rem;
+  gap: 0.62rem;
 
   &.visible {
     max-height: 14rem;
@@ -269,11 +255,11 @@ const CategoryContainer = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 0.75rem;
+  gap: 0.62rem;
 
   div {
     background-color: white;
-    width: 18.75rem;
+    width: 15.625rem;
     padding: 0.75rem 1.5rem;
     box-sizing: border-box;
     border-radius: 0.75rem;
@@ -292,10 +278,9 @@ const CategoryContainer = styled.div`
       font-size: 1rem;
       font-style: normal;
       font-weight: 700;
-      line-height: 1.25rem;
+      line-height: normal;
       letter-spacing: 0.00625rem;
       padding: 0.875rem 0.75rem;
-      background-color: white;
 
       cursor: pointer;
     }
@@ -304,8 +289,7 @@ const CategoryContainer = styled.div`
       padding: 0.75rem 1.5rem 0.75rem 1rem;
       font-style: normal;
       font-weight: 500;
-      line-height: 1.25rem;
-      letter-spacing: 0.00625rem;
+      line-height: normal;
 
       cursor: pointer;
     }

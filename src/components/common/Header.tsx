@@ -104,16 +104,17 @@ const Layout = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
+  width: 120rem;
   height: 4.875rem;
   padding: 1.3125rem, 10rem;
+  box-sizing: border-box;
 
   background-color: white;
 `;
 
 const Logo = styled.img`
-  width: 3.5rem;
-  height: 2rem;
+  width: 7.25rem;
+  height: 2.625rem;
 
   margin-left: 10rem;
   border: 1px solid blue;
@@ -153,6 +154,8 @@ const Search = styled.div`
 const BtnLayout = styled.div`
   display: flex;
   gap: 0.625rem;
+
+  margin-right: 10rem;
 `;
 
 const Btn = styled.button`

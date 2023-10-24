@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { theme } from '../../styles/theme';
 
 export default function CardLayout({ title, data, shop_Id }) {
   const navigate = useNavigate();
@@ -15,10 +16,11 @@ export default function CardLayout({ title, data, shop_Id }) {
 
   return (
     <>
-      <Layout>
+      <Layout title={title}>
         {data && (
           <>
-            <Title>{title}</Title>
+            {title === '인기 상품' && <PointBox></PointBox>}
+            <Title title={title}>{title}</Title>
             <CardWrapper>
               {data.map(item => (
                 <Card key={item.item_id} categoryTitle={title} itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
@@ -48,6 +50,19 @@ const Layout = styled.div`
   flex-direction: column;
   width: 78.125rem;
   gap: 1.25rem;
+  margin-top: ${props => (props.title === '인기 상품' ? '3.34rem' : '')};
+`;
+
+const PointBox = styled.div`
+  position: absolute;
+  top: 9.38rem;
+  left: 30rem;
+  width: 90rem;
+  height: 19.3125rem;
+  flex-shrink: 0;
+  background-color: ${theme.pointColor};
+  z-index: -1;
+  border-radius: 1.25rem 0rem 0rem 0rem;
 `;
 
 const CardWrapper = styled.div`
@@ -58,10 +73,12 @@ const CardWrapper = styled.div`
 `;
 
 const Title = styled.p`
-  font-size: 1.75rem;
-  font-weight: 600;
-  line-height: 33px;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
   align-self: flex-start;
+  color: ${props => (props.title === '인기 상품' ? 'white' : '')};
 `;
 
 const ViewAll = styled.button`
