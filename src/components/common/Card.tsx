@@ -1,32 +1,51 @@
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { theme } from '../../styles/theme';
 
 interface CardProps {
-  key: number;
+  id: number;
   img: string;
-  title: string;
+  itemTitle: string;
   price: string;
+  categoryTitle: string;
+  itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
 }
 
-export default function Card({ id, img, title, price }: CardProps) {
+export default function Card({ id, img, itemTitle, price, itemState, categoryTitle }: CardProps) {
   const navigate = useNavigate();
 
-  const location = useLocation();
-  const path = location.pathname;
-  const renderSale = path.includes('/mypage');
+  const formattedPrice = Number(price).toLocaleString('ko-KR');
+
+  const [displayItemState, setDisplayItemState] = useState('');
+  useEffect(() => {
+    switch (itemState) {
+      case 'RESERVED':
+        setDisplayItemState('예약중');
+        break;
+      case 'SOLDOUT':
+        setDisplayItemState('판매완료');
+        break;
+      case 'SELLING':
+        setDisplayItemState('판매중');
+        break;
+      default:
+        setDisplayItemState('');
+    }
+  }, [itemState]);
 
   return (
     <>
       <Layout
         onClick={() => {
-          navigate(`/posting/${title}`, { state: { id } });
+          navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
       >
         <Image src={img} />
         <TextLayout>
-          {renderSale && <Sale>판매중</Sale>}
-          <h1>{title}</h1>
-          <Price>{price}원</Price>
+          {categoryTitle !== 'TOP 20' && categoryTitle !== '최신 상품' && <Sale>{displayItemState}</Sale>}
+          <h1>{itemTitle}</h1>
+          <Price>{formattedPrice}원</Price>
         </TextLayout>
       </Layout>
     </>
@@ -34,18 +53,19 @@ export default function Card({ id, img, title, price }: CardProps) {
 }
 
 const Layout = styled.div`
-  width: 18.25rem;
-  /* height: 22.375rem; */
+  width: 19.0625rem;
+  /* height: 18.75rem; */
   border-radius: 0.75rem;
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid ${theme.outline};
+  background-color: white;
 `;
 
 const Image = styled.img`
-  width: 18.25rem;
+  width: 19.0625rem;
   height: 13rem;
   border-radius: 0.75rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 
   border: 1px solid black;
 `;
@@ -56,7 +76,8 @@ const TextLayout = styled.div`
   width: 18.25rem;
   flex-direction: column;
   padding: 0rem 1rem;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.25rem;
+  gap: 0.62rem;
 
   h1 {
     font-size: 1.5rem;
@@ -66,6 +87,7 @@ const TextLayout = styled.div`
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    text-align: left;
   }
 `;
 
@@ -85,10 +107,13 @@ const Sale = styled.div`
   font-weight: 600;
   line-height: 1.25rem;
   letter-spacing: 0.04rem;
-  color: #838383;
+  color: black;
 `;
 
 const Price = styled.div`
-  font-size: 1rem;
-  text-align: right;
+  font-size: 1.25rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-align: left;
 `;

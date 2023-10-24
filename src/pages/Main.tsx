@@ -45,27 +45,17 @@ export default function Main() {
   return (
     <>
       <Layout>
-        <CardLayout title={'인기 상품'} data={top} />
-        <CardLayout title={'최신 상품'} data={newest} />
-        {/* <Link to="/top20">
-        <div>ViewItems</div>
-      </Link> */}
-        {/* <Tab
-        tabs={[
-          { name: '판매상품', content: <ReviewCard /> },
-          { name: '상점리뷰', content: <CardLayout /> },
-          { name: '팔로잉', content: <CardLayout /> },
-          { name: '팔로워', content: <CardLayout /> },
-        ]}
-      /> */}
+        <CardLayout title={'TOP 20'} data={top} shop_Id="" />
+        <CardLayout title={'최신 상품'} data={newest} shop_Id="" />
       </Layout>
     </>
   );
 }
 
 const Layout = styled.div`
-  width: 75rem;
+  width: 78.125rem;
   display: flex;
   flex-direction: column;
   margin-top: 3.13rem;
+  gap: 3.12rem;
 `;

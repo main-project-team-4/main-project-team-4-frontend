@@ -48,7 +48,6 @@ export const ShopItem = async ({ shopId, size }) => {
   try {
     const response = await baseInstance.get(`/api/shops/${shopId}/items?page=0&size=${size}`);
     return response.data.content;
-    console.log('response.data', response.data);
   } catch (error) {
     console.error(error);
     throw error;

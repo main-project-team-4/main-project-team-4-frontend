@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import Main from '../../pages/Main';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 function Image() {
   const [images, setImages] = useState<string[]>([]);
@@ -53,7 +52,7 @@ function Image() {
         setViewAlert(false);
       }, 3000); // 3000ms = 3s
 
-      return () => clearTimeout(timerId); 
+      return () => clearTimeout(timerId);
     }
   }, [viewAlert]);
 
@@ -115,7 +114,7 @@ function Image() {
                   </Imgs>
                 )}
               </Droppable>
-              {images.length < 5 && ( 
+              {images.length < 5 && (
                 <AddPictures onClick={handleClick}>
                   <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
                   <span className="material-symbols-outlined">add_photo_alternate</span>

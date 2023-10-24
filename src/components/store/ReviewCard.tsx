@@ -1,12 +1,27 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
-export default function ReviewCard({ img, name, item, review }) {
+type ReviewType = {
+  img: string;
+  name: string;
+  item: string;
+  review: string;
+  reviewRate: number;
+};
+
+export default function ReviewCard({ img, name, item, review, reviewRate }: ReviewType) {
   const [open, setOpen] = useState(false);
 
   const viewHandler = useCallback(() => {
     setOpen(prev => !prev);
   }, []);
+
+  // 별점관리
+  let stars = [];
+  const rate = Math.round(reviewRate);
+  for (let i = 0; i < rate; i++) {
+    stars.push(<img src="https://ifh.cc/g/NZAWv7.png" />);
+  }
 
   return (
     <>
@@ -16,6 +31,7 @@ export default function ReviewCard({ img, name, item, review }) {
           <Info>
             <span>{name}</span>
             <p>{item}</p>
+            <div>{stars}</div>
           </Info>
         </Profile>
         <Review open={open}>{review}</Review>
@@ -30,9 +46,10 @@ export default function ReviewCard({ img, name, item, review }) {
 
 const Layout = styled.div`
   display: flex;
-  width: 75rem;
-  /* height: 14rem; */
+  width: 78.125rem;
+  height: 14.6875rem;
   padding: 1.25rem;
+  box-sizing: border-box;
   flex-direction: column;
   border-bottom: 1px solid black;
 `;
@@ -56,8 +73,8 @@ const Info = styled.div`
   gap: 0.625rem;
   margin-top: 1.22rem;
   span {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 600;
     text-align: left;
   }
   p {
@@ -65,6 +82,13 @@ const Info = styled.div`
     color: #000;
     font-size: 1.125rem;
     font-weight: 500;
+  }
+  div {
+    display: flex;
+  }
+  img {
+    width: 1.125rem;
+    height: 1.125rem;
   }
 `;
 

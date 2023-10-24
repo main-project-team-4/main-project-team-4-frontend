@@ -33,11 +33,13 @@ export const changeImages = async ({ token, formData }: ImagesType) => {
   }
 };
 
-// 닉네임 변경
+// 회원정보 변경
 type NickNameType = {
   token: string;
-  nickName: string;
+  nickName?: string;
+  intro?: string;
 };
+
 export const changeNickName = async ({ token, nickName }: NickNameType) => {
   try {
     const response = await baseInstance.put(
@@ -76,6 +78,24 @@ export const changeLocation = async ({ token, location }: LocationType) => {
     return response;
   } catch (error) {
     console.log(error);
+  }
+};
+
+// 인트로 변경
+export const changeIntro = async ({ token, intro }: NickNameType) => {
+  try {
+    const response = await baseInstance.put(
+      `/api/auth/members/me`,
+      { shop_intro: intro },
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
   }
 };
 
