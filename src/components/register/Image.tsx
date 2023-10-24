@@ -167,8 +167,8 @@ const FileBtn = styled.button`
   align-items: center;
   width: 9.9375rem;
   height: 2.5rem;
-  background-color: #9aa0a6;
-  border-radius: 0.1875rem;
+  background-color: ${theme.navy};
+  border-radius: 0.375rem;
   border: 1px dotted #9aa0a6;
   font-size: 0.8rem;
   font-weight: 600;
@@ -204,7 +204,7 @@ const Layout = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #ececec;
+  background-color: ${theme.inputColor};
   border: 1px dashed ${theme.deactivateBtn};
   margin-top: 1.3rem;
   border-radius: 0.75rem;

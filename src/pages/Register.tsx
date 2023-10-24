@@ -7,24 +7,32 @@ import { theme } from '../styles/theme';
 import { useInput, usePriceInput } from '../hooks/useInput';
 import { getCookie } from '../utils/cookie';
 import { uploadItem } from '../apis/posting/posting';
+import Modal from '../components/common/Modal';
 
 function RegistrationItem() {
   const [clicked, setClicked] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [title, titleHandleChange] = useInput('');
   const [explain, explainHandleChange] = useInput('');
-  const [price, viewPrice, priceHandleChange] = usePriceInput('');
+  const [price, viewPrice, notice, priceHandleChange] = usePriceInput('');
   const [mainImg, setMainImg] = useState<File | null>(null);
   const [subImg, setSubImg] = useState<File[]>([]);
+  const [category, setCategory] = useState(0);
+  const [deliveryfee, setDeliveryfee] = useState(true);
+  const [viewModal, setViewModal] = useState(false);
+
+  const isFormComplete = title && explain && price && mainImg && category;
 
   const queryClient = useQueryClient();
   const token = getCookie('token');
 
   const onClickInclude = () => {
     setClicked(0);
+    setDeliveryfee(true);
   };
   const onClickExclude = () => {
     setClicked(1);
+    setDeliveryfee(false);
   };
 
   const InputHandler = e => {
@@ -60,53 +68,75 @@ function RegistrationItem() {
       item_name: title,
       item_price: price,
       item_comment: explain,
-      item_with_delivery_fee: true,
+      item_with_delivery_fee: deliveryfee,
+      category_m_id: category,
     };
-    // requestDto의 데이터를 FormData에 추가
-    dataFormData.append('requestDto', JSON.stringify(data));
 
-    // console.log('main', mainImg);
-    // console.log('sub', subImg);
+    // requestDto의 데이터를 FormData에 추가
+    const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    dataFormData.append('requestDto', blobData);
 
     mutation.mutate({ token, data: dataFormData }); // FormData 전송
   };
-
   return (
-    <Container>
-      <h1>상품등록</h1>
+    <>
+      {viewModal && (
+        <Modal
+          modalClose={() => {
+            setViewModal(false);
+          }}
+          modalInfo={'모든 정보를 입력해 주세요'}
+        />
+      )}
+      <Container>
+        <h1>상품등록</h1>
+        <RegistrationBox>
+          <Image setMainImg={setMainImg} setSubImg={setSubImg} />
 
-      <RegistrationBox>
-        <Image setMainImg={setMainImg} setSubImg={setSubImg} />
+          <Layout>
+            <h3>제목</h3>
+            <input placeholder="제목을 입력해주세요" maxLength={88} value={title} onChange={titleHandleChange}></input>
 
-        <Layout>
-          <h3>제목</h3>
-          <input placeholder="제목을 입력해주세요" value={title} onChange={titleHandleChange}></input>
-          <Category />
-          <h3>가격</h3>
-          <input placeholder="가격을 입력해주세요" value={viewPrice} onChange={priceHandleChange}></input>
-          <DeliveryBox>
-            <Delivery onClick={onClickInclude} className={clicked === 0 ? ' active' : ''}>
-              배송비 포함
-            </Delivery>
-            <Delivery onClick={onClickExclude} className={clicked === 1 ? ' active' : ''}>
-              배송비 미포함
-            </Delivery>
-          </DeliveryBox>
-          <h3>설명</h3>
-          <textarea placeholder="설명을 입력해주세요" maxLength={2000} onChange={InputHandler} value={explain}></textarea>
-          <p>
-            <span>{inputCount}</span>
-            <span> / 2000 자</span>
-          </p>
-          <BtnLayout>
-            <Btn backcolor="#CCCFD3">취소</Btn>
-            <Btn backcolor="#9aa0a6" onClick={saveItem}>
-              상품등록
-            </Btn>
-          </BtnLayout>
-        </Layout>
-      </RegistrationBox>
-    </Container>
+            <Category setCategory={setCategory} />
+
+            <PriceLayout>
+              <h3>가격 </h3>
+              {notice && <span>숫자만 입력해주세요</span>}
+            </PriceLayout>
+            <input placeholder="가격을 입력해주세요" value={viewPrice} onChange={priceHandleChange}></input>
+            <DeliveryBox>
+              <Delivery onClick={onClickInclude} className={clicked === 0 ? ' active' : ''}>
+                배송비 포함
+              </Delivery>
+              <Delivery onClick={onClickExclude} className={clicked === 1 ? ' active' : ''}>
+                배송비 미포함
+              </Delivery>
+            </DeliveryBox>
+            <h3>설명</h3>
+            <textarea placeholder="설명을 입력해주세요" maxLength={2000} onChange={InputHandler} value={explain}></textarea>
+            <p>
+              <span>{inputCount}</span>
+              <span> / 2000 자</span>
+            </p>
+            <BtnLayout>
+              <Btn backcolor="#AFB2B7">취소</Btn>
+              <Btn
+                backcolor={isFormComplete ? '#2667FF' : '#E7E8EA'}
+                onClick={
+                  isFormComplete
+                    ? saveItem
+                    : () => {
+                        setViewModal(true);
+                      }
+                }
+              >
+                상품등록
+              </Btn>
+            </BtnLayout>
+          </Layout>
+        </RegistrationBox>
+      </Container>
+    </>
   );
 }
 
@@ -121,7 +151,7 @@ const Container = styled.div`
   border-radius: 0.75rem;
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 1.25rem;
   }
@@ -176,6 +206,17 @@ const Layout = styled.div`
   }
   p {
     text-align: right;
+  }
+`;
+
+const PriceLayout = styled.div`
+  display: flex;
+  align-items: center;
+  span {
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    margin-bottom: 4px;
+    color: ${theme.pointColor};
   }
 `;
 
