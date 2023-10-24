@@ -13,7 +13,7 @@ type MidOptionType = {
   mid_category_name: string;
 };
 
-function Category() {
+function Category({ setCategory }) {
   const { data, refetch } = useQuery('category', getCategory, { enabled: false });
 
   // 대분류 카테고리 상태관리
@@ -26,7 +26,6 @@ function Category() {
   // 중분류 카테고리 상태관리
   const [midIsOpen, setMidIsOpen] = useState(false);
   const [midSelected, setMidSelected] = useState('중분류');
-
   const [showMessage, setShowMessage] = useState(false);
 
   const LargeToggleDropdown = () => {
@@ -34,6 +33,7 @@ function Category() {
     setlargeIsOpen(!largeIsOpen);
     setShowMessage(false);
   };
+
   const LargeOptionClick = (option: string, categoryID: number) => {
     setlargeSelected(option);
     setCategoryID(categoryID);
@@ -46,9 +46,10 @@ function Category() {
     }
     setMidIsOpen(!midIsOpen);
   };
-  const MidOptionClick = (option: string) => {
+  const MidOptionClick = (option: string, categoryId: number) => {
     setMidSelected(option);
     setMidIsOpen(false);
+    setCategory(categoryId);
   };
   return (
     <Container>
@@ -74,7 +75,7 @@ function Category() {
           {largeSelected !== '대분류' && midIsOpen && (
             <Options>
               {data?.data[categoryID - 1]?.children.map((option: MidOptionType) => (
-                <li key={option.category_m_id} onClick={() => MidOptionClick(option.category_m_name)}>
+                <li key={option.category_m_id} onClick={() => MidOptionClick(option.category_m_name, option.category_m_id)}>
                   {option.category_m_name}
                 </li>
               ))}
