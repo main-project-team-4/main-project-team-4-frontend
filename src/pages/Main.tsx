@@ -45,7 +45,7 @@ export default function Main() {
   return (
     <>
       <Layout>
-        <CardLayout title={'TOP 20'} data={top} shop_Id="" />
+        <CardLayout title={'인기 상품'} data={top} shop_Id="" />
         <CardLayout title={'최신 상품'} data={newest} shop_Id="" />
       </Layout>
     </>

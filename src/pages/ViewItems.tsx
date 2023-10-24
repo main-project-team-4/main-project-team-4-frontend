@@ -9,6 +9,8 @@ import { theme } from '../styles/theme';
 export default function ViewItems() {
   const params = useParams();
   const location = useLocation();
+  const path = location.pathname;
+  const categoryCheck = path.includes('/category');
 
   // 검색 키워드 관리
   const [keyword, setKeyword] = useState('');
@@ -19,13 +21,12 @@ export default function ViewItems() {
 
   const { data: items } = useQuery('items', AllItems);
   const { data: topItems } = useQuery('topItems', TopItems);
-  const { data: categoryData, refetch } = useQuery([`categoryitem`, location.state?.id, location.state?.layer], () => CategoryItem(location.state.id, location.state.layer), { enabled: false });
-
-  const shouldFetch = location.state;
+  const { data: categoryData, refetch } = useQuery([`categoryitem`, location.state?.id, location.state?.layer], () => CategoryItem(location.state?.id, location.state?.layer), { enabled: false });
 
   useEffect(() => {
-    refetch();
-  }, [shouldFetch]);
+    if (categoryCheck) refetch();
+  }, [categoryCheck]);
+
   let dataToRender;
 
   if (params.items == '최신 상품') {
@@ -50,7 +51,8 @@ export default function ViewItems() {
           </h4>
         ) : (
           <>
-            {/* {params.items} */}
+            {params.items == 'category' ? '' : params.items}
+
             {params.LargeCategory}
             {params.midCategoryId && ` - ${params.midCategoryId}`}
           </>
