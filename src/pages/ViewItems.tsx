@@ -65,7 +65,7 @@ export default function ViewItems() {
         dataToRender && (
           <CardWrapper>
             {dataToRender.map((item: ItemType) => (
-              <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
+              <Card key={item.item_id} categoryTitle="" itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
             ))}
           </CardWrapper>
         )
@@ -78,12 +78,13 @@ type ItemType = {
   item_name: string;
   item_main_image: string;
   item_price: string;
+  item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
 };
 
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
-  width: 75rem;
+  width: 78.125rem;
   gap: 1.25rem;
   flex-wrap: wrap;
   margin-top: 3.13rem;
@@ -92,7 +93,7 @@ const Layout = styled.div`
 const CardWrapper = styled.div`
   display: flex;
   gap: 0.625rem;
-  width: 74.875rem;
+  width: 78.125rem;
   flex-wrap: wrap;
 `;
 

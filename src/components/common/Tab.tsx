@@ -32,7 +32,7 @@ export default function Tab({ tabs = [] }: PropsType) {
 }
 
 const TabLayout = styled.div`
-  width: 75rem;
+  width: 78.125rem;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -42,23 +42,26 @@ const TabLayout = styled.div`
 
 const TabMenusContainer = styled.div`
   display: flex;
-  width: 29.25rem;
-  margin-bottom: 1.87rem;
+  flex-direction: row;
+
+  width: 33.625rem;
+  height: 1.8125rem;
+  margin-bottom: 1.25rem;
   gap: 3.12rem;
-  font-size: 1.5rem;
-  font-weight: 700;
 `;
 
 const TabMenu = styled.button<{ active: number }>`
   cursor: pointer;
-  padding: 10px;
+  width: 5.1875rem;
+  height: 1.8125rem;
   border: none;
   background: none;
   outline: none;
   transition:
     background-color 0.3s,
     color 0.3s;
-  font-size: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
   text-align: center;
   color: ${({ active }) => (active === 0 ? 'black' : '#969696')};
   flex-grow: 1;
@@ -72,10 +75,9 @@ const TabMenu = styled.button<{ active: number }>`
 const Info = styled.div`
   flex-grow: 1;
   /* border-top: 1px solid #e0e0e0; */
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
+  justify-content: center; */
   font-weight: bold;
   white-space: pre-line;
   text-align: center;

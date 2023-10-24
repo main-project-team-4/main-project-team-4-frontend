@@ -51,6 +51,7 @@ function Profilepicture({ data }: DataInfo) {
   const mutation = useMutation(changeImages, {
     onSuccess: () => {
       queryClient.invalidateQueries('profileImage');
+      queryClient.invalidateQueries('myInfo');
     },
   });
   const changeImage = () => {

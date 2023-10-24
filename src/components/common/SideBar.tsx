@@ -92,7 +92,7 @@ function SideBar() {
           <ProfileBox>
             {token ? (
               <div onClick={toggleMypage}>
-                <span className="person-icon material-symbols-outlined">person</span>
+                <img src={myData?.member_image} />
                 <h3>{myData?.member_nickname}</h3>
                 <button>
                   <span className="expand-icon material-symbols-outlined">expand_more</span>
@@ -223,6 +223,12 @@ const ProfileBox = styled.div`
     cursor: pointer;
     font-size: 1.125rem;
     line-height: 1;
+  }
+  img {
+    width: 2.125rem;
+    height: 2.125rem;
+    border-radius: 100%;
+    color: #c1c7cd;
   }
 `;
 

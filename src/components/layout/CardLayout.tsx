@@ -9,11 +9,6 @@ export default function CardLayout({ title, data, shop_Id }) {
   const goShop = path.includes('/posting');
   const storePath = path.includes('/store');
 
-  // const move = () => {
-  //   const formattedTitle = title.replace(/\s+/g, '');
-  //   navigate(`/${formattedTitle}`);
-  // };
-
   const move = () => {
     navigate(`/${title}`);
   };
@@ -26,7 +21,7 @@ export default function CardLayout({ title, data, shop_Id }) {
             <Title>{title}</Title>
             <CardWrapper>
               {data.map(item => (
-                <Card key={item.item_id} id={item.item_id} img={item.item_main_image} title={item.item_name} price={item.item_price} />
+                <Card key={item.item_id} categoryTitle={title} itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
               ))}
             </CardWrapper>
 
@@ -51,19 +46,19 @@ export default function CardLayout({ title, data, shop_Id }) {
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
-  width: 74.875rem;
+  width: 78.125rem;
   gap: 1.25rem;
 `;
 
 const CardWrapper = styled.div`
   display: flex;
-  gap: 0.625rem;
-  width: 74.875rem;
+  gap: 0.62rem;
+  width: 78.125rem;
   flex-wrap: wrap;
 `;
 
 const Title = styled.p`
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 600;
   line-height: 33px;
   align-self: flex-start;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { theme } from '../../styles/theme';
 
 function Image({ setMainImg, setSubImg }) {

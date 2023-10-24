@@ -1,8 +1,12 @@
 import { baseInstance } from '../config';
 
-export const Followers = async shopId => {
+export const Followers = async ({ shopId, token }) => {
   try {
-    const response = await baseInstance.get(`api/shops/${shopId}/followers`);
+    const response = await baseInstance.get(`api/shops/${shopId}/followers`, {
+      headers: {
+        Authorization: token,
+      },
+    });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -27,7 +31,8 @@ export const Follow = async ({ shopId, token }) => {
         headers: { Authorization: token },
       },
     );
-    return response;
+
+    return response.data;
   } catch (error) {
     console.log(error);
   }
