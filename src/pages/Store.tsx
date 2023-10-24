@@ -11,6 +11,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { changeIntro, getMyInfo } from '../apis/mypage/members';
 import CardLayout from '../components/layout/CardLayout';
 import { theme } from '../styles/theme';
+import { useInput } from '../hooks/useInput';
 
 export default function Store() {
   const [checkMine, setCheckMine] = useState(false);
@@ -41,6 +42,8 @@ export default function Store() {
   const [intro, setIntro] = useState(shopInfo?.shop_intro);
   const [introState, setIntroState] = useState(false);
   const introRef = useRef<HTMLTextAreaElement | null>(null);
+  const [inputCount, setInputCount] = useState(0);
+  const [explain, explainHandleChange] = useInput('');
 
   const introMutation = useMutation(changeIntro, {
     onSuccess: () => {
@@ -51,6 +54,20 @@ export default function Store() {
       console.log(error);
     },
   });
+
+  // 상점소개 수정
+  const introOnChange = e => {
+    setInputCount(e.target.value.length);
+    explainHandleChange(e);
+  };
+  const introOnClick = () => {
+    if (introState) {
+      introMutation.mutate({ token, explain });
+    }
+    setIntroState(!introState);
+  };
+
+  // 인풋 카운트
 
   // 팔로우 상태 관리
   const { data: followCheck, refetch: followCheckRefetch } = useQuery(['followCheck', state], () => FollowCheck(state, token), { enabled: !!token });
@@ -93,20 +110,8 @@ export default function Store() {
     return <h2>오류가 발생하였습니다</h2>;
   }
 
-  // 상점소개 수정
-  const introOnChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.currentTarget;
-    setIntro(value);
-  };
-  const introOnClick = () => {
-    if (introState) {
-      introMutation.mutate({ token, intro });
-    }
-    setIntroState(!introState);
-  };
-
   // 별점관리
-  let stars = [];
+  const stars = [];
   const rate = Math.round(shopInfo.review_rating_avg);
   for (let i = 0; i < rate; i++) {
     stars.push(<img src="https://ifh.cc/g/NZAWv7.png" />);
@@ -119,12 +124,34 @@ export default function Store() {
         <ProfileContainer>
           <ProfileBox>
             <Profile src={myData?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
-            <Name>
+            <Name starLength={stars.length}>
               <h3>
-                {shopInfo.shop_name} <h4>평점 {stars.length > 0 ? stars : '없음'} </h4>
+                {shopInfo.shop_name}{' '}
+                {stars.length > 0 ? (
+                  <h4>
+                    <p>평점</p> {stars}{' '}
+                  </h4>
+                ) : (
+                  <h4>평점이 없습니다</h4>
+                )}
               </h3>
               <Intro>
-                {introState ? <textarea maxLength={68} ref={introRef} defaultValue={intro} onChange={introOnChange} /> : <p>{intro}</p>}
+                {intro ? (
+                  introState ? (
+                    <TextArea>
+                      {' '}
+                      <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
+                      <div>
+                        <span>{inputCount}</span>
+                        <span>/ 60자</span>
+                      </div>{' '}
+                    </TextArea>
+                  ) : (
+                    <p>{intro}</p>
+                  )
+                ) : (
+                  <h4>소개글이 없습니다.</h4>
+                )}
                 {myData?.shop_id === shopInfo?.shop_id && <img onClick={introOnClick} src="https://ifh.cc/g/aDSaVR.png" />}
               </Intro>
             </Name>
@@ -186,7 +213,7 @@ const Container = styled.div`
 
 const ProfileContainer = styled.div`
   width: 78.125rem;
-  height: 9.375rem;
+  /* height: 9.375rem; */
   margin-bottom: 6.25rem;
 
   display: flex;
@@ -219,39 +246,59 @@ const Profile = styled.img`
 `;
 const Intro = styled.div`
   width: 45.3125rem;
-  height: 4.5rem;
+  height: 7.5rem;
 
   display: flex;
-  align-items: flex-end;
   gap: 0.62rem;
 
-  textarea {
+  h3 {
     padding: 0.88rem;
     box-sizing: border-box;
     width: 41.8125rem;
     height: 4.5rem;
-    border: none;
-    background-color: ${theme.inputColor};
-
     font-style: normal;
     font-size: 1.25rem;
     font-weight: 500;
     letter-spacing: 0.04rem;
     line-height: normal;
+    color: ${theme.cancelBtn};
+  }
+
+  textarea {
+    padding: 0.88rem;
+    box-sizing: border-box;
+    width: 41.8125rem;
+    height: 4.6rem;
+    border: none;
+    background-color: ${theme.inputColor};
+    border-radius: 0.75rem;
+    margin-bottom: 0.4rem;
+
+    font-style: normal;
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: 0.04rem;
+    line-height: normal;
     resize: none;
-    overflow: hidden;
+
+    &:focus {
+      border: 1px solid ${theme.outline};
+
+      outline: none;
+    }
   }
 
   p {
     padding: 0.88rem;
     box-sizing: border-box;
     width: 41.8125rem;
-    height: 4.5rem;
+    height: 2.75rem;
     font-style: normal;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 500;
     letter-spacing: 0.04rem;
     line-height: normal;
+    overflow-wrap: break-word;
   }
   img {
     width: 1.125rem;
@@ -259,13 +306,19 @@ const Intro = styled.div`
     cursor: pointer;
   }
 `;
-
-const Name = styled.div`
-  /* width: 45.3125rem; */
-  height: 6.4375rem;
+const TextArea = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.78rem;
+  align-items: flex-end;
+`;
+
+const Name = styled.div<{ starLength: number }>`
+  /* width: 45.3125rem; */
+  height: 4.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.31rem;
+  margin-top: 2.25rem;
 
   h3 {
     display: flex;
@@ -277,11 +330,23 @@ const Name = styled.div`
     font-weight: 700;
     line-height: normal;
     letter-spacing: 0.04rem;
-    margin-bottom: 0.62rem;
 
     h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.1875rem;
       border-left: 1px solid ${theme.outline};
       padding-left: 0.62rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+
+      color: ${props => (props.starLength > 0 ? '' : theme.cancelBtn)};
+
+      p {
+        margin-right: 0.3125rem;
+      }
+    }
+    img {
     }
   }
 `;

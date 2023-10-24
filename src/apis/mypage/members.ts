@@ -37,6 +37,7 @@ type NickNameType = {
   token: string;
   nickName?: string;
   intro?: string;
+  explain?: string;
 };
 
 export const changeNickName = async ({ token, nickName }: NickNameType) => {
@@ -81,11 +82,11 @@ export const changeLocation = async ({ token, location }: LocationType) => {
 };
 
 // 인트로 변경
-export const changeIntro = async ({ token, intro }: NickNameType) => {
+export const changeIntro = async ({ token, explain }: NickNameType) => {
   try {
     const response = await baseInstance.put(
       `/api/auth/members/me`,
-      { shop_intro: intro },
+      { shop_intro: explain },
       {
         headers: {
           Authorization: token,

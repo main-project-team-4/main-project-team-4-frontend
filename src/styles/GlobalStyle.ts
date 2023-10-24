@@ -39,6 +39,10 @@ footer, header, hgroup, main, menu, nav, section {
 body {  
   max-width: 120rem;
   line-height: 1;
+  font-weight: 300;
+  font-family: 'Pretendard-Regular', 'Source Sans Pro', sans-serif;
+  line-height: 1.2;
+  background-color: ${props => props.theme.bgColor};
 }
 menu, ol, ul {
   list-style: none;
@@ -57,12 +61,6 @@ table {
 }
 * {
   box-sizing: border-box;
-}
-body {
-  font-weight: 300;
-  font-family: 'Pretendard-Regular', 'Source Sans Pro', sans-serif;
-  line-height: 1.2;
-  background-color: ${props => props.theme.bgColor};
 }
 a {
   text-decoration:none;
