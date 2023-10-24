@@ -23,7 +23,6 @@ export const changeImages = async ({ token, formData }: ImagesType) => {
   try {
     const response = await baseInstance.post(`/api/auth/members/me/images`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
         Authorization: token,
       },
     });
