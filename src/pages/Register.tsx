@@ -1,25 +1,111 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import Image from '../components/register/Image';
 import Category from '../components/register/Category';
-import Price from '../components/register/Price';
-import Explanation from '../components/register/Explanation';
-import Button from '../components/register/Button';
-import Title from '../components/register/Title';
+import { theme } from '../styles/theme';
+import { useInput, usePriceInput } from '../hooks/useInput';
+import { getCookie } from '../utils/cookie';
+import { uploadItem } from '../apis/posting/posting';
 
 function RegistrationItem() {
+  const [clicked, setClicked] = useState(0);
+  const [inputCount, setInputCount] = useState(0);
+  const [title, titleHandleChange] = useInput('');
+  const [explain, explainHandleChange] = useInput('');
+  const [price, viewPrice, priceHandleChange] = usePriceInput('');
+  const [mainImg, setMainImg] = useState<File | null>(null);
+  const [subImg, setSubImg] = useState<File[]>([]);
+
+  const queryClient = useQueryClient();
+  const token = getCookie('token');
+
+  const onClickInclude = () => {
+    setClicked(0);
+  };
+  const onClickExclude = () => {
+    setClicked(1);
+  };
+
+  const InputHandler = e => {
+    setInputCount(e.target.value.length);
+    explainHandleChange(e);
+  };
+
+  // 상품 등록
+  const mutation = useMutation(uploadItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('uploadItem');
+    },
+  });
+
+  const saveItem = () => {
+    const dataFormData = new FormData();
+
+    if (mainImg instanceof File) {
+      // mainImg가 File 타입인지 확인
+      dataFormData.append('main_image', mainImg);
+    }
+
+    if (Array.isArray(subImg) && subImg.length > 0) {
+      // subImg가 배열이며, 길이가 0보다 큰지 확인
+      subImg.forEach(file => {
+        if (file instanceof File) {
+          // 각 항목이 File 타입인지 확인
+          dataFormData.append(`sub_image`, file);
+        }
+      });
+    }
+    const data = {
+      item_name: title,
+      item_price: price,
+      item_comment: explain,
+      item_with_delivery_fee: true,
+    };
+    // requestDto의 데이터를 FormData에 추가
+    dataFormData.append('requestDto', JSON.stringify(data));
+
+    // console.log('main', mainImg);
+    // console.log('sub', subImg);
+
+    mutation.mutate({ token, data: dataFormData }); // FormData 전송
+  };
+
   return (
     <Container>
       <h1>상품등록</h1>
+
       <RegistrationBox>
-        <Image />
-        <ExplanationBox>
-          <Title />
+        <Image setMainImg={setMainImg} setSubImg={setSubImg} />
+
+        <Layout>
+          <h3>제목</h3>
+          <input placeholder="제목을 입력해주세요" value={title} onChange={titleHandleChange}></input>
           <Category />
-          <Price />
-          <Explanation />
-        </ExplanationBox>
+          <h3>가격</h3>
+          <input placeholder="가격을 입력해주세요" value={viewPrice} onChange={priceHandleChange}></input>
+          <DeliveryBox>
+            <Delivery onClick={onClickInclude} className={clicked === 0 ? ' active' : ''}>
+              배송비 포함
+            </Delivery>
+            <Delivery onClick={onClickExclude} className={clicked === 1 ? ' active' : ''}>
+              배송비 미포함
+            </Delivery>
+          </DeliveryBox>
+          <h3>설명</h3>
+          <textarea placeholder="설명을 입력해주세요" maxLength={2000} onChange={InputHandler} value={explain}></textarea>
+          <p>
+            <span>{inputCount}</span>
+            <span> / 2000 자</span>
+          </p>
+          <BtnLayout>
+            <Btn backcolor="#CCCFD3">취소</Btn>
+            <Btn backcolor="#9aa0a6" onClick={saveItem}>
+              상품등록
+            </Btn>
+          </BtnLayout>
+        </Layout>
       </RegistrationBox>
-      <Button />
     </Container>
   );
 }
@@ -28,32 +114,124 @@ export default RegistrationItem;
 
 const Container = styled.div`
   width: 75rem;
-  height: 53.25rem;
+  max-height: 60rem;
   margin-top: 3.13rem;
+  padding: 1.88rem;
+  background-color: white;
+  border-radius: 0.75rem;
 
   h1 {
     font-size: 1.75rem;
     font-weight: 600;
-
-    margin-top: 1.88rem;
-    margin-left: 1.87rem;
+    margin-bottom: 1.25rem;
   }
 `;
+
 const RegistrationBox = styled.div`
-  width: 68.75rem;
-  height: 37.5rem;
-
-  margin: 3.12rem 3.13rem 3.13rem 3.13rem;
-
   display: flex;
-  gap: 1.88rem;
+  padding: 0rem 0.625rem;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.875rem;
 `;
 
-const ExplanationBox = styled.div`
+const Layout = styled.div`
   width: 35.625rem;
-  height: 37.5rem;
 
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  h3 {
+    margin-bottom: 0.3125rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  input {
+    display: flex;
+    width: 35.625rem;
+    padding: 0.75rem 1.25rem;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    box-sizing: border-box;
+    font-weight: 500;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    background-color: ${theme.inputColor};
+    border: none;
+    outline: none;
+  }
+
+  textarea {
+    width: 35.625rem;
+    min-height: 14.4375rem;
+    max-height: 21.4375rem;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    box-sizing: border-box;
+    background-color: ${theme.inputColor};
+    border: none;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  p {
+    text-align: right;
+  }
+`;
+
+const DeliveryBox = styled.div`
+  height: 2.4375rem;
+  margin-top: 0.62rem;
+  margin-bottom: 1.25rem;
+
+  display: flex;
+  gap: 0.62rem;
+`;
+const Delivery = styled.button<ButtonType>`
+  all: unset;
+  padding: 0.625rem 1.5rem;
+  box-sizing: border-box;
+  height: 2.4375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6.25rem;
+  border: none;
+  font-size: 0.875rem;
+  border: 1px solid ${theme.deactivateBtn};
+  color: #8e8e8e;
+  font-weight: 500;
+  &.active {
+    border: 1px solid ${theme.pointColor};
+    color: ${theme.pointColor};
+  }
+  cursor: pointer;
+`;
+
+const BtnLayout = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+  margin-bottom: 3.06rem;
+  gap: 0.62rem;
+`;
+const Btn = styled.div<{ backcolor: string }>`
+  width: 8.125rem;
+  height: 2.5rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 0.5rem;
+  background: ${props => props.backcolor};
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem; /* 142.857% */
+  letter-spacing: 0.04rem;
+  text-transform: uppercase;
+
+  cursor: pointer;
 `;
