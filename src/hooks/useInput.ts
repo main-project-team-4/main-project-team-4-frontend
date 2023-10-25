@@ -7,7 +7,7 @@ export const useInput = (initialValue: string) => {
     setInput(e.target.value);
   };
 
-  return [input, handleChange] as const;
+  return [input, setInput, handleChange] as const;
 };
 
 export const usePriceInput = () => {
@@ -31,5 +31,5 @@ export const usePriceInput = () => {
     setViewPrice(formattedPrice);
   };
 
-  return [price, viewPrice, notice, priceHandleChange];
+  return [price,setPrice, viewPrice, setViewPrice,notice, priceHandleChange];
 };

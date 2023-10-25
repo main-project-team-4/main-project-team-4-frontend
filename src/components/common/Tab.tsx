@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-
+import { theme } from '../../styles/theme';
 type TabType = {
   name: string;
   content: JSX.Element;
@@ -67,8 +67,7 @@ const TabMenu = styled.button<{ active: number }>`
   flex-grow: 1;
 
   &:hover {
-    background-color: #c0c0c0;
-    color: white;
+    color: black;
   }
 `;
 

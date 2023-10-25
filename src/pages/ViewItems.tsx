@@ -36,7 +36,8 @@ export default function ViewItems() {
     dataToRender = topItems;
   }
   if (params.items == 'category') {
-    dataToRender = categoryData;
+    dataToRender = categoryData?.content;
+    console.log(categoryData);
   }
   if (params.items == 'search') {
     dataToRender = location.state;

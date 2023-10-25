@@ -58,5 +58,5 @@ const Container = styled.div`
   align-items: center;
 
   box-sizing: border-box;
-  padding: 11.0005rem 0rem 6.25rem 0rem;
+  padding: 6.88rem 0rem 6.25rem 0rem;
 `;

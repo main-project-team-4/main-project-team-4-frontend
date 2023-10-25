@@ -114,7 +114,7 @@ export default function Store() {
   const stars = [];
   const rate = Math.round(shopInfo.review_rating_avg);
   for (let i = 0; i < rate; i++) {
-    stars.push(<img src="https://ifh.cc/g/NZAWv7.png" />);
+    stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" />);
   }
 
   return (
@@ -124,22 +124,25 @@ export default function Store() {
         <ProfileContainer>
           <ProfileBox>
             <Profile src={myData?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
-            <Name starLength={stars.length}>
+            <Name starlength={stars.length}>
               <h3>
-                {shopInfo.shop_name}{' '}
+                {shopInfo.shop_name}
                 {stars.length > 0 ? (
-                  <h4>
-                    <p>평점</p> {stars}{' '}
-                  </h4>
+                  <div>
+                    <h4>
+                      <p>평점</p> {stars}
+                    </h4>
+                  </div>
                 ) : (
-                  <h4>평점이 없습니다</h4>
+                  <div>
+                    <h4>평점이 없습니다</h4>
+                  </div>
                 )}
               </h3>
               <Intro>
                 {intro ? (
                   introState ? (
                     <TextArea>
-                      {' '}
                       <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
                       <div>
                         <span>{inputCount}</span>
@@ -312,7 +315,7 @@ const TextArea = styled.div`
   align-items: flex-end;
 `;
 
-const Name = styled.div<{ starLength: number }>`
+const Name = styled.div<{ starlength: number }>`
   /* width: 45.3125rem; */
   height: 4.875rem;
   display: flex;
@@ -340,7 +343,7 @@ const Name = styled.div<{ starLength: number }>`
       font-size: 1.25rem;
       font-weight: 600;
 
-      color: ${props => (props.starLength > 0 ? '' : theme.cancelBtn)};
+      color: ${props => (props.starlength > 0 ? '' : theme.cancelBtn)};
 
       p {
         margin-right: 0.3125rem;

@@ -75,7 +75,7 @@ export default function Header() {
               </Btn>
               <Btn
                 onClick={() => {
-                  navigate('/register');
+                  navigate('/register',{state:''});
                 }}
               >
                 <span style={{ color: 'white' }} className="material-symbols-outlined">

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { getCategory } from '../../apis/sidebar/category';
 
@@ -13,19 +13,14 @@ type MidOptionType = {
   mid_category_name: string;
 };
 
-function Category({ setCategory }) {
+function Category({ setCategory, largeSelected, setlargeSelected, midSelected, setMidSelected, categoryID, setCategoryID }) {
   const { data, refetch } = useQuery('category', getCategory, { enabled: false });
 
   // 대분류 카테고리 상태관리
   const [largeIsOpen, setlargeIsOpen] = useState(false);
-  const [largeSelected, setlargeSelected] = useState('대분류');
-
-  // 대분류 선택 카테고리 상태관리
-  const [categoryID, setCategoryID] = useState(0);
 
   // 중분류 카테고리 상태관리
   const [midIsOpen, setMidIsOpen] = useState(false);
-  const [midSelected, setMidSelected] = useState('중분류');
   const [showMessage, setShowMessage] = useState(false);
 
   const LargeToggleDropdown = () => {
@@ -51,11 +46,34 @@ function Category({ setCategory }) {
     setMidIsOpen(false);
     setCategory(categoryId);
   };
+
+  // 참조 생성
+  const largeDropdownRef = useRef(null);
+  const midDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      // 대분류 드롭다운 외부 클릭 검사
+      if (largeDropdownRef.current && !largeDropdownRef.current.contains(event.target)) {
+        setlargeIsOpen(false);
+      }
+
+      // 중분류 드롭다운 외부 클릭 검사
+      if (midDropdownRef.current && !midDropdownRef.current.contains(event.target)) {
+        setMidIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <Container>
       <h3>카테고리</h3>
       <SelectBox>
-        <Select onClick={LargeToggleDropdown}>
+        <Select ref={largeDropdownRef} onClick={LargeToggleDropdown}>
           {largeSelected}
           <span className="expand-icon material-symbols-outlined">expand_more</span>
           {largeIsOpen && (
@@ -68,7 +86,7 @@ function Category({ setCategory }) {
             </Options>
           )}
         </Select>
-        <Select onClick={MidToggleDropdown}>
+        <Select ref={midDropdownRef} onClick={MidToggleDropdown}>
           {midSelected}
           <span className="expand-icon material-symbols-outlined">expand_more</span>
           {showMessage && <Message>대분류를 먼저 선택해주세요</Message>}

@@ -3,9 +3,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-function Image({ setMainImg, setSubImg }) {
-  const [images, setImages] = useState<string[]>([]);
-  const [selectedPicture, setSelectedPicture] = useState('');
+function Image({ images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }) {
   const [viewAlert, setViewAlert] = useState(false);
   const [hovered, setHovered] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -34,29 +32,27 @@ function Image({ setMainImg, setSubImg }) {
     }
   };
 
-const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const files = event.currentTarget.files;
+  const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.currentTarget.files;
 
-  if (files && files.length > 0) {
-    const fileArray = Array.from(files);
+    if (files && files.length > 0) {
+      const fileArray = Array.from(files);
 
-    if (fileArray.length + images.length <= 5) {
-      const imageArray = fileArray.map(file => URL.createObjectURL(file));
-      setImages(prevImages => [...prevImages, ...imageArray]);
-      setSelectedPicture(imageArray[0]);
+      if (fileArray.length + images.length <= 5) {
+        const imageArray = fileArray.map(file => URL.createObjectURL(file));
+        setImages(prevImages => [...prevImages, ...imageArray]);
+        setSelectedPicture(imageArray[0]);
 
-      setMainImg(fileArray[0]); // File 객체를 직접 설정
-      setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
+        setMainImg(fileArray[0]); // File 객체를 직접 설정
+        setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
 
-      console.log('fileArray.slice(1)', fileArray.slice(1));
-      event.currentTarget.value = null;
-
-    } else {
-      setViewAlert(true);
+        console.log('fileArray.slice(1)', fileArray.slice(1));
+        event.currentTarget.value = null;
+      } else {
+        setViewAlert(true);
+      }
     }
-  }
-};
-
+  };
 
   useEffect(() => {
     if (viewAlert) {
@@ -307,11 +303,12 @@ const Img = styled.div`
   position: relative;
   width: 5rem;
   height: 5rem;
-  border: 1px solid #90909096;
   background-color: white;
+  border-radius: 0.375rem;
   img {
     width: 100%;
     height: 100%;
+    border-radius: 0.375rem;
   }
   span {
     font-size: 0.75rem;
