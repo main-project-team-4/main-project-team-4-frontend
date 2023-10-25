@@ -40,6 +40,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
         onClick={() => {
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
+        displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
       >
         <Image src={img} />
         <TextLayout>
@@ -52,9 +53,9 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   );
 }
 
-const Layout = styled.div`
+const Layout = styled.div<{ displaybtn: number }>`
   width: 19.0625rem;
-  height: 20rem;
+  height: ${props => (props.displaybtn ? '22.4375rem' : '20rem')};
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid ${theme.outline};
