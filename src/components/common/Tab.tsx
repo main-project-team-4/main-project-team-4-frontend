@@ -42,8 +42,6 @@ const TabLayout = styled.div`
 
 const TabMenusContainer = styled.div`
   display: flex;
-
-  width: 24.8125rem;
   height: 1.8125rem;
   gap: 3.12rem;
 `;

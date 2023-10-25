@@ -9,12 +9,12 @@ import { getCookie } from '../../utils/cookie';
 
 export default function Header() {
   const [modal, setModal] = useState(false);
-  const [itemName, setItemname] = useState('');
+  const [itemName, setItemName] = useState('');
   const navigate = useNavigate();
   const token = getCookie('token');
 
   const goHome = () => {
-    setItemname('');
+    setItemName('');
     navigate('/');
   };
 
@@ -28,11 +28,11 @@ export default function Header() {
   };
 
   // 검색 기능
-  const { refetch } = useQuery('search', () => searchItems(), { enabled: false });
+  const { refetch } = useQuery('search', () => searchItems(itemName), { enabled: false });
 
   const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
-    setItemname(value);
+    setItemName(value);
   };
   const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -44,6 +44,7 @@ export default function Header() {
       const { data: refetchedData } = await refetch();
       if (refetchedData && itemName) {
         navigate(`search?keyword=${itemName}`, { state: refetchedData });
+        setItemName('');
       }
     } catch (error) {
       console.error('Error refetching data:', error);
@@ -75,7 +76,7 @@ export default function Header() {
               </Btn>
               <Btn
                 onClick={() => {
-                  navigate('/register',{state:''});
+                  navigate('/register', { state: '' });
                 }}
               >
                 <span style={{ color: 'white' }} className="material-symbols-outlined">

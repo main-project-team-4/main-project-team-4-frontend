@@ -76,7 +76,7 @@ export default function ViewItems() {
       <Title>
         {params.items === 'search' ? (
           <h4>
-            <span>{keyword}</span>의 검색결과 {dataToRender?.length}개
+            <span>"{keyword}"</span>의 검색결과 {dataToRender?.length}개
           </h4>
         ) : (
           <>
