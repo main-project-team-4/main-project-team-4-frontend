@@ -28,7 +28,7 @@ export default function Header() {
   };
 
   // 검색 기능
-  const { refetch } = useQuery('search', () => searchItems(itemName), { enabled: false });
+  const { refetch } = useQuery('search', () => searchItems(), { enabled: false });
 
   const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
@@ -124,10 +124,10 @@ const Logo = styled.img`
 
 const Search = styled.div`
   box-sizing: border-box;
-  width: 26.1875rem;
+  width: 31.25rem;
   height: 2rem;
   border-radius: 3.125rem;
-  padding: 1.5rem 0.88rem;
+  padding: 1.5rem 0.62rem;
 
   display: flex;
   justify-content: center;
@@ -136,15 +136,15 @@ const Search = styled.div`
   background-color: #f4f4f4;
 
   input {
-    width: 22.0625rem;
-    height: 2.875rem;
+    width: 26.125rem;
+    height: 1.875rem;
     border: none;
     outline-style: none;
     background-color: #f4f4f4;
   }
 
   span {
-    font-size: 1.125rem;
+    font-size: 1.5rem;
     background-color: transparent;
 
     cursor: pointer;

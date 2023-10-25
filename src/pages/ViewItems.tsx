@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useInfiniteQuery } from 'react-query';
-import { AllItems, CategoryItem, TopItems } from '../apis/getItems/Item';
+import { AllItems, CategoryItem, TopItems, nearByItem } from '../apis/getItems/Item';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
 import { theme } from '../styles/theme';
+import { getCookie } from '../utils/cookie';
 
 export default function ViewItems() {
   const params = useParams();
   const location = useLocation();
   const path = location.pathname;
+  const token = getCookie('token');
 
   // 검색 키워드 관리
   const [keyword, setKeyword] = useState('');
@@ -26,6 +28,8 @@ export default function ViewItems() {
       return AllItems({ page: pageParam, pageSize });
     } else if (params.items === '인기 상품') {
       return TopItems({ page: pageParam, pageSize });
+    } else if (params.items === '내 주위 상품') {
+      return nearByItem({ token, page: pageParam, pageSize });
     } else if (params.items === 'category') {
       return CategoryItem(location.state?.id, location.state?.layer, pageParam);
     } else {
@@ -61,8 +65,9 @@ export default function ViewItems() {
   let dataToRender;
   if (params.items === 'search') {
     dataToRender = location.state;
-  } else {
-    infiniteQueryData?.pages.flat() || [];
+  }
+  if (params.items !== 'search') {
+    dataToRender = infiniteQueryData?.pages.flat() || [];
   }
 
   return (
@@ -115,6 +120,7 @@ const Layout = styled.div`
   gap: 1.25rem;
   flex-wrap: wrap;
   margin-top: 3.13rem;
+  margin-bottom: 3.13rem;
 `;
 
 const CardWrapper = styled.div`

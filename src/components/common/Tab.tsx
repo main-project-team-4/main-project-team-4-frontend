@@ -42,17 +42,15 @@ const TabLayout = styled.div`
 
 const TabMenusContainer = styled.div`
   display: flex;
-  flex-direction: row;
 
-  width: 33.625rem;
+  width: 24.8125rem;
   height: 1.8125rem;
-  margin-bottom: 1.25rem;
   gap: 3.12rem;
 `;
 
 const TabMenu = styled.button<{ active: number }>`
   cursor: pointer;
-  width: 5.1875rem;
+  width: 6.1875rem;
   height: 1.8125rem;
   border: none;
   background: none;
@@ -61,10 +59,11 @@ const TabMenu = styled.button<{ active: number }>`
     background-color 0.3s,
     color 0.3s;
   font-size: 1.5rem;
+  font-style: normal;
   font-weight: 700;
+  line-height: normal;
   text-align: center;
   color: ${({ active }) => (active === 0 ? 'black' : '#969696')};
-  flex-grow: 1;
 
   &:hover {
     background-color: #c0c0c0;
