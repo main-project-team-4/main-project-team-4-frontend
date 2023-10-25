@@ -50,13 +50,12 @@ function Mypage() {
 export default Mypage;
 
 const Container = styled.div`
-  width: 74.9375rem;
+  width: 78.125rem;
   height: 65.0625rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-
   box-sizing: border-box;
-  padding: 11.0005rem 0rem 6.25rem 0rem;
+  padding: 6.87rem 0rem 6.25rem 0rem;
 `;

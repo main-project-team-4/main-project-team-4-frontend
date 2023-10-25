@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import styled from 'styled-components';
 import { changeLocation, changeNickName, deleteID } from '../../apis/mypage/members';
 import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
+import { theme } from '../../styles/theme';
 
 type DataInfo = {
   data: {
@@ -100,7 +101,7 @@ function InformationInput({ data }: DataInfo) {
 
   return (
     <Container>
-      <NickNameBox>
+      <InputBox boxname="nickName">
         <h3>상점명</h3>
         {nickBtnState ? (
           <>
@@ -119,8 +120,8 @@ function InformationInput({ data }: DataInfo) {
             <button onClick={completeNick}>수정완료</button>
           </>
         )}
-      </NickNameBox>
-      <AddressBox>
+      </InputBox>
+      <InputBox boxname="address">
         <h3>주소</h3>
         {locBtnState ? (
           <>
@@ -133,7 +134,7 @@ function InformationInput({ data }: DataInfo) {
             <button onClick={completeLocation}>수정완료</button>
           </>
         )}
-      </AddressBox>
+      </InputBox>
       <ButtonBox onClick={goMyStore}>
         내 상점 가기
         <div>
@@ -148,121 +149,88 @@ function InformationInput({ data }: DataInfo) {
 export default InformationInput;
 
 const Container = styled.div`
-  width: 95.0575rem;
-  height: 23.9375rem;
-  margin-top: 3.75rem;
+  width: 78.125rem;
+  height: 22.5rem;
+  margin-top: 3.12rem;
   margin-bottom: 6.25rem;
 
-  padding: 3.12rem 25.5rem 1rem 25.5rem;
+  padding: 3.12rem 15.44rem 0.62rem 15.44rem;
   box-sizing: border-box;
 
   position: relative;
+  background-color: white;
+  border-radius: 0.75rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
-const NickNameBox = styled.div`
-  width: 44.0625rem;
-  height: 3rem;
+const InputBox = styled.div<{ boxname: string }>`
+  width: 40.3125rem;
+  height: 2.8125rem;
 
   display: flex;
   align-items: center;
-  margin-bottom: 1.25rem;
+  margin-bottom: ${props => (props.boxname === 'nickName' ? '1.25rem' : '3.12rem')};
   border-radius: 0.75rem;
 
   h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.04rem;
+    font-size: 1.125rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 
-    margin-right: 1.25rem;
+    margin-right: ${props => (props.boxname === 'nickName' ? '1.25rem' : '2.19rem')};
   }
   p {
-    width: 31.25rem;
-    height: 3rem;
+    width: 28.125rem;
+    height: 2.8125rem;
     border-radius: 0.75rem;
     margin-right: 0.5rem;
+    background-color: ${theme.inputColor};
 
-    font-size: 1.25rem;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 
     display: flex;
-    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
+    padding: 1.25rem 0.81rem;
     align-items: center;
   }
   input {
-    width: 31.25rem;
-    height: 3rem;
+    width: 28.125rem;
+    height: 2.8125rem;
     border-radius: 0.75rem;
     margin-right: 0.5rem;
     border: none;
-    font-size: 1.25rem;
+    background-color: ${theme.inputColor};
+
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 
     display: flex;
-    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
+    padding: 1.25rem 0.81rem;
     align-items: center;
   }
   button {
     width: 7.5rem;
-    height: 3rem;
-    border-radius: 0.75rem;
-    background-color: #f4f4f4;
+    height: 2.8125rem;
+    border-radius: 0.375rem;
+    background-color: ${theme.navy};
+    color: white;
     border: none;
-    color: #818181;
     cursor: pointer;
   }
 `;
-const AddressBox = styled.div`
-  width: 44.0625rem;
-  height: 3rem;
 
-  display: flex;
-  align-items: center;
-  margin-bottom: 3.12rem;
-
-  h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    letter-spacing: 0.04rem;
-
-    margin-right: 2.44rem;
-  }
-  p {
-    width: 31.25rem;
-    height: 3rem;
-    border-radius: 0.75rem;
-    margin-right: 0.5rem;
-
-    font-size: 1.25rem;
-
-    display: flex;
-    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
-    align-items: center;
-  }
-  input {
-    width: 31.25rem;
-    height: 3rem;
-    border-radius: 0.75rem;
-    margin-right: 0.5rem;
-    border: none;
-
-    font-size: 1.25rem;
-
-    display: flex;
-    padding: 0.8125rem 11.5625rem 0.8125rem 1.25rem;
-    align-items: center;
-  }
-  button {
-    width: 7.5rem;
-    height: 3rem;
-    border-radius: 0.75rem;
-    background-color: #f4f4f4;
-    border: none;
-    color: #818181;
-    cursor: pointer;
-  }
-`;
 const ButtonBox = styled.button`
-  width: 44.0625rem;
-  height: 4.1875rem;
-  background-color: #c9c9c9;
+  width: 40.3125rem;
+  height: 3.5rem;
+  background-color: ${theme.navy};
   border: none;
 
   display: flex;
@@ -277,8 +245,7 @@ const ButtonBox = styled.button`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  letter-spacing: 0.04rem;
-
+  color: white;
   cursor: pointer;
 
   div {
@@ -290,7 +257,6 @@ const ButtonBox = styled.button`
     height: 1.875rem;
     flex-shrink: 0;
     border-radius: 100%;
-    background-color: #808080;
 
     span {
       color: white;
@@ -304,13 +270,12 @@ const WithdrawalButton = styled.button`
   font-weight: 500;
   line-height: normal;
   letter-spacing: 0.04rem;
-  color: #8f8f8f;
+  color: #afb2b7;
 
   background-color: transparent;
   border: none;
 
-  position: absolute;
-  left: 65.8rem;
-
+  margin-left: auto;
+  margin-right: 3rem;
   cursor: pointer;
 `;
