@@ -57,5 +57,5 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  padding: 6.87rem 0rem 6.25rem 0rem;
+  padding: 6.88rem 0rem 6.25rem 0rem;
 `;

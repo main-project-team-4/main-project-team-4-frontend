@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import styled from 'styled-components';
+import { theme } from '../../styles/theme';
 
 type ReviewType = {
   img: string;
@@ -10,17 +11,22 @@ type ReviewType = {
 };
 
 export default function ReviewCard({ img, name, item, review, reviewRate }: ReviewType) {
-  const [open, setOpen] = useState(false);
-
-  const viewHandler = useCallback(() => {
-    setOpen(prev => !prev);
-  }, []);
-
   // 별점관리
   let stars = [];
   const rate = Math.round(reviewRate);
   for (let i = 0; i < rate; i++) {
-    stars.push(<img src="https://ifh.cc/g/NZAWv7.png" />);
+    stars.push(
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+        <g clip-path="url(#clip0_812_2714)">
+          <path
+            d="M8.52448 1.96332C8.67416 1.50269 9.32584 1.50269 9.47552 1.96332L10.9085 6.37314C10.9755 6.57913 11.1674 6.71861 11.384 6.71861L16.0209 6.71879C16.5052 6.71881 16.7066 7.33858 16.3148 7.62329L12.5636 10.3489C12.3884 10.4762 12.315 10.7019 12.382 10.9079L13.8147 15.3178C13.9643 15.7784 13.4371 16.1615 13.0452 15.8768L9.29388 13.1515C9.11864 13.0242 8.88136 13.0242 8.70612 13.1515L4.95476 15.8768C4.5629 16.1615 4.03569 15.7784 4.18534 15.3178L5.61803 10.9079C5.68496 10.7019 5.61163 10.4762 5.43641 10.3489L1.68525 7.62329C1.29342 7.33858 1.49479 6.71881 1.97913 6.71879L6.61595 6.71861C6.83255 6.71861 7.02452 6.57913 7.09146 6.37314L8.52448 1.96332Z"
+            fill="#2667FF"
+            stroke="#2667FF"
+            stroke-width="1.5"
+          />
+        </g>
+      </svg>,
+    );
   }
 
   return (
@@ -31,14 +37,13 @@ export default function ReviewCard({ img, name, item, review, reviewRate }: Revi
           <Info>
             <span>{name}</span>
             <p>{item}</p>
-            <div>{stars}</div>
+            <div>
+              <h3>평점</h3>
+              {stars}
+            </div>
           </Info>
         </Profile>
         <Review open={open}>{review}</Review>
-        <ViewAll onClick={viewHandler}>
-          {open ? '접기' : '전체보기'}
-          <span className="material-symbols-outlined">{open ? 'expand_less' : 'expand_more'}</span>
-        </ViewAll>
       </Layout>
     </>
   );
@@ -46,12 +51,13 @@ export default function ReviewCard({ img, name, item, review, reviewRate }: Revi
 
 const Layout = styled.div`
   display: flex;
-  width: 78.125rem;
-  height: 14.6875rem;
+  max-width: 37.5rem;
+  min-width: 37.5rem;
   padding: 1.25rem;
-  box-sizing: border-box;
   flex-direction: column;
-  border-bottom: 1px solid black;
+  gap: 0.5rem;
+  box-sizing: border-box;
+
 `;
 
 const Profile = styled.div`
@@ -85,6 +91,12 @@ const Info = styled.div`
   }
   div {
     display: flex;
+    h3 {
+      font-size: 0.875rem;
+      font-weight: 400;
+      margin-right: 5px;
+      color: #3c3c3c;
+    }
   }
   img {
     width: 1.125rem;
@@ -94,25 +106,7 @@ const Info = styled.div`
 
 const Review = styled.div`
   font-weight: 400;
-  height: ${props => (props.open ? 'auto' : '1.5rem')};
   overflow: hidden;
   margin-bottom: 0.625rem;
   text-align: left;
-`;
-
-const ViewAll = styled.button`
-  all: unset;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 5rem;
-  font-size: 0.9rem;
-  line-height: 0.875rem;
-  align-self: flex-end;
-  text-align: right;
-  cursor: pointer;
-  color: #8f8f8f;
-  span {
-    color: #c2c2c2;
-  }
 `;

@@ -13,7 +13,6 @@ export default function CardLayout({ title, data, shop_Id }) {
   const move = () => {
     navigate(`/${title}`);
   };
-
   return (
     <>
       <Layout title={title}>

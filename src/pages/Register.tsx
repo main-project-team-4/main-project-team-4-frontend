@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import Image from '../components/register/Image';
 import Category from '../components/register/Category';
@@ -8,30 +8,70 @@ import { useInput, usePriceInput } from '../hooks/useInput';
 import { getCookie } from '../utils/cookie';
 import { uploadItem } from '../apis/posting/posting';
 import Modal from '../components/common/Modal';
+import { useLocation } from 'react-router-dom';
 
 function RegistrationItem() {
-  const [clicked, setClicked] = useState(0);
+  const [clicked, setClicked] = useState(true);
   const [inputCount, setInputCount] = useState(0);
-  const [title, titleHandleChange] = useInput('');
-  const [explain, explainHandleChange] = useInput('');
-  const [price, viewPrice, notice, priceHandleChange] = usePriceInput('');
+  const [title, setTitle, titleHandleChange] = useInput('');
+  const [explain, setExplain, explainHandleChange] = useInput('');
+  const [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange] = usePriceInput('');
   const [mainImg, setMainImg] = useState<File | null>(null);
   const [subImg, setSubImg] = useState<File[]>([]);
   const [category, setCategory] = useState(0);
   const [deliveryfee, setDeliveryfee] = useState(true);
   const [viewModal, setViewModal] = useState(false);
+  const [isFormComplete, setIsFormComplete] = useState(false);
+  //이미지 state 관리
+  const [images, setImages] = useState<string[]>([]);
+  const [selectedPicture, setSelectedPicture] = useState('');
+  // 카테고리 state 관리
+  const [largeSelected, setlargeSelected] = useState('대분류');
+  const [midSelected, setMidSelected] = useState('중분류');
+  const [categoryID, setCategoryID] = useState(0);
 
-  const isFormComplete = title && explain && price && mainImg && category;
+  const { state: detailItems } = useLocation() || {};
+
+  useEffect(() => {
+    if (detailItems) {
+      setImages(detailItems.item_image_list);
+      setMainImg(detailItems.item_image_list[0]);
+      setSelectedPicture(detailItems.item_image_list[0]);
+      setTitle(detailItems.item_name);
+      setCategory(detailItems.category_m_id);
+      setExplain(detailItems.item_comment);
+      setPrice(detailItems.item_price);
+      setViewPrice(String(detailItems.item_price).replace(/\B(?=(\d{3})+(?!\d))/g, ','));
+      setDeliveryfee(detailItems.item_with_delivery_fee);
+      setClicked(detailItems.item_with_delivery_fee);
+      setlargeSelected(detailItems.category_l_name);
+      setMidSelected(detailItems.category_m_name);
+      setInputCount(detailItems.item_comment.length);
+      setCategoryID(detailItems.category_l_id);
+      setIsFormComplete(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const isComplete = title && explain && price && mainImg && category;
+    setIsFormComplete(isComplete);
+  }, [title, explain, price, mainImg, category, detailItems]);
+
+  // useEffect(() => {
+  //   title && explain && price && mainImg && category ? setIsFormComplete(true) : setIsFormComplete(false);
+
+  //   console.log('isFormComplete', isFormComplete);
+  // }, [title, explain, price, mainImg, category]);
 
   const queryClient = useQueryClient();
   const token = getCookie('token');
 
   const onClickInclude = () => {
-    setClicked(0);
+    setClicked(true);
     setDeliveryfee(true);
   };
   const onClickExclude = () => {
-    setClicked(1);
+    setClicked(false);
     setDeliveryfee(false);
   };
 
@@ -42,8 +82,9 @@ function RegistrationItem() {
 
   // 상품 등록
   const mutation = useMutation(uploadItem, {
-    onSuccess: () => {
+    onSuccess: response => {
       queryClient.invalidateQueries('uploadItem');
+      console.log(response);
     },
   });
 
@@ -91,13 +132,21 @@ function RegistrationItem() {
       <Container>
         <h1>상품등록</h1>
         <RegistrationBox>
-          <Image setMainImg={setMainImg} setSubImg={setSubImg} />
+          <Image images={images} setImages={setImages} selectedPicture={selectedPicture} setSelectedPicture={setSelectedPicture} setMainImg={setMainImg} setSubImg={setSubImg} />
 
           <Layout>
             <h3>제목</h3>
             <input placeholder="제목을 입력해주세요" maxLength={88} value={title} onChange={titleHandleChange}></input>
 
-            <Category setCategory={setCategory} />
+            <Category
+              setCategory={setCategory}
+              largeSelected={largeSelected}
+              setlargeSelected={setlargeSelected}
+              midSelected={midSelected}
+              setMidSelected={setMidSelected}
+              categoryID={categoryID}
+              setCategoryID={setCategoryID}
+            />
 
             <PriceLayout>
               <h3>가격 </h3>
@@ -105,10 +154,10 @@ function RegistrationItem() {
             </PriceLayout>
             <input placeholder="가격을 입력해주세요" value={viewPrice} onChange={priceHandleChange}></input>
             <DeliveryBox>
-              <Delivery onClick={onClickInclude} className={clicked === 0 ? ' active' : ''}>
+              <Delivery onClick={onClickInclude} className={clicked ? ' active' : ''}>
                 배송비 포함
               </Delivery>
-              <Delivery onClick={onClickExclude} className={clicked === 1 ? ' active' : ''}>
+              <Delivery onClick={onClickExclude} className={clicked ? ' ' : 'active'}>
                 배송비 미포함
               </Delivery>
             </DeliveryBox>

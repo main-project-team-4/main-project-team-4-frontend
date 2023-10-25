@@ -62,6 +62,7 @@ export default function ViewItems() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+
   let dataToRender;
   if (params.items === 'search') {
     dataToRender = location.state;

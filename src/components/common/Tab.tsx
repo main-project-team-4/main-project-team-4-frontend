@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-
+import { theme } from '../../styles/theme';
 type TabType = {
   name: string;
   content: JSX.Element;
@@ -66,8 +66,7 @@ const TabMenu = styled.button<{ active: number }>`
   color: ${({ active }) => (active === 0 ? 'black' : '#969696')};
 
   &:hover {
-    background-color: #c0c0c0;
-    color: white;
+    color: black;
   }
 `;
 

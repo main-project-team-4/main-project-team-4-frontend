@@ -1,13 +1,29 @@
 import ReviewCard from '../store/ReviewCard';
+import styled from 'styled-components';
 
-function ReviewLayout({ reviewData }) {
+export default function ReviewLayout({ reviewData }) {
   return (
-    <div>
-      {reviewData.map(item => (
-        <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
+    <Container>
+      {reviewData.map((item, index) => (
+        <>
+          <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
+          {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />}
+        </>
       ))}
-    </div>
+    </Container>
   );
 }
 
-export default ReviewLayout;
+const Container = styled.div`
+  display: flex;
+  width: 78.125rem;
+  gap: 0 3.12rem;
+  flex-wrap: wrap;
+`;
+
+const Divider = styled.div`
+  flex-basis: 100%;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 0.62rem 0;
+`;
