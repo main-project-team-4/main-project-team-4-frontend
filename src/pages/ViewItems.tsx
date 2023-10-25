@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
-import { useQuery } from 'react-query';
-import { AllItems, CategoryItem, TopItems } from '../apis/getItems/Item';
+import { useInfiniteQuery } from 'react-query';
+import { AllItems, CategoryItem, TopItems, nearByItem } from '../apis/getItems/Item';
 import styled from 'styled-components';
 import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
 import { theme } from '../styles/theme';
+import { getCookie } from '../utils/cookie';
 
 export default function ViewItems() {
   const params = useParams();
   const location = useLocation();
   const path = location.pathname;
-  const categoryCheck = path.includes('/category');
+  const token = getCookie('token');
 
   // 검색 키워드 관리
   const [keyword, setKeyword] = useState('');
@@ -19,28 +20,55 @@ export default function ViewItems() {
     setKeyword(key);
   }, [key]);
 
-  const { data: items } = useQuery('items', AllItems);
-  const { data: topItems } = useQuery('topItems', TopItems);
-  const { data: categoryData, refetch } = useQuery([`categoryitem`, location.state?.id, location.state?.layer], () => CategoryItem(location.state?.id, location.state?.layer), { enabled: false });
+  // 무한스크롤
+  const pageSize = 20;
+
+  const fetchItems = ({ pageParam = 0 }) => {
+    if (params.items === '최신 상품') {
+      return AllItems({ page: pageParam, pageSize });
+    } else if (params.items === '인기 상품') {
+      return TopItems({ page: pageParam, pageSize });
+    } else if (params.items === '내 주위 상품') {
+      return nearByItem({ token, page: pageParam, pageSize });
+    } else if (params.items === 'category') {
+      return CategoryItem(location.state?.id, location.state?.layer, pageParam);
+    } else {
+      throw new Error('Unknown item type');
+    }
+  };
+  const {
+    data: infiniteQueryData,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery(['items', params.items, path], fetchItems, {
+    getNextPageParam: (lastPage, pages) => {
+      return pages.length;
+    },
+  });
 
   useEffect(() => {
-    if (categoryCheck) refetch();
-  }, [categoryCheck]);
+    refetch();
+  }, [path, refetch]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const { scrollTop, offsetHeight } = document.documentElement;
+      if (window.innerHeight + scrollTop >= offsetHeight) {
+        console.log('scroll');
+        fetchNextPage();
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
 
   let dataToRender;
-
-  if (params.items == '최신 상품') {
-    dataToRender = items;
-  }
-  if (params.items == '인기 상품') {
-    dataToRender = topItems;
-  }
-  if (params.items == 'category') {
-    dataToRender = categoryData?.content;
-    console.log(categoryData);
-  }
-  if (params.items == 'search') {
+  if (params.items === 'search') {
     dataToRender = location.state;
+  }
+  if (params.items !== 'search') {
+    dataToRender = infiniteQueryData?.pages.flat() || [];
   }
 
   return (
@@ -67,8 +95,8 @@ export default function ViewItems() {
       ) : (
         dataToRender && (
           <CardWrapper>
-            {dataToRender.map((item: ItemType) => (
-              <Card key={item.item_id} categoryTitle="" itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
+            {dataToRender.map((item: ItemType, index: number) => (
+              <Card key={index} categoryTitle="" itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
             ))}
           </CardWrapper>
         )
@@ -76,12 +104,14 @@ export default function ViewItems() {
     </Layout>
   );
 }
+
 type ItemType = {
   item_id: number;
   item_name: string;
   item_main_image: string;
   item_price: string;
   item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  item_created_at: string;
 };
 
 const Layout = styled.div`
@@ -91,6 +121,7 @@ const Layout = styled.div`
   gap: 1.25rem;
   flex-wrap: wrap;
   margin-top: 3.13rem;
+  margin-bottom: 3.13rem;
 `;
 
 const CardWrapper = styled.div`

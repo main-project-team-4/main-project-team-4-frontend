@@ -36,9 +36,9 @@ function Mypage() {
           <InformationInput data={myData} />
           <Tab
             tabs={[
-              { name: '구매내역', content: <CardLayout title="" data={ordered} /> },
-              { name: '판매내역', content: <CardLayout title="" data={sales} /> },
-              { name: '찜한상품', content: <CardLayout title="" data={wishlist} /> },
+              { name: '구매내역', content: <CardLayout shop_Id="" title="" data={ordered} /> },
+              { name: '판매내역', content: <CardLayout shop_Id="" title="" data={sales} /> },
+              { name: '찜한상품', content: <CardLayout shop_Id="" title="" data={wishlist} /> },
             ]}
           />
         </Container>
@@ -50,13 +50,12 @@ function Mypage() {
 export default Mypage;
 
 const Container = styled.div`
-  width: 74.9375rem;
+  width: 78.125rem;
   height: 65.0625rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-
   box-sizing: border-box;
   padding: 6.88rem 0rem 6.25rem 0rem;
 `;
