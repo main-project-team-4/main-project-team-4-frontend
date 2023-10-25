@@ -3,7 +3,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-function Image({ images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }) {
+function Image({ setViewImages, viewImages, images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }) {
   const [viewAlert, setViewAlert] = useState(false);
   const [hovered, setHovered] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -40,19 +40,24 @@ function Image({ images, setImages, setMainImg, selectedPicture, setSelectedPict
 
       if (fileArray.length + images.length <= 5) {
         const imageArray = fileArray.map(file => URL.createObjectURL(file));
-        setImages(prevImages => [...prevImages, ...imageArray]);
+        setImages(prevImages => [...prevImages, ...fileArray]);
+        setViewImages(prevImages => [...prevImages, ...imageArray]);
         setSelectedPicture(imageArray[0]);
 
         setMainImg(fileArray[0]); // File 객체를 직접 설정
         setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
 
-        console.log('fileArray.slice(1)', fileArray.slice(1));
         event.currentTarget.value = null;
       } else {
         setViewAlert(true);
       }
     }
   };
+
+  useEffect(() => {
+    setMainImg(images[0]); // File 객체를 직접 설정
+    setSubImg(images.slice(1)); // File 객체 배열을 직접 설정
+  }, [images]);
 
   useEffect(() => {
     if (viewAlert) {
@@ -112,7 +117,7 @@ function Image({ images, setImages, setMainImg, selectedPicture, setSelectedPict
               <Droppable droppableId="droppable" direction="horizontal">
                 {provided => (
                   <Imgs ref={provided.innerRef} {...provided.droppableProps}>
-                    {images.map((image, index) => (
+                    {viewImages.map((image, index) => (
                       <Draggable key={image} draggableId={image} index={index}>
                         {provided => (
                           <Img ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => clickHandler(index)}>

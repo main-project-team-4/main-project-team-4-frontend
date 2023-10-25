@@ -8,14 +8,14 @@ import { useInput, usePriceInput } from '../hooks/useInput';
 import { getCookie } from '../utils/cookie';
 import { uploadItem } from '../apis/posting/posting';
 import Modal from '../components/common/Modal';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function RegistrationItem() {
   const [clicked, setClicked] = useState(true);
   const [inputCount, setInputCount] = useState(0);
   const [title, setTitle, titleHandleChange] = useInput('');
   const [explain, setExplain, explainHandleChange] = useInput('');
-  const [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange] = usePriceInput('');
+  const [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange] = usePriceInput();
   const [mainImg, setMainImg] = useState<File | null>(null);
   const [subImg, setSubImg] = useState<File[]>([]);
   const [category, setCategory] = useState(0);
@@ -25,12 +25,20 @@ function RegistrationItem() {
   //이미지 state 관리
   const [images, setImages] = useState<string[]>([]);
   const [selectedPicture, setSelectedPicture] = useState('');
+  const [viewImages, setViewImages] = useState([]);
   // 카테고리 state 관리
   const [largeSelected, setlargeSelected] = useState('대분류');
   const [midSelected, setMidSelected] = useState('중분류');
   const [categoryID, setCategoryID] = useState(0);
 
   const { state: detailItems } = useLocation() || {};
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (detailItems) {
+      setViewImages(detailItems.item_image_list);
+    }
+  }, []);
 
   useEffect(() => {
     if (detailItems) {
@@ -57,12 +65,6 @@ function RegistrationItem() {
     setIsFormComplete(isComplete);
   }, [title, explain, price, mainImg, category, detailItems]);
 
-  // useEffect(() => {
-  //   title && explain && price && mainImg && category ? setIsFormComplete(true) : setIsFormComplete(false);
-
-  //   console.log('isFormComplete', isFormComplete);
-  // }, [title, explain, price, mainImg, category]);
-
   const queryClient = useQueryClient();
   const token = getCookie('token');
 
@@ -84,7 +86,9 @@ function RegistrationItem() {
   const mutation = useMutation(uploadItem, {
     onSuccess: response => {
       queryClient.invalidateQueries('uploadItem');
-      console.log(response);
+      if (response?.status === 200) {
+        navigate(`/posting/${title}`, { state: { id: response.data.item_id } });
+      }
     },
   });
 
@@ -119,6 +123,7 @@ function RegistrationItem() {
 
     mutation.mutate({ token, data: dataFormData }); // FormData 전송
   };
+
   return (
     <>
       {viewModal && (
@@ -132,7 +137,16 @@ function RegistrationItem() {
       <Container>
         <h1>상품등록</h1>
         <RegistrationBox>
-          <Image images={images} setImages={setImages} selectedPicture={selectedPicture} setSelectedPicture={setSelectedPicture} setMainImg={setMainImg} setSubImg={setSubImg} />
+          <Image
+            setViewImages={setViewImages}
+            viewImages={viewImages}
+            images={images}
+            setImages={setImages}
+            selectedPicture={selectedPicture}
+            setSelectedPicture={setSelectedPicture}
+            setMainImg={setMainImg}
+            setSubImg={setSubImg}
+          />
 
           <Layout>
             <h3>제목</h3>
@@ -168,7 +182,9 @@ function RegistrationItem() {
               <span> / 2000 자</span>
             </p>
             <BtnLayout>
-              <Btn backcolor="#AFB2B7">취소</Btn>
+              <Btn onClick={() => navigate(-1)} backcolor="#AFB2B7">
+                취소
+              </Btn>
               <Btn
                 backcolor={isFormComplete ? '#2667FF' : '#E7E8EA'}
                 onClick={

@@ -150,6 +150,7 @@ const ProfileImage = styled.div`
     font-size: 4.375rem;
     color: #c1c7cd;
     background-color: ${theme.navy};
+    border-radius: 100%;
   }
 `;
 
