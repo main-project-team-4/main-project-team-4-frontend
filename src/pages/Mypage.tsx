@@ -36,9 +36,9 @@ function Mypage() {
           <InformationInput data={myData} />
           <Tab
             tabs={[
-              { name: '구매내역', content: <CardLayout title="" data={ordered} /> },
-              { name: '판매내역', content: <CardLayout title="" data={sales} /> },
-              { name: '찜한상품', content: <CardLayout title="" data={wishlist} /> },
+              { name: '구매내역', content: <CardLayout shop_Id="" title="" data={ordered} /> },
+              { name: '판매내역', content: <CardLayout shop_Id="" title="" data={sales} /> },
+              { name: '찜한상품', content: <CardLayout shop_Id="" title="" data={wishlist} /> },
             ]}
           />
         </Container>

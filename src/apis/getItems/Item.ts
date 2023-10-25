@@ -1,10 +1,14 @@
 import { baseInstance } from '../config';
 
 // 최신 상품을 모두 가져오는 API
-
-export const AllItems = async () => {
+type ItemsType = {
+  page: number;
+  pageSize: number;
+};
+export const AllItems = async ({ page, pageSize }: ItemsType) => {
   try {
-    const response = await baseInstance.get('/api/items');
+    const response = await baseInstance.get(`/api/items?page=${page}&size=${pageSize}`);
+
     return response.data.content;
   } catch (error) {
     console.log(error);
@@ -12,9 +16,9 @@ export const AllItems = async () => {
 };
 
 // 인기 상품 모두 조회
-export const TopItems = async () => {
+export const TopItems = async ({ page, pageSize }: ItemsType) => {
   try {
-    const response = await baseInstance.get('/api/top-items');
+    const response = await baseInstance.get(`/api/top-items?page=${page}&size=${pageSize}`);
 
     return response.data.content;
   } catch (error) {
@@ -23,10 +27,10 @@ export const TopItems = async () => {
 };
 
 //카테고리별 아이템 조회
-export const CategoryItem = async (categoryID, layer) => {
+export const CategoryItem = async (categoryID, layer, page) => {
   try {
-    const response = await baseInstance.get(`api/categories/${categoryID}/items?layer=${layer}`);
-    return response.data;
+    const response = await baseInstance.get(`api/categories/${categoryID}/items?page=${page}&layer=${layer}`);
+    return response.data.content;
   } catch (error) {
     console.log(error);
   }
