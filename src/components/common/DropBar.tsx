@@ -38,7 +38,7 @@ export default function DropBar({ setSelected }) {
 
   return (
     <Container ref={dropdownRef}>
-      <Options isOpen={isOpen}>
+      <Options isopen={isOpen ? 1 : 0}>
         {isOpen ? (
           data.map((option, index) => (
             <Option key={option.state_name} onClick={() => handleOptionClick(option.item_state, option.state_name)}>
@@ -58,6 +58,9 @@ export default function DropBar({ setSelected }) {
 }
 
 const Container = styled.div`
+  position: absolute;
+  left: 29.5rem;
+  top: 0rem;
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
@@ -68,13 +71,13 @@ const Container = styled.div`
   }
 `;
 
-const Options = styled.ul`
+const Options = styled.ul<{ isopen: number }>`
   width: 7.5rem;
   border: 1px solid ${theme.pointColor};
   border-radius: 10px;
   background-color: white;
   list-style: none;
-  height: ${({ isOpen }) => (isOpen ? '8.1875rem' : '2.6875rem')};
+  height: ${({ isopen }) => (isopen === 1 ? '8.1875rem' : '2.6875rem')};
   overflow: hidden;
 `;
 

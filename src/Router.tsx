@@ -59,7 +59,7 @@ const router = createBrowserRouter([
             element: <Chat />,
           },
           {
-            path: 'register',
+            path: 'register/modify?',
             element: <Register />,
           },
         ],

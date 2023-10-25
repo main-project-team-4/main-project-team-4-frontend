@@ -52,7 +52,6 @@ export const changeItemState = async ({ data, token }) => {
 
 // 상품 등록
 export const uploadItem = async ({ token, data }) => {
-
   try {
     const response = await baseInstance.post(`/api/items`, data, {
       headers: {

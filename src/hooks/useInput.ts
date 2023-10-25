@@ -24,12 +24,13 @@ export const usePriceInput = () => {
       }, 10000);
       return;
     }
-    setPrice(e.target.value);
+
+    setPrice(e.target.value.replace(/,/g, ''));
     setNotice(false);
 
     const formattedPrice = e.target.value.replace(/\D/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     setViewPrice(formattedPrice);
   };
 
-  return [price,setPrice, viewPrice, setViewPrice,notice, priceHandleChange];
+  return [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange];
 };

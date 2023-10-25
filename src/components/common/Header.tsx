@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { searchItems } from '../../apis/header/Header';
 import React, { useState } from 'react';
-
 import LoginModal from '../login/LoginModal';
 import { getCookie } from '../../utils/cookie';
 

@@ -82,7 +82,7 @@ export default function DetailPosting() {
 
   // 상품 수정 페이지로 이동
   const goRegister = () => {
-    navigate('/register', { state: detailItems });
+    navigate('/register/modify', { state: detailItems });
   };
 
   const RenderHeartButton = ({ wishState, onClick }) => (
@@ -107,7 +107,6 @@ export default function DetailPosting() {
         <img className="firstImg" src={mainImg} alt="게시물"></img>
         <ImageBox>{detailItems.item_image_list?.map((item, index) => <img key={index} src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
       </ImageComtainer>
-
       <PostingContainer>
         <PostingBox>
           <div className="layout">
@@ -155,6 +154,7 @@ const ImageComtainer = styled.div`
     width: 37.5rem;
     height: 31.25rem;
     border-radius: 0.75rem;
+    background-color: white;
   }
 `;
 const ImageBox = styled.div`
@@ -164,11 +164,13 @@ const ImageBox = styled.div`
   gap: 0.75rem;
   width: 37.5rem;
   height: 3.75rem;
+  cursor: pointer;
 
   img {
     width: 4.125rem;
     height: 3.75rem;
     border-radius: 0.375rem;
+    cursor: pointer;
   }
 `;
 
@@ -182,8 +184,9 @@ const PostingBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
   gap: 1.5rem;
-  width: 37.5rem
+  width: 37.5rem;
   height: 22.9375rem;
 
   h1 {
@@ -207,7 +210,7 @@ const PostingBox = styled.div`
     letter-spacing: -0.015rem;
   }
 
-  .layout{
+  .layout {
     display: flex;
     width: 37.5rem;
     justify-content: space-between;
@@ -240,9 +243,9 @@ const PriceBox = styled.div`
     all: unset;
     background-color: transparent;
     display: flex;
-    width: 7.8rem;
+    /* width: 7.8rem; */
     height: 3.375rem;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1.3rem;
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
