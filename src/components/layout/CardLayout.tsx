@@ -3,7 +3,7 @@ import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 
-export default function CardLayout({ title, data, shop_Id }) {
+export default function CardLayout({ title, data, shop_Id }: ParamsType) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
@@ -13,6 +13,7 @@ export default function CardLayout({ title, data, shop_Id }) {
   const move = () => {
     navigate(`/${title}`);
   };
+
   return (
     <>
       <Layout title={title}>
@@ -21,7 +22,7 @@ export default function CardLayout({ title, data, shop_Id }) {
             {title === '인기 상품' && <PointBox></PointBox>}
             <Title title={title}>{title}</Title>
             <CardWrapper>
-              {data.map(item => (
+              {data.map((item: ItemType) => (
                 <Card key={item.item_id} categoryTitle={title} itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
               ))}
             </CardWrapper>
@@ -43,7 +44,23 @@ export default function CardLayout({ title, data, shop_Id }) {
     </>
   );
 }
-
+type ParamsType = {
+  data: ItemType[];
+  title: string;
+  shop_Id: string;
+};
+type ItemType = {
+  category_m_id: 2;
+  category_m_name: string;
+  item_created_at: string;
+  item_id: number;
+  item_main_image: string;
+  item_name: string;
+  item_price: string;
+  item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  member_id: number;
+  member_nickname: string;
+};
 const Layout = styled.div`
   display: flex;
   flex-direction: column;

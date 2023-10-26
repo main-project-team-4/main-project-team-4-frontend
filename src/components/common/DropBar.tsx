@@ -8,13 +8,13 @@ const data = [
   { state_name: '판매완료', item_state: 'SOLDOUT' },
 ];
 
-export default function DropBar({ setSelected }) {
+export default function DropBar({ setSelected }: any) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('판매중');
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = e => {
+    const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
       }
@@ -30,7 +30,7 @@ export default function DropBar({ setSelected }) {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (item_state, state_name) => {
+  const handleOptionClick = (item_state: string, state_name: string) => {
     setSelected(item_state);
     setSelectedView(state_name);
     setIsOpen(false);

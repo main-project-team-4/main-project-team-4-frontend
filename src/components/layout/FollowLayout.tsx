@@ -1,10 +1,22 @@
 import styled from 'styled-components';
 import FollowerCard from '../store/FollowerCard';
 
-export default function FollowLayout({ data, checkMine, follow }) {
+type FollowType = {
+  data: ItemType[];
+  checkMine: boolean;
+  follow: string;
+};
+type ItemType = {
+  member_id: number;
+  shop_id: number;
+  member_nickname: string;
+  member_image: string;
+  is_following: boolean;
+};
+export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
     <Container>
-      {data.map((item, index) => (
+      {data.map((item: ItemType, index: number) => (
         <>
           <FollowerCard key={index} isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
           {(index + 1) % 4 === 0 && <Divider />}

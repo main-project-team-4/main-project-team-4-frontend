@@ -5,5 +5,5 @@ export const baseInstance = axios.create({
   baseURL: 'http://43.200.8.55', // 기본 URL 설정
 });
 
-//authInstance
 // https://api.chanyoungkang.com/
+// 'http://43.200.8.55'
