@@ -125,7 +125,7 @@ export default function Store() {
       <Container>
         <ProfileContainer>
           <ProfileBox>
-            <Profile src={myData?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
+            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
             <Name starlength={stars.length}>
               <h3>
                 {shopInfo.shop_name}
