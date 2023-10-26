@@ -127,20 +127,20 @@ export default function Store() {
           <ProfileBox>
             <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
             <Name starlength={stars.length}>
-              <h3>
+              <h2>
                 {shopInfo.shop_name}
                 {stars.length > 0 ? (
                   <div>
-                    <h4>
+                    <h3>
                       <p>평점</p> {stars}
-                    </h4>
+                    </h3>
                   </div>
                 ) : (
                   <div>
-                    <h4>평점이 없습니다</h4>
+                    <h3>평점이 없습니다</h3>
                   </div>
                 )}
-              </h3>
+              </h2>
               <Intro>
                 {introState ? (
                   <TextArea>
@@ -153,7 +153,7 @@ export default function Store() {
                 ) : intro ? (
                   <p>{intro}</p>
                 ) : (
-                  <h4>소개글이 없습니다.</h4>
+                  <h3>소개글이 없습니다.</h3>
                 )}
 
                 {myData?.shop_id === shopInfo?.shop_id && <img onClick={introOnClick} src="https://ifh.cc/g/aDSaVR.png" />}
@@ -255,19 +255,6 @@ const Intro = styled.div`
   display: flex;
   gap: 0.62rem;
 
-  h3 {
-    padding: 0.88rem;
-    box-sizing: border-box;
-    width: 41.8125rem;
-    height: 4.5rem;
-    font-style: normal;
-    font-size: 1.25rem;
-    font-weight: 500;
-    letter-spacing: 0.04rem;
-    line-height: normal;
-    color: ${theme.cancelBtn};
-  }
-
   textarea {
     padding: 0.88rem;
     box-sizing: border-box;
@@ -324,7 +311,7 @@ const Name = styled.div<{ starlength: number }>`
   gap: 0.31rem;
   margin-top: 2.25rem;
 
-  h3 {
+  h2 {
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -335,7 +322,7 @@ const Name = styled.div<{ starlength: number }>`
     line-height: normal;
     letter-spacing: 0.04rem;
 
-    h4 {
+    h3 {
       display: flex;
       align-items: center;
       gap: 0.1875rem;

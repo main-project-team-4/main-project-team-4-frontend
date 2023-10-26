@@ -32,8 +32,6 @@ export default function ViewItems() {
       return nearByItem({ token, page: pageParam, pageSize });
     } else if (params.items === 'category') {
       return CategoryItem(location.state?.id, location.state?.layer, pageParam);
-    } else {
-      throw new Error('Unknown item type');
     }
   };
   const {
@@ -74,9 +72,9 @@ export default function ViewItems() {
     <Layout>
       <Title>
         {params.items === 'search' ? (
-          <h4>
+          <p>
             <span>"{keyword}"</span>의 검색결과 {dataToRender?.length}개
-          </h4>
+          </p>
         ) : (
           <>
             {params.items == 'category' ? '' : params.items}
@@ -130,7 +128,7 @@ const CardWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: 28px;
   font-weight: 600;
   line-height: 33px;

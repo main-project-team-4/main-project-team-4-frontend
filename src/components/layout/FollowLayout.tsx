@@ -17,10 +17,10 @@ export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
     <Container>
       {data.map((item: ItemType, index: number) => (
-        <>
-          <FollowerCard key={index} isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
+        <div key={index}>
+          <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
           {(index + 1) % 4 === 0 && <Divider />}
-        </>
+        </div>
       ))}
     </Container>
   );

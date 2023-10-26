@@ -54,7 +54,7 @@ const Container = styled.div`
 
   z-index: 20;
 `;
-const H3 = styled.h4`
+const H3 = styled.p`
   font-size: 1rem;
   font-weight: 400;
   margin-top: 2.5rem;

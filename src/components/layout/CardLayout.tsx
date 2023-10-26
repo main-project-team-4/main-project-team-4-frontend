@@ -71,7 +71,7 @@ const Layout = styled.div`
 
 const PointBox = styled.div`
   position: absolute;
-  top: 9.38rem;
+  top: 9.403rem;
   left: 30rem;
   width: 90rem;
   height: 19.3125rem;

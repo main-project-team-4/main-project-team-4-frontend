@@ -33,6 +33,7 @@ function RegistrationItem() {
 
   const { state: detailItems } = useLocation() || {};
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (detailItems) {
@@ -180,10 +181,10 @@ function RegistrationItem() {
             </DeliveryBox>
             <h3>설명</h3>
             <textarea placeholder="설명을 입력해주세요" maxLength={2000} onChange={InputHandler} value={explain}></textarea>
-            <p>
+            <div className="inputcount">
               <span>{inputCount}</span>
               <span> / 2000 자</span>
-            </p>
+            </div>
             <BtnLayout>
               <Btn onClick={() => navigate(-1)} backcolor="#AFB2B7">
                 취소
@@ -198,7 +199,7 @@ function RegistrationItem() {
                       }
                 }
               >
-                상품등록
+                {pathname === '/register/modify' ? '수정하기' : '상품등록'}
               </Btn>
             </BtnLayout>
           </Layout>
@@ -272,7 +273,7 @@ const Layout = styled.div`
     font-size: 1rem;
     font-weight: 500;
   }
-  p {
+  .inputcount {
     text-align: right;
   }
 `;
