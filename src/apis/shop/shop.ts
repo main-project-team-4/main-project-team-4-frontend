@@ -1,7 +1,7 @@
 import { baseInstance } from '../config';
 
 type ShopType = {
-  shopId: number;
+  shopId: number | string;
   token?: string;
 };
 export const Followers = async ({ shopId, token }: ShopType) => {

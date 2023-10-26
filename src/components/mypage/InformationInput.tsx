@@ -13,6 +13,7 @@ type DataInfo = {
     member_image: string;
     member_nickname: string;
     shop_id: number;
+    shop_name: string;
   };
 };
 

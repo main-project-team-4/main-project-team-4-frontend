@@ -134,7 +134,7 @@ export default function DetailPosting() {
 
 type HeartBtnType = {
   wishState: boolean;
-  onClick: any;
+  onClick: () => void;
 };
 const Container = styled.div`
   height: 40.1875rem;

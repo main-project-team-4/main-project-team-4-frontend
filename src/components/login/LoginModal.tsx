@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 
 interface LoginModalProps {
@@ -9,7 +8,7 @@ interface FontProps {
   color?: string;
   font?: string;
 }
-export default function LoginModal({ openModal, closeModal }: LoginModalProps) {
+export default function LoginModal({ closeModal }: LoginModalProps) {
   return (
     <>
       <ModalBackDrop>

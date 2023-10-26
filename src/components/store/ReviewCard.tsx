@@ -1,6 +1,4 @@
-import { useCallback, useState } from 'react';
 import styled from 'styled-components';
-import { theme } from '../../styles/theme';
 
 type ReviewType = {
   img: string;
@@ -12,7 +10,7 @@ type ReviewType = {
 
 export default function ReviewCard({ img, name, item, review, reviewRate }: ReviewType) {
   // 별점관리
-  let stars = [];
+  const stars = [];
   const rate = Math.round(reviewRate);
   for (let i = 0; i < rate; i++) {
     stars.push(
@@ -43,7 +41,7 @@ export default function ReviewCard({ img, name, item, review, reviewRate }: Revi
             </div>
           </Info>
         </Profile>
-        <Review open={open}>{review}</Review>
+        <Review>{review}</Review>
       </Layout>
     </>
   );
@@ -57,7 +55,6 @@ const Layout = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   box-sizing: border-box;
-
 `;
 
 const Profile = styled.div`

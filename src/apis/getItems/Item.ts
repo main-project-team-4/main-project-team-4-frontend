@@ -53,7 +53,7 @@ export const DetailItem = async (id: number) => {
 
 // 상점별 아이템 조회
 type ShopItemType = {
-  shopId: number;
+  shopId: number | string;
   size: number;
 };
 export const ShopItem = async ({ shopId, size }: ShopItemType) => {
