@@ -37,7 +37,9 @@ export default function ReviewCard({ img, name, item, review, reviewRate }: Revi
             <p>{item}</p>
             <div>
               <h3>평점</h3>
-              {stars}
+              {stars.map((star, index) => (
+                <div key={index}>{star}</div>
+              ))}
             </div>
           </Info>
         </Profile>

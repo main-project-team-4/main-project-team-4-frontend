@@ -19,12 +19,12 @@ export default function DetailPosting() {
   const [selected, setSelected] = useState<string>('SELLING');
 
   // 상품 조회
-  const { data: detailItems } = useQuery(['detailitem', id], () => {
+  const { data: detailItems, isSuccess: detailSuccess } = useQuery(['detailitem', id], () => {
     return DetailItem(id);
   });
 
   //내 정보 조회
-  const { data: myData } = useQuery('myinfo', () => getMyInfo(token), {
+  const { data: myData, isSuccess: myDataSuccess } = useQuery('myinfo', () => getMyInfo(token), {
     enabled: !!token,
   });
 
@@ -51,10 +51,12 @@ export default function DetailPosting() {
 
   //여기확인 필!!!!
   useEffect(() => {
-    if (myData?.member_id === detailItems?.member_id) {
-      ChangeState();
+    if (detailSuccess && myDataSuccess) {
+      if (myData.member_id === detailItems.member_id) {
+        ChangeState();
+      }
     }
-  }, [selected, myData, detailItems]);
+  }, [selected]);
 
   useEffect(() => {
     if (detailItems) {
@@ -71,8 +73,10 @@ export default function DetailPosting() {
     },
   });
   const onClickHeart = () => {
-    mutation.mutate({ token, itemId: detailItems.item_id });
-    setWishState(wishState);
+    if (token) {
+      mutation.mutate({ token, itemId: detailItems.item_id });
+      setWishState(wishState);
+    }
   };
 
   // 찜여부 확인

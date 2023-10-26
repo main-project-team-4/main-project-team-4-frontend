@@ -130,7 +130,7 @@ const CardWrapper = styled.div`
   flex-wrap: wrap;
 `;
 
-const Title = styled.p`
+const Title = styled.div`
   font-size: 28px;
   font-weight: 600;
   line-height: 33px;
