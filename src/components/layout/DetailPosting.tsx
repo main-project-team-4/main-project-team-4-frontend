@@ -33,8 +33,8 @@ export default function DetailPosting() {
     onSuccess: () => {
       queryClient.invalidateQueries('detailitem');
     },
-    onError: () => {
-      console.log('에러');
+    onError: error => {
+      console.log(error);
     },
   });
 

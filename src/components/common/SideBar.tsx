@@ -184,7 +184,6 @@ const ProfileBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: red; */
 
   width: 15.625rem;
   height: 3.125rem;
@@ -210,7 +209,7 @@ const ProfileBox = styled.div`
     font-size: 1.125rem;
     line-height: 1;
   }
-  .my-img {
+  img {
     width: 1.875rem;
     height: 1.875rem;
     border-radius: 100%;

@@ -118,7 +118,6 @@ export default function Store() {
   for (let i = 0; i < rate; i++) {
     stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" />);
   }
-  console.log(reviewData);
 
   return (
     <>
