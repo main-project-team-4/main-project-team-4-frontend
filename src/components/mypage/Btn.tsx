@@ -1,6 +1,13 @@
 import styled from 'styled-components';
 
-export default function Btn({ bgColor, color, icon, children }) {
+interface BtnProps {
+  bgColor?: string;
+  color?: string;
+  icon: string;
+  children: React.ReactNode;
+}
+
+export default function Btn({ bgColor, color, icon, children }: BtnProps) {
   return (
     <Button bgColor={bgColor} color={color}>
       <span className="material-symbols-outlined">{icon}</span>
@@ -8,8 +15,7 @@ export default function Btn({ bgColor, color, icon, children }) {
     </Button>
   );
 }
-
-const Button = styled.button`
+const Button = styled.button<{ bgColor?: string; color?: string }>`
   all: unset;
   border-radius: 0.5rem;
   background: ${props => props.bgColor || '#717171'};
@@ -17,7 +23,7 @@ const Button = styled.button`
 
   display: flex;
   box-sizing: border-box;
-  width: '7.875rem';
+  width: 7.875rem;
   padding: 1rem;
   justify-content: center;
   align-items: center;
