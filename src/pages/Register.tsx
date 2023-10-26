@@ -108,7 +108,10 @@ function RegistrationItem() {
           dataFormData.append(`sub_image`, file);
         }
       });
+    } else {
+      dataFormData.append('sub_image', '');
     }
+
     const data = {
       item_name: title,
       item_price: price,

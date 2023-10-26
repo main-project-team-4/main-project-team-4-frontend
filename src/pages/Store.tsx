@@ -58,7 +58,9 @@ export default function Store() {
   // 상점소개 수정
   const introOnChange = e => {
     setInputCount(e.target.value.length);
-    explainHandleChange(e);
+    const { value } = e.target;
+
+    explainHandleChange(value);
   };
   const introOnClick = () => {
     if (introState) {
@@ -140,21 +142,20 @@ export default function Store() {
                 )}
               </h3>
               <Intro>
-                {intro ? (
-                  introState ? (
-                    <TextArea>
-                      <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
-                      <div>
-                        <span>{inputCount}</span>
-                        <span>/ 60자</span>
-                      </div>{' '}
-                    </TextArea>
-                  ) : (
-                    <p>{intro}</p>
-                  )
+                {introState ? (
+                  <TextArea>
+                    <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
+                    <div>
+                      <span>{inputCount}</span>
+                      <span>/ 60자</span>
+                    </div>{' '}
+                  </TextArea>
+                ) : intro ? (
+                  <p>{intro}</p>
                 ) : (
                   <h4>소개글이 없습니다.</h4>
                 )}
+
                 {myData?.shop_id === shopInfo?.shop_id && <img onClick={introOnClick} src="https://ifh.cc/g/aDSaVR.png" />}
               </Intro>
             </Name>
