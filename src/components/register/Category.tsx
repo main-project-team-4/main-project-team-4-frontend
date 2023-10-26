@@ -4,16 +4,25 @@ import { useQuery } from 'react-query';
 import { getCategory } from '../../apis/sidebar/category';
 
 type LargeOptionType = {
-  large_category_id: number;
-  large_category_name: string;
+  category_l_id: number;
+  category_l_name: string;
 };
 
 type MidOptionType = {
-  mid_category_id: number;
-  mid_category_name: string;
+  category_m_id: number;
+  category_m_name: string;
+};
+type CategoryProps = {
+  setCategory: (categoryId: number) => void;
+  largeSelected: string;
+  setlargeSelected: (selected: string) => void;
+  midSelected: string;
+  setMidSelected: (selected: string) => void;
+  categoryID: number;
+  setCategoryID: (id: number) => void;
 };
 
-function Category({ setCategory, largeSelected, setlargeSelected, midSelected, setMidSelected, categoryID, setCategoryID }) {
+function Category({ setCategory, largeSelected, setlargeSelected, midSelected, setMidSelected, categoryID, setCategoryID }: CategoryProps) {
   const { data, refetch } = useQuery('category', getCategory, { enabled: false });
 
   // 대분류 카테고리 상태관리
@@ -52,7 +61,7 @@ function Category({ setCategory, largeSelected, setlargeSelected, midSelected, s
   const midDropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = event => {
+    const handleClickOutside = (event: MouseEvent) => {
       // 대분류 드롭다운 외부 클릭 검사
       if (largeDropdownRef.current && !largeDropdownRef.current.contains(event.target)) {
         setlargeIsOpen(false);
@@ -104,7 +113,10 @@ function Category({ setCategory, largeSelected, setlargeSelected, midSelected, s
     </Container>
   );
 }
-
+// type OptionType = {
+//   category_m_id:number
+//   category_m_name
+// }
 export default Category;
 
 const Container = styled.div`

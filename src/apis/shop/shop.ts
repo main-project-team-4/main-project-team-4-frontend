@@ -1,6 +1,10 @@
 import { baseInstance } from '../config';
 
-export const Followers = async ({ shopId, token }) => {
+type ShopType = {
+  shopId: number | string;
+  token?: string;
+};
+export const Followers = async ({ shopId, token }: ShopType) => {
   try {
     const response = await baseInstance.get(`api/shops/${shopId}/followers`, {
       headers: {
@@ -13,7 +17,7 @@ export const Followers = async ({ shopId, token }) => {
   }
 };
 
-export const Followings = async shopId => {
+export const Followings = async (shopId: ShopType) => {
   try {
     const response = await baseInstance.get(`api/shops/${shopId}/followings`);
     return response.data;
@@ -22,7 +26,7 @@ export const Followings = async shopId => {
   }
 };
 
-export const Follow = async ({ shopId, token }) => {
+export const Follow = async ({ shopId, token }: ShopType) => {
   try {
     const response = await baseInstance.post(
       `/api/shops/${shopId}/follows`,
@@ -38,7 +42,7 @@ export const Follow = async ({ shopId, token }) => {
   }
 };
 
-export const FollowCheck = async (shopId, token) => {
+export const FollowCheck = async (shopId: number, token: string) => {
   try {
     const response = await baseInstance.get(`/api/shops/${shopId}/follows`, {
       headers: { Authorization: token },
@@ -49,7 +53,7 @@ export const FollowCheck = async (shopId, token) => {
   }
 };
 
-export const ShopInfo = async shopId => {
+export const ShopInfo = async (shopId: ShopType) => {
   try {
     const response = await baseInstance.get(`/api/shops/${shopId}`);
     return response.data;
@@ -58,7 +62,7 @@ export const ShopInfo = async shopId => {
   }
 };
 
-export const Reviews = async shopId => {
+export const Reviews = async (shopId: ShopType) => {
   try {
     const response = await baseInstance.get(`/api/shop/${shopId}/reviews?page=0`);
     return response.data.content;

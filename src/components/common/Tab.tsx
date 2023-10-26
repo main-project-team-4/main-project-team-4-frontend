@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { theme } from '../../styles/theme';
 type TabType = {
   name: string;
   content: JSX.Element;

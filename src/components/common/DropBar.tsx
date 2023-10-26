@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { theme } from '../../styles/theme';
 
 const data = [
@@ -8,29 +8,33 @@ const data = [
   { state_name: '판매완료', item_state: 'SOLDOUT' },
 ];
 
-export default function DropBar({ setSelected }) {
+interface DropBarProps {
+  setSelected: (state: string) => void;
+}
+
+export default function DropBar({ setSelected }: DropBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('판매중');
   const dropdownRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = e => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
+  // useEffect(() => {
+  //   const handleClickOutside = (e: MouseEvent) => {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+  //       setIsOpen(false);
+  //     }
+  //   };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
 
   const handleDropdownToggle = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleOptionClick = (item_state, state_name) => {
+  const handleOptionClick = (item_state: string, state_name: string) => {
     setSelected(item_state);
     setSelectedView(state_name);
     setIsOpen(false);

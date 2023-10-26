@@ -1,7 +1,14 @@
-import React from 'react';
 import styled from 'styled-components';
 
-export default function LoginModal({ openModal, closeModal }) {
+interface LoginModalProps {
+  openModal: () => void;
+  closeModal: () => void;
+}
+interface FontProps {
+  color?: string;
+  font?: string;
+}
+export default function LoginModal({ closeModal }: LoginModalProps) {
   return (
     <>
       <ModalBackDrop>

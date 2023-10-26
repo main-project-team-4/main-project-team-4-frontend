@@ -3,7 +3,18 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-function Image({ setViewImages, viewImages, images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }) {
+interface ImageProps {
+  setViewImages: React.Dispatch<React.SetStateAction<string[]>>;
+  viewImages: string[];
+  images: any[];
+  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  setMainImg: React.Dispatch<React.SetStateAction<File>>;
+  selectedPicture: string;
+  setSelectedPicture: React.Dispatch<React.SetStateAction<string>>;
+  setSubImg: React.Dispatch<React.SetStateAction<File[]>>;
+}
+
+function Image({ setViewImages, viewImages, images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }: ImageProps) {
   const [viewAlert, setViewAlert] = useState(false);
   const [hovered, setHovered] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -47,7 +58,7 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
         setMainImg(fileArray[0]); // File 객체를 직접 설정
         setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
 
-        event.currentTarget.value = null;
+        event.currentTarget.value = '';
       } else {
         setViewAlert(true);
       }
@@ -69,7 +80,7 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
     }
   }, [viewAlert]);
 
-  const onDragEnd = result => {
+  const onDragEnd = (result: any) => {
     if (!result.destination) return;
 
     const { source, destination } = result;

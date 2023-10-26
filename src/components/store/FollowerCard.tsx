@@ -7,7 +7,18 @@ import React from 'react';
 import { theme } from '../../styles/theme';
 import { ShopItem } from '../../apis/getItems/Item';
 
-function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }) {
+interface FollowerCardProps {
+  img?: string;
+  name: string;
+  shop: {
+    shop_id: string;
+  };
+  checkMine: boolean;
+  follow: string;
+  isFollowing: boolean;
+}
+
+function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: FollowerCardProps) {
   const token = getCookie('token');
   const queryClient = useQueryClient();
 
@@ -53,7 +64,6 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }) {
             </>
           ) : (
             <button onClick={handleFollowButtonClick}>
-              {' '}
               <img src="https://ifh.cc/g/2hzdJS.png" />
               팔로잉
             </button>
