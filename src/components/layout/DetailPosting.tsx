@@ -16,7 +16,7 @@ export default function DetailPosting() {
   const { id } = location.state || {};
   const token = getCookie('token');
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState('SELLING');
+  const [selected, setSelected] = useState<string>('SELLING');
 
   // 상품 조회
   const { data: detailItems } = useQuery(['detailitem', id], () => {
@@ -85,7 +85,7 @@ export default function DetailPosting() {
     navigate('/register/modify', { state: detailItems });
   };
 
-  const RenderHeartButton = ({ wishState, onClick }) => (
+  const RenderHeartButton = ({ wishState, onClick }: HeartBtnType) => (
     <button onClick={onClick} className="Follow-Button">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path
@@ -105,7 +105,7 @@ export default function DetailPosting() {
     <Container>
       <ImageComtainer>
         <img className="firstImg" src={mainImg} alt="게시물"></img>
-        <ImageBox>{detailItems.item_image_list?.map((item, index) => <img key={index} src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
+        <ImageBox>{detailItems.item_image_list?.map((item: string, index: number) => <img key={index} src={item} alt="게시물" onClick={() => setMainImg(item)} />)}</ImageBox>
       </ImageComtainer>
       <PostingContainer>
         <PostingBox>
@@ -132,6 +132,10 @@ export default function DetailPosting() {
   ) : null;
 }
 
+type HeartBtnType = {
+  wishState: boolean;
+  onClick: any;
+};
 const Container = styled.div`
   height: 40.1875rem;
   width: 78.125rem;

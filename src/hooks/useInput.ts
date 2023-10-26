@@ -15,7 +15,7 @@ export const usePriceInput = () => {
   const [viewPrice, setViewPrice] = useState<string>('');
   const [notice, setNotice] = useState(false);
 
-  const priceHandleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const priceHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value && isNaN(Number(e.target.value.replace(/,/g, '')))) {
       setNotice(true);
 

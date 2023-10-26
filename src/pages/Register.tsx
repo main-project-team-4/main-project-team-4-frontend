@@ -77,9 +77,10 @@ function RegistrationItem() {
     setDeliveryfee(false);
   };
 
-  const InputHandler = e => {
+  const InputHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputCount(e.target.value.length);
-    explainHandleChange(e);
+    const { value } = e.target;
+    explainHandleChange(value);
   };
 
   // 상품 등록
