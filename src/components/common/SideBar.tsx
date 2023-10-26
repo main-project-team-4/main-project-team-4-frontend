@@ -41,7 +41,9 @@ function SideBar() {
   const { data: category } = useQuery('category', getCategory);
 
   // 유저 정보 가져오기
-  const { data: myData, isLoading } = useQuery('myInfo', () => getMyInfo(token));
+  const { data: myData, isLoading } = useQuery('myInfo', () => getMyInfo(token), {
+    enabled: !!token,
+  });
   useEffect(() => {}, [myData]);
 
   // 클릭시 대분류 페이지로 이동

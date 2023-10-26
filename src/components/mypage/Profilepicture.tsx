@@ -16,7 +16,7 @@ type DataInfo = {
 };
 
 function Profilepicture({ data }: DataInfo) {
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState('https://ifh.cc/g/kXNjcT.jpg');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [confirm, setConfirm] = useState(false);

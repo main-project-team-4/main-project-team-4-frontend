@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import FollowerCard from '../store/FollowerCard';
+import React from 'react';
 
 type FollowType = {
   data: ItemType[];
@@ -17,10 +18,10 @@ export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
     <Container>
       {data.map((item: ItemType, index: number) => (
-        <div key={index}>
+        <React.Fragment key={item.member_id}>
           <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
           {(index + 1) % 4 === 0 && <Divider />}
-        </div>
+        </React.Fragment>
       ))}
     </Container>
   );

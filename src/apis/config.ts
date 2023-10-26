@@ -6,4 +6,4 @@ export const baseInstance = axios.create({
 });
 
 // https://api.chanyoungkang.com/
-// 'http://43.200.8.55'
+// ''

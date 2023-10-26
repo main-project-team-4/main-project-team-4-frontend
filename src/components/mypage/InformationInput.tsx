@@ -5,7 +5,7 @@ import { changeLocation, changeNickName, deleteID } from '../../apis/mypage/memb
 import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../../styles/theme';
-
+import { removeCookie } from '../../utils/cookie';
 type DataInfo = {
   data: {
     location_name: string;
@@ -94,6 +94,8 @@ function InformationInput({ data }: DataInfo) {
   const mutationDel = useMutation(deleteID, {
     onSuccess: () => {
       queryClient.invalidateQueries('delete');
+      removeCookie('token');
+      navigate('/');
     },
   });
   const onClickDelete = () => {

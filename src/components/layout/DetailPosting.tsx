@@ -51,6 +51,7 @@ export default function DetailPosting() {
   // console.log(myData, 'a');
   // console.log(detailItems, 'd');
 
+  //여기확인 필!!!!
   useEffect(() => {
     if (detailSuccess && myDataSuccess) {
       if (myData.member_id === detailItems.member_id) {
@@ -58,6 +59,7 @@ export default function DetailPosting() {
       }
     }
   }, [selected]);
+
 
   useEffect(() => {
     if (detailItems) {
@@ -79,7 +81,10 @@ export default function DetailPosting() {
   };
 
   // 찜여부 확인
-  const { data: isWishing } = useQuery(['checkWishes', location.state.id], () => checkWishes({ token, itemId: location.state.id }));
+  const { data: isWishing } = useQuery(['checkWishes', location.state.id], () => checkWishes({ token, itemId: location.state.id }), {
+    enabled: !!token,
+  });
+
   useEffect(() => {
     if (isWishing !== undefined && isWishing !== null) {
       setWishState(isWishing.is_wishing);
