@@ -41,7 +41,7 @@ export default function ViewItems() {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery(['items', params.items, path], fetchItems, {
-    getNextPageParam: (lastPage, pages) => {
+    getNextPageParam: ({ pages }) => {
       return pages.length;
     },
   });

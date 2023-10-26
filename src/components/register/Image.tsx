@@ -27,7 +27,7 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
     setSelectedPicture(images[index]);
   };
 
-  const handleRemoveImage = (e, index: number) => {
+  const handleRemoveImage = (e: any, index: number) => {
     e.stopPropagation();
     const newImages = images.filter((_, i) => i !== index);
     setImages(newImages);

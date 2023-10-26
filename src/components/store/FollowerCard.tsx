@@ -10,13 +10,18 @@ import { ShopItem } from '../../apis/getItems/Item';
 interface FollowerCardProps {
   img?: string;
   name: string;
-  shop: {
-    shop_id: string;
-  };
+  shop: ItemType;
   checkMine: boolean;
   follow: string;
   isFollowing: boolean;
 }
+type ItemType = {
+  member_id: number;
+  shop_id: number;
+  member_nickname: string;
+  member_image: string;
+  is_following: boolean;
+};
 
 function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: FollowerCardProps) {
   const token = getCookie('token');

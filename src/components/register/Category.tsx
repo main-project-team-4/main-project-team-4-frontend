@@ -57,18 +57,18 @@ function Category({ setCategory, largeSelected, setlargeSelected, midSelected, s
   };
 
   // 참조 생성
-  const largeDropdownRef = useRef(null);
-  const midDropdownRef = useRef(null);
+  const largeDropdownRef = useRef<HTMLDivElement>(null);
+  const midDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       // 대분류 드롭다운 외부 클릭 검사
-      if (largeDropdownRef.current && !largeDropdownRef.current.contains(event.target)) {
+      if (largeDropdownRef.current && !largeDropdownRef.current.contains(event.target as any)) {
         setlargeIsOpen(false);
       }
 
       // 중분류 드롭다운 외부 클릭 검사
-      if (midDropdownRef.current && !midDropdownRef.current.contains(event.target)) {
+      if (midDropdownRef.current && !midDropdownRef.current.contains(event.target as any)) {
         setMidIsOpen(false);
       }
     };

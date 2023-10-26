@@ -16,6 +16,11 @@ type DataInfo = {
     shop_name: string;
   };
 };
+declare global {
+  interface Window {
+    daum: any;
+  }
+}
 
 function InformationInput({ data }: DataInfo) {
   const token = getCookie('token');
@@ -68,7 +73,7 @@ function InformationInput({ data }: DataInfo) {
   const handleAddressClick = () => {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
-        oncomplete: function (data) {
+        oncomplete: function (data: any) {
           setAddress(data.address);
           setLocBtnState(false);
         },

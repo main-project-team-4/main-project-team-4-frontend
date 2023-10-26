@@ -16,16 +16,16 @@ function RegistrationItem() {
   const [title, setTitle, titleHandleChange] = useInput('');
   const [explain, setExplain, explainHandleChange] = useInput('');
   const [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange] = usePriceInput();
-  const [mainImg, setMainImg] = useState<File | null>(null);
+  const [mainImg, setMainImg] = useState<any>();
   const [subImg, setSubImg] = useState<File[]>([]);
   const [category, setCategory] = useState(0);
   const [deliveryfee, setDeliveryfee] = useState(true);
   const [viewModal, setViewModal] = useState(false);
   const [isFormComplete, setIsFormComplete] = useState(false);
   //이미지 state 관리
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
   const [selectedPicture, setSelectedPicture] = useState('');
-  const [viewImages, setViewImages] = useState([]);
+  const [viewImages, setViewImages] = useState<string[]>([]);
   // 카테고리 state 관리
   const [largeSelected, setlargeSelected] = useState('대분류');
   const [midSelected, setMidSelected] = useState('중분류');
@@ -79,8 +79,7 @@ function RegistrationItem() {
 
   const InputHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputCount(e.target.value.length);
-    const { value } = e.target;
-    explainHandleChange(value);
+    explainHandleChange(e.target.value as any);
   };
 
   // 상품 등록
@@ -170,7 +169,7 @@ function RegistrationItem() {
               <h3>가격 </h3>
               {notice && <span>숫자만 입력해주세요</span>}
             </PriceLayout>
-            <input placeholder="가격을 입력해주세요" value={viewPrice} onChange={priceHandleChange}></input>
+            <input placeholder="가격을 입력해주세요" value={viewPrice as any} onChange={priceHandleChange as any}></input>
             <DeliveryBox>
               <Delivery onClick={onClickInclude} className={clicked ? ' active' : ''}>
                 배송비 포함
@@ -297,7 +296,7 @@ const DeliveryBox = styled.div`
   display: flex;
   gap: 0.62rem;
 `;
-const Delivery = styled.button<ButtonType>`
+const Delivery = styled.button`
   all: unset;
   padding: 0.625rem 1.5rem;
   box-sizing: border-box;

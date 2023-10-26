@@ -11,7 +11,7 @@ export const useInput = (initialValue: string) => {
 };
 
 export const usePriceInput = () => {
-  const [price, setPrice] = useState<string>('');
+  const [price, setPrice] = useState<any>('');
   const [viewPrice, setViewPrice] = useState<string>('');
   const [notice, setNotice] = useState(false);
 
