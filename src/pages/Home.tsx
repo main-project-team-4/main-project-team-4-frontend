@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { getMyInfo } from '../apis/mypage/members';
 import { getCookie } from '../utils/cookie';
 
-export default function Main() {
+export default function Home() {
   const navigate = useNavigate();
   const token = getCookie('token');
   const { state } = useLocation();
@@ -39,7 +39,6 @@ export default function Main() {
   if (itemsResult.isError || !itemsResult.data || topItemsResult.isError || !topItemsResult.data) {
     return <h2>오류가 발생하였습니다</h2>;
   }
-  console.log(data);
 
   return (
     <>

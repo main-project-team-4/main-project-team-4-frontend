@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import Main from './pages/Main';
+import Home from './pages/Home';
 import Posting from './pages/Posting';
 import Mypage from './pages/Mypage';
 import Store from './pages/Store';
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: <Main />,
+            element: <Home />,
           },
           {
             path: ':items/:LargeCategory?/:midCategoryId?/:last?',
