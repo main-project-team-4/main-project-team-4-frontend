@@ -118,7 +118,6 @@ export default function Store() {
   for (let i = 0; i < rate; i++) {
     stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" />);
   }
-  console.log(reviewData);
 
   return (
     <>
@@ -126,7 +125,7 @@ export default function Store() {
       <Container>
         <ProfileContainer>
           <ProfileBox>
-            <Profile src={myData?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
+            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
             <Name starlength={stars.length}>
               <h3>
                 {shopInfo.shop_name}

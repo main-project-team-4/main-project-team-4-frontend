@@ -41,7 +41,7 @@ export default function ViewItems() {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery(['items', params.items, path], fetchItems, {
-    getNextPageParam: ({ pages }) => {
+    getNextPageParam: (_, pages) => {
       return pages.length;
     },
   });
@@ -54,7 +54,7 @@ export default function ViewItems() {
     const handleScroll = () => {
       const { scrollTop, offsetHeight } = document.documentElement;
       if (window.innerHeight + scrollTop >= offsetHeight) {
-        console.log('scroll');
+        // console.log('scroll');
         fetchNextPage();
       }
     };

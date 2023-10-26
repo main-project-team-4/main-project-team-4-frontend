@@ -18,7 +18,7 @@ export const putWishes = async ({ token, itemId }: WishesType) => {
     );
     return response;
   } catch (error) {
-    console.log('에러', error);
+    console.log(error);
   }
 };
 

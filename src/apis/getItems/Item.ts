@@ -8,8 +8,6 @@ type ItemsType = {
   Selling?: string;
 };
 export const AllItems = async ({ page, pageSize, Selling }: ItemsType) => {
-  console.log(Selling);
-
   try {
     const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}`);
 
