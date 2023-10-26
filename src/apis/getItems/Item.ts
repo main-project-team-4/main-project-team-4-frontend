@@ -5,10 +5,13 @@ type ItemsType = {
   page: number;
   pageSize: number;
   token?: string;
+  Selling?: string;
 };
-export const AllItems = async ({ page, pageSize }: ItemsType) => {
+export const AllItems = async ({ page, pageSize, Selling }: ItemsType) => {
+  console.log(Selling);
+
   try {
-    const response = await baseInstance.get(`/api/items?page=${page}&size=${pageSize}`);
+    const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}`);
 
     return response.data.content;
   } catch (error) {
@@ -17,9 +20,9 @@ export const AllItems = async ({ page, pageSize }: ItemsType) => {
 };
 
 // 인기 상품 모두 조회
-export const TopItems = async ({ page, pageSize }: ItemsType) => {
+export const TopItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/top-items?page=${page}&size=${pageSize}`);
+    const response = await baseInstance.get(`/api/top-items?state=${Selling}&page=${page}&size=${pageSize}`);
 
     return response.data.content;
   } catch (error) {

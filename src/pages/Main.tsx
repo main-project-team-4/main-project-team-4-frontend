@@ -23,9 +23,9 @@ export default function Main() {
   }, [data]);
 
   const queryResults = useQueries([
-    { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8 }) },
-    { queryKey: 'topitems', queryFn: () => TopItems({ page: 0, pageSize: 4 }) },
-    { queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8 }) },
+    { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8, Selling: 'SELLING' }) },
+    { queryKey: 'topitems', queryFn: () => TopItems({ page: 0, pageSize: 4, Selling: 'SELLING' }) },
+    { queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING' }) },
   ]);
 
   const itemsResult = queryResults[0];

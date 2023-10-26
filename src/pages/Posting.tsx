@@ -17,7 +17,6 @@ export default function Posting() {
   const { data: shopItem, refetch } = useQuery(['shopItem', detailItems?.shop_id], () => ShopItem({ shopId: detailItems?.shop_id, size: 4 }), {
     enabled: false,
   });
-  console.log(detailItems);
 
   useEffect(() => {
     if (detailItems) {

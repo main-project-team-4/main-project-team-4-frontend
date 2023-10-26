@@ -25,9 +25,9 @@ export default function ViewItems() {
 
   const fetchItems = ({ pageParam = 0 }) => {
     if (params.items === '최신 상품') {
-      return AllItems({ page: pageParam, pageSize });
+      return AllItems({ page: pageParam, pageSize, Selling: 'SELLING' });
     } else if (params.items === '인기 상품') {
-      return TopItems({ page: pageParam, pageSize });
+      return TopItems({ page: pageParam, pageSize, Selling: 'SELLING' });
     } else if (params.items === '내 주위 상품') {
       return nearByItem({ token, page: pageParam, pageSize });
     } else if (params.items === 'category') {
@@ -61,7 +61,6 @@ export default function ViewItems() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   let dataToRender;
   if (params.items === 'search') {
