@@ -49,9 +49,12 @@ export default function DetailPosting() {
     });
   };
 
+  //여기확인 필!!!!
   useEffect(() => {
-    ChangeState();
-  }, [selected]);
+    if (myData?.member_id === detailItems?.member_id) {
+      ChangeState();
+    }
+  }, [selected, myData, detailItems]);
 
   useEffect(() => {
     if (detailItems) {
@@ -73,7 +76,10 @@ export default function DetailPosting() {
   };
 
   // 찜여부 확인
-  const { data: isWishing } = useQuery(['checkWishes', location.state.id], () => checkWishes({ token, itemId: location.state.id }));
+  const { data: isWishing } = useQuery(['checkWishes', location.state.id], () => checkWishes({ token, itemId: location.state.id }), {
+    enabled: !!token,
+  });
+
   useEffect(() => {
     if (isWishing !== undefined && isWishing !== null) {
       setWishState(isWishing.is_wishing);
