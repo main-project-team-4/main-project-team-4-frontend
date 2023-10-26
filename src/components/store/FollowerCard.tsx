@@ -50,7 +50,7 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
   return (
     <FollowerBox onClick={() => navigate(`/store/${name}`, { state: shop.shop_id })}>
       <ProfileBox src={img || 'https://ifh.cc/g/APoRmB.jpg'}></ProfileBox>
-      <NameBox followState={isFollowing ? 0 : 1}>
+      <NameBox followstate={isFollowing ? 0 : 1}>
         <h3>{name}</h3>
         <p>상품 : {data?.length}개</p>
         {checkMine &&
@@ -112,7 +112,7 @@ const ProfileBox = styled.img`
   }
 `;
 
-const NameBox = styled.div<{ followState: number }>`
+const NameBox = styled.div<{ followstate: number }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -142,7 +142,7 @@ const NameBox = styled.div<{ followState: number }>`
     align-items: center;
     gap: 0.5rem;
     border-radius: 0.5rem;
-    background: ${props => (props.followState ? theme.cancelBtn : theme.navy)};
+    background: ${props => (props.followstate ? theme.cancelBtn : theme.navy)};
     color: white;
     margin-top: 1rem;
     display: flex;

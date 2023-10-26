@@ -12,7 +12,9 @@ export default function Home() {
   const token = getCookie('token');
   const { state } = useLocation();
 
-  const { data } = useQuery('myinfo', () => getMyInfo(token));
+  const { data } = useQuery('myinfo', () => getMyInfo(token), {
+    enabled: !!token,
+  });
 
   useEffect(() => {
     if (state) {
@@ -25,7 +27,7 @@ export default function Home() {
   const queryResults = useQueries([
     { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8, Selling: 'SELLING' }) },
     { queryKey: 'topitems', queryFn: () => TopItems({ page: 0, pageSize: 4, Selling: 'SELLING' }) },
-    { queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING' }) },
+    ...(token ? [{ queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING' }) }] : []),
   ]);
 
   const itemsResult = queryResults[0];
