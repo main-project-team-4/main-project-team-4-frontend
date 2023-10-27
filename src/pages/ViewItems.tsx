@@ -90,7 +90,7 @@ export default function ViewItems() {
       </Title>
       {dataToRender?.length === 0 ? (
         <NotExits>
-          {keyword !== '' ? (
+          {params.items === 'search' ? (
             <>
               <h3>{keyword}</h3>
               <p>에 대한 검색결과가 없습니다.</p>
