@@ -22,17 +22,27 @@ function RegistrationItem() {
   const [deliveryfee, setDeliveryfee] = useState(true);
   const [viewModal, setViewModal] = useState(false);
   const [isFormComplete, setIsFormComplete] = useState(false);
+
   //이미지 state 관리
   const [images, setImages] = useState<File[]>([]);
   const [selectedPicture, setSelectedPicture] = useState('');
   const [viewImages, setViewImages] = useState<string[]>([]);
+
   // 카테고리 state 관리
   const [largeSelected, setlargeSelected] = useState('대분류');
   const [midSelected, setMidSelected] = useState('중분류');
   const [categoryID, setCategoryID] = useState(0);
 
   const { state: detailItems } = useLocation() || {};
+  const queryClient = useQueryClient();
+  const token = getCookie('token');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+  }, [token]);
 
   useEffect(() => {
     if (detailItems) {
@@ -65,9 +75,6 @@ function RegistrationItem() {
     setIsFormComplete(isComplete);
   }, [title, explain, price, mainImg, category, detailItems]);
 
-  const queryClient = useQueryClient();
-  const token = getCookie('token');
-
   const onClickInclude = () => {
     setClicked(true);
     setDeliveryfee(true);
@@ -91,15 +98,6 @@ function RegistrationItem() {
       }
     },
   });
-
-  // const convertURLtoFile = async (url: string) => {
-  //   const ext = url.split('.').pop(); // url 구조에 맞게 수정할 것
-  //   const filename = url.split('/').pop(); // url 구조에 맞게 수정할 것
-  //   const metadata = { type: `image/${ext}` };
-  //   return new File([url], filename!, metadata);
-  // };
-
-  console.log(mainImg);
 
   const saveItem = () => {
     const dataFormData = new FormData();
