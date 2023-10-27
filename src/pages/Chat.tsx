@@ -3,9 +3,13 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
 
+interface UserProps {
+  selected?: boolean;
+}
+
 export default function Chat() {
-  const messageLayoutRef = useRef(null);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const messageLayoutRef = useRef<HTMLDivElement | null>(null);
+  const [selectedUser, setSelectedUser] = useState<number | null>(null);
 
   useEffect(() => {
     const messageLayoutElement = messageLayoutRef.current;
@@ -29,19 +33,16 @@ export default function Chat() {
           </User>
         </UserList>
       </ChatList>
-
       <ChatContainer>
         <Name>Jhon Abraham</Name>
-
         <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox /> : <div>채팅을 시작하세요</div>}</MessageLayout>
-
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" />
             <button>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M22 2L11 13" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </ChatInput>
@@ -64,9 +65,7 @@ const ChatList = styled.div`
   width: 25.5rem;
   height: 100%;
   background-color: white;
-
   border-radius: 0.75rem;
-
   h3 {
     font-size: 1.75rem;
     font-weight: 600;
@@ -81,7 +80,7 @@ const UserList = styled.div`
   gap: 0.63rem;
 `;
 
-const User = styled.div`
+const User = styled.div<UserProps>`
   display: flex;
   width: 21.75rem;
   height: 4.25rem;
@@ -112,7 +111,6 @@ const Name = styled.div`
   height: 5.5rem;
   border-radius: 0.75rem 0.75rem 0rem 0rem;
   padding: 1.87rem 0 0 1.87rem;
-
   background: #fff;
   font-size: 1.5rem;
   font-weight: 600;
