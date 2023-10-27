@@ -63,7 +63,7 @@ const Layout = styled.div<{ displaybtn: number }>`
 `;
 
 const Image = styled.img`
-  width: 19.0625rem;
+  width: 100%;
   height: 14.25rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem 0.5rem 0rem 0rem;

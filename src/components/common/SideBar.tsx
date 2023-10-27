@@ -94,7 +94,7 @@ function SideBar() {
           <ProfileBox>
             {token ? (
               <div onClick={toggleMypage}>
-                <img className="my-img" src={myData?.member_image} />
+                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
                 <h3>{myData?.member_nickname}</h3>
                 <button>
                   <span className="expand-icon material-symbols-outlined">expand_more</span>
@@ -102,7 +102,7 @@ function SideBar() {
               </div>
             ) : (
               <div onClick={openModal}>
-                <img src="https://ifh.cc/g/mH1B10.png" />
+                <img src="https://ifh.cc/g/kXNjcT.jpg" />
                 <h3>로그인이 필요합니다</h3>
               </div>
             )}

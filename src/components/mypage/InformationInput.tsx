@@ -6,6 +6,8 @@ import { getCookie } from '../../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 import { removeCookie } from '../../utils/cookie';
+import { ModalWithClose } from '../common/Modal';
+
 type DataInfo = {
   data: {
     location_name: string;
@@ -31,6 +33,7 @@ function InformationInput({ data }: DataInfo) {
   const [nickName, setNickName] = useState(data.shop_name);
   const [nickBtnState, setNickBtnState] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [modalState, setModalState] = useState(false);
 
   const mutationNick = useMutation(changeNickName, {
     onSuccess: () => {
@@ -99,12 +102,14 @@ function InformationInput({ data }: DataInfo) {
     },
   });
   const onClickDelete = () => {
-    const userResponse = confirm('정말로 계정을 삭제하시겠습니까?');
-    if (userResponse) {
-      mutationDel.mutate(token);
-    } else {
-      return;
-    }
+    setModalState(true);
+  };
+  const modalConfirm = () => {
+    mutationDel.mutate(token);
+    setModalState(false);
+  };
+  const modalClose = () => {
+    setModalState(false);
   };
 
   return (
@@ -150,6 +155,7 @@ function InformationInput({ data }: DataInfo) {
         </div>
       </ButtonBox>
       <WithdrawalButton onClick={onClickDelete}>회원탈퇴</WithdrawalButton>
+      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 삭제 하시겠습니까?" />}
     </Container>
   );
 }

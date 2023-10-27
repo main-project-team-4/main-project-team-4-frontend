@@ -14,6 +14,7 @@ function Kakao() {
   const codeParam = searchParams.get('code');
 
   const { isSuccess, isLoading, isError, data } = useQuery('kakao ', () => kakaoLogin(codeParam as string));
+  console.log(data);
 
   useEffect(() => {
     if (isSuccess) {

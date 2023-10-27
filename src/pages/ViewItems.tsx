@@ -16,9 +16,11 @@ export default function ViewItems() {
   // 검색 키워드 관리
   const [keyword, setKeyword] = useState('');
   const key = location.search.split('=')[1];
+  const decodedString = decodeURIComponent(key);
+
   useEffect(() => {
-    setKeyword(key);
-  }, [key]);
+    setKeyword(decodedString);
+  }, [decodedString]);
 
   // 무한스크롤
   const pageSize = 20;

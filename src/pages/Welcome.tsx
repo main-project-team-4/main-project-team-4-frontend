@@ -5,7 +5,7 @@ import { changeLocation, changeNickName } from '../apis/mypage/members';
 import { getCookie } from '../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../styles/theme';
-import Modal from '../components/common/Modal';
+import { Modal } from '../components/common/Modal';
 import { getMyInfo } from '../apis/mypage/members';
 import { useQuery } from 'react-query';
 
@@ -20,7 +20,7 @@ function Welcome() {
 
   const { data } = useQuery('myinfo', () => getMyInfo(token));
   useEffect(() => {
-    if (data?.shop_name || data?.location_name) {
+    if (data?.shop_name && data?.location_name) {
       navigate('/');
     }
   }, [data]);
@@ -99,48 +99,54 @@ function Welcome() {
   }, [goMainState, modalState, navigate]);
 
   return (
-    <Container>
-      {modalState && <Modal modalClose={modalClose} modalInfo={modalInfo} />}
-      <h1>환영합니다!</h1>
-      <h3>아래 정보를 입력해주세요</h3>
-      <InputBox>
-        <p>상점명</p>
-        <div>
-          <input value={nickName} onChange={nickOnChange} placeholder="상점명을 입력하세요" />
-          <button onClick={nickOnClick}>중복확인</button>
-        </div>
-        {nickDuplicated && <span>중복된 상점명입니다.</span>}
-        {isNickname && <span>닉네임을 입력해주세요.</span>}
-      </InputBox>
+    <Layout>
+      <Container>
+        {modalState && <Modal modalClose={modalClose} modalInfo={modalInfo} />}
+        <h1>환영합니다!</h1>
+        <h3>아래 정보를 입력해주세요</h3>
+        <InputBox>
+          <p>상점명</p>
+          <div>
+            <input value={nickName} onChange={nickOnChange} placeholder="상점명을 입력하세요" />
+            <button onClick={nickOnClick}>중복확인</button>
+          </div>
+          {nickDuplicated && <span>중복된 상점명입니다.</span>}
+          {isNickname && <span>닉네임을 입력해주세요.</span>}
+        </InputBox>
 
-      <InputBox>
-        <p>주소</p>
-        <div>
-          <input value={address} placeholder="주소를 입력하세요" readOnly />
-          <button onClick={handleAddressClick}>주소보기</button>
-        </div>
-      </InputBox>
-      <SignUpBtn onClick={goMain}>회원가입 완료</SignUpBtn>
-    </Container>
+        <InputBox>
+          <p>주소</p>
+          <div>
+            <input value={address} placeholder="주소를 입력하세요" readOnly />
+            <button onClick={handleAddressClick}>주소보기</button>
+          </div>
+        </InputBox>
+        <SignUpBtn onClick={goMain}>회원가입 완료</SignUpBtn>
+      </Container>
+    </Layout>
   );
 }
 
 export default Welcome;
 
+const Layout = styled.div`
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Container = styled.div`
   background-color: white;
   width: 90rem;
-  height: 51.125rem;
-
-  margin: 11.1rem 15rem 6.25rem 15rem;
-  position: relative;
+  height: 50.125rem;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  padding: 11.87rem 26.94rem 7.75rem 26.94rem;
   box-sizing: border-box;
 
   h1 {
@@ -185,6 +191,7 @@ const InputBox = styled.div`
     border-radius: 0.75rem;
     border: none;
     background-color: ${theme.inputColor};
+    padding: 0.8125rem 1.25rem;
   }
 
   button {

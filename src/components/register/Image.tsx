@@ -24,20 +24,25 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
   };
 
   const clickHandler = (index: number) => {
-    setSelectedPicture(images[index]);
+    setSelectedPicture(viewImages[index]);
   };
 
   const handleRemoveImage = (e: any, index: number) => {
     e.stopPropagation();
+
     const newImages = images.filter((_, i) => i !== index);
+    const imageArray = newImages.map(file => (typeof file === 'string' ? file : URL.createObjectURL(file)));
     setImages(newImages);
-    if (images[index] === selectedPicture) {
-      setSelectedPicture(newImages[0] || '');
+    setViewImages(imageArray);
+
+    if (viewImages[index] === selectedPicture) {
+      setSelectedPicture(imageArray[0] || '');
     }
   };
 
   const handleMainImageRemove = () => {
-    const index = images.indexOf(selectedPicture);
+    const index = viewImages.indexOf(selectedPicture);
+
     if (index !== -1) {
       handleRemoveImage({ stopPropagation: () => {} }, index);
     }
