@@ -22,7 +22,7 @@ export default function Store() {
   useEffect(() => {}, [storeId]);
 
   const queryResults = useQueries([
-    { queryKey: ['myInfo'], queryFn: () => getMyInfo(token) },
+    { queryKey: ['myInfo'], queryFn: () => getMyInfo(token), enabled: !!token },
     { queryKey: ['shopInfo', state], queryFn: () => ShopInfo(state) },
     { queryKey: ['review', state], queryFn: () => Reviews(state) },
     { queryKey: ['followers', state], queryFn: () => Followers({ shopId: state, token }) },
@@ -125,7 +125,7 @@ export default function Store() {
       <Container>
         <ProfileContainer>
           <ProfileBox>
-            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/APoRmB.jpg'} />
+            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
             <Name starlength={stars.length}>
               <h3>
                 {shopInfo.shop_name}

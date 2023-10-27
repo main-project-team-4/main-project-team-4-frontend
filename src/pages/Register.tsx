@@ -7,7 +7,7 @@ import { theme } from '../styles/theme';
 import { useInput, usePriceInput } from '../hooks/useInput';
 import { getCookie } from '../utils/cookie';
 import { uploadItem } from '../apis/posting/posting';
-import Modal from '../components/common/Modal';
+import { Modal } from '../components/common/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function RegistrationItem() {
@@ -91,6 +91,15 @@ function RegistrationItem() {
       }
     },
   });
+
+  // const convertURLtoFile = async (url: string) => {
+  //   const ext = url.split('.').pop(); // url 구조에 맞게 수정할 것
+  //   const filename = url.split('/').pop(); // url 구조에 맞게 수정할 것
+  //   const metadata = { type: `image/${ext}` };
+  //   return new File([url], filename!, metadata);
+  // };
+
+  console.log(mainImg);
 
   const saveItem = () => {
     const dataFormData = new FormData();
@@ -198,7 +207,7 @@ function RegistrationItem() {
                       }
                 }
               >
-                상품등록
+                {detailItems ? '상품 수정' : '상품등록'}
               </Btn>
             </BtnLayout>
           </Layout>
