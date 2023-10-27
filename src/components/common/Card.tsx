@@ -67,6 +67,7 @@ const Image = styled.img`
   height: 14.25rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
+  border-bottom: 1px solid #e7e8ea7e;
 `;
 
 const TextLayout = styled.div`
