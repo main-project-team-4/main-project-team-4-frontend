@@ -3,7 +3,7 @@ import { theme } from '../../styles/theme';
 
 type ModalProps = {
   modalClose: () => void;
-  modalConfirm: () => void;
+  modalConfirm?: () => void;
   modalInfo: string;
 };
 
