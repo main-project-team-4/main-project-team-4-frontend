@@ -6,7 +6,7 @@ import Category from '../components/register/Category';
 import { theme } from '../styles/theme';
 import { useInput, usePriceInput } from '../hooks/useInput';
 import { getCookie } from '../utils/cookie';
-import { uploadItem } from '../apis/posting/posting';
+import { modifyItem, uploadItem } from '../apis/posting/posting';
 import { Modal } from '../components/common/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ function RegistrationItem() {
   const [deliveryfee, setDeliveryfee] = useState(true);
   const [viewModal, setViewModal] = useState(false);
   const [isFormComplete, setIsFormComplete] = useState(false);
+  const [itemId, setItemId] = useState(0);
 
   //이미지 state 관리
   const [images, setImages] = useState<File[]>([]);
@@ -67,6 +68,7 @@ function RegistrationItem() {
       setInputCount(detailItems.item_comment.length);
       setCategoryID(detailItems.category_l_id);
       setIsFormComplete(true);
+      setItemId(detailItems.item_id);
     }
   }, []);
 
@@ -98,22 +100,32 @@ function RegistrationItem() {
       }
     },
   });
+  // 상품 수정
+  const modifyMutation = useMutation(modifyItem, {
+    onSuccess: response => {
+      queryClient.invalidateQueries('modifyItem');
+      if (response?.status === 200) {
+        navigate(`/posting/${title}`, { state: { id: response.data.item_id } });
+      }
+    },
+  });
 
+  // 상품 등록
   const saveItem = () => {
     const dataFormData = new FormData();
 
-    if (mainImg instanceof File) {
-      // mainImg가 File 타입인지 확인
-      dataFormData.append('main_image', mainImg);
-    }
+    // if (mainImg instanceof File) {
+    // mainImg가 File 타입인지 확인
+    dataFormData.append('main_image', mainImg);
+    // }
 
     if (Array.isArray(subImg) && subImg.length > 0) {
       // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        if (file instanceof File) {
-          // 각 항목이 File 타입인지 확인
-          dataFormData.append(`sub_image`, file);
-        }
+        // if (file instanceof File) {
+        // 각 항목이 File 타입인지 확인
+        dataFormData.append(`sub_image`, file);
+        //}
       });
     } else {
       dataFormData.append('sub_image', '');
@@ -126,12 +138,44 @@ function RegistrationItem() {
       item_with_delivery_fee: deliveryfee,
       category_m_id: category,
     };
-
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
     dataFormData.append('requestDto', blobData);
 
     mutation.mutate({ token, data: dataFormData }); // FormData 전송
+  };
+
+  // 상품 수정
+  const modifyItemHandler = () => {
+    const dataFormData = new FormData();
+
+    // mainImg가 File 타입인지 확인
+    dataFormData.append('new_mainImage', mainImg);
+
+    if (Array.isArray(subImg) && subImg.length > 0) {
+      // subImg가 배열이며, 길이가 0보다 큰지 확인
+      subImg.forEach(file => {
+        // if (file instanceof File) {
+        // 각 항목이 File 타입인지 확인
+        dataFormData.append(`new_subImages`, file);
+        // }
+      });
+    } else {
+      dataFormData.append('sub_image', '');
+    }
+
+    const data = {
+      item_name: title,
+      item_price: price,
+      item_comment: explain,
+      item_with_delivery_fee: deliveryfee,
+      category_m_id: category,
+    };
+    // requestDto의 데이터를 FormData에 추가
+    const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    dataFormData.append('requestDto', blobData);
+
+    modifyMutation.mutate({ token, data: dataFormData, itemId }); // FormData 전송
   };
 
   return (
@@ -199,7 +243,9 @@ function RegistrationItem() {
                 backcolor={isFormComplete ? '#2667FF' : '#E7E8EA'}
                 onClick={
                   isFormComplete
-                    ? saveItem
+                    ? detailItems
+                      ? modifyItemHandler
+                      : saveItem
                     : () => {
                         setViewModal(true);
                       }

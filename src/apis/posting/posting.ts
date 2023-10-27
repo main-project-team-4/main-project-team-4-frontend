@@ -63,10 +63,25 @@ export const changeItemState = async ({ data, token }: ChangeItemStateType) => {
 type UploadItem = {
   data: FormData;
   token: string;
+  itemId?: number;
 };
 export const uploadItem = async ({ token, data }: UploadItem) => {
   try {
     const response = await baseInstance.post(`/api/items`, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 상품 수정
+export const modifyItem = async ({ token, data, itemId }: UploadItem) => {
+  try {
+    const response = await baseInstance.put(`api/items/${itemId}`, data, {
       headers: {
         Authorization: token,
       },
