@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-export default function LoginModal({ openModal, closeModal }) {
+type PropsType = {
+  closeModal: () => void;
+};
+export default function LoginModal({ closeModal }: PropsType) {
   return (
     <>
       <ModalBackDrop>
@@ -19,8 +22,6 @@ export default function LoginModal({ openModal, closeModal }) {
           </TextArea>
 
           <Btn
-            color="#F7E600"
-            font="#3A1D1D"
             onClick={() => {
               window.location.href =
                 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=851d6c649ed19d32afa2743c91134e57&redirect_uri=https://main-project-team-4-frontend.vercel.app/kakao';
@@ -84,7 +85,7 @@ const TextArea = styled.div`
   }
 `;
 
-const Btn = styled.button<FontProps>`
+const Btn = styled.button`
   border: none;
   cursor: pointer;
   width: 70%;

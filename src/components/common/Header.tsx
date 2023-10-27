@@ -129,7 +129,7 @@ export default function Header() {
         </BtnLayout>
       </Layout>
 
-      {modal && <LoginModal openModal={openModal} closeModal={closeModal} />}
+      {modal && <LoginModal closeModal={closeModal} />}
     </>
   );
 }

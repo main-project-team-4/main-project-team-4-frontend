@@ -150,7 +150,7 @@ function SideBar() {
         </CategoryContainer>
       </Container>
 
-      {modal && <LoginModal openModal={openModal} closeModal={closeModal} />}
+      {modal && <LoginModal closeModal={closeModal} />}
     </>
   );
 }
