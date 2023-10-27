@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { getCookie } from '../../utils/cookie';
 import { changeImages } from '../../apis/mypage/members';
 import { theme } from '../../styles/theme';
+import imageCompression from 'browser-image-compression';
 
 type DataInfo = {
   data: {
@@ -21,27 +22,34 @@ function Profilepicture({ data }: DataInfo) {
   const [formData, setFormData] = useState<FormData>(new FormData());
   const [confirm, setConfirm] = useState(false);
   const queryClient = useQueryClient();
-
   const token = getCookie('token');
 
-  const saveImgFile = () => {
-    if (inputRef.current) {
-      const file = inputRef.current.files?.[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          setImage(reader.result as string);
+  // 이미지 저장
+  const saveImgFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.files) {
+      const file = event.currentTarget.files[0];
+      const options = {
+        maxSizeMB: 0.2, // 이미지 최대 용량
+        maxWidthOrHeight: 840, // 최대 넓이
+        useWebWorker: true,
+      };
+      try {
+        const compressedFile = await imageCompression(file, options);
+        const result = await imageCompression.getDataUrlFromFile(compressedFile);
 
-          const newFormData = new FormData();
-          newFormData.append('image', file);
+        const newFile = new File([compressedFile], 'image.jpg');
+        const newFormData = new FormData();
+        newFormData.append('image', newFile);
 
-          setFormData(newFormData);
-          setConfirm(true);
-        };
+        setImage(result);
+        setFormData(newFormData);
+        setConfirm(true);
+      } catch (error) {
+        console.log(error);
       }
     }
   };
+
   useEffect(() => {
     if (data?.member_image) {
       setImage(data?.member_image);

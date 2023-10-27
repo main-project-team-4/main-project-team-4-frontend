@@ -8,9 +8,17 @@ import { useEffect } from 'react';
 import { getOrders, getSales, getWishList } from '../apis/mypage/items';
 import { getCookie } from '../utils/cookie';
 import { getMyInfo } from '../apis/mypage/members';
+import { useNavigate } from 'react-router-dom';
 
 function Mypage() {
   const token = getCookie('token');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+  }, [token]);
 
   //구매내역 조회
   const { data: orderData } = useQuery('orders', () => getOrders(token));
