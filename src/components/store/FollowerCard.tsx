@@ -49,7 +49,7 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
 
   return (
     <FollowerBox onClick={() => navigate(`/store/${name}`, { state: shop.shop_id })}>
-      <ProfileBox src={img || 'https://ifh.cc/g/APoRmB.jpg'}></ProfileBox>
+      <ProfileBox src={img || 'https://ifh.cc/g/kXNjcT.jpg'}></ProfileBox>
       <NameBox followstate={isFollowing ? 0 : 1}>
         <h3>{name}</h3>
         <p>상품 : {data?.length}개</p>
