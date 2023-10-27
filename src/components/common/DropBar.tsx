@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { theme } from '../../styles/theme';
 
 const data = [
@@ -10,11 +10,28 @@ const data = [
 
 interface DropBarProps {
   setSelected: (state: string) => void;
+  itemState: string;
 }
 
-export default function DropBar({ setSelected }: DropBarProps) {
+export default function DropBar({ setSelected, itemState }: DropBarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedView, setSelectedView] = useState('판매중');
+  useEffect(() => {
+    switch (itemState) {
+      case 'RESERVED':
+        setSelectedView('예약중');
+        break;
+      case 'SOLDOUT':
+        setSelectedView('판매완료');
+        break;
+      case 'SELLING':
+        setSelectedView('판매중');
+        break;
+      default:
+        setSelectedView('');
+    }
+  }, [itemState]);
+
+  const [selectedView, setSelectedView] = useState(itemState);
   const dropdownRef = useRef(null);
 
   // useEffect(() => {

@@ -90,8 +90,13 @@ export default function ViewItems() {
       </Title>
       {dataToRender?.length === 0 ? (
         <NotExits>
-          <h3>{keyword}</h3>
-          <p>에 대한 검색결과가 없습니다.</p>
+          {keyword && (
+            <>
+              <h3>{keyword}</h3>
+              <p>에 대한 검색결과가 없습니다.</p>
+            </>
+          )}
+          <p>아직 등록된 상품이 없습니다.</p>
         </NotExits>
       ) : (
         dataToRender && (

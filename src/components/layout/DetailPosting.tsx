@@ -16,12 +16,17 @@ export default function DetailPosting() {
   const { id } = location.state || {};
   const token = getCookie('token');
   const queryClient = useQueryClient();
-  const [selected, setSelected] = useState<string>('SELLING');
+  const [selected, setSelected] = useState<string>('');
 
   // 상품 조회
   const { data: detailItems, isSuccess: detailSuccess } = useQuery(['detailitem', id], () => {
     return DetailItem(id);
   });
+  useEffect(() => {
+    if (detailSuccess) {
+      setSelected(detailItems.item_state);
+    }
+  }, [detailItems]);
 
   //내 정보 조회
   const { data: myData, isSuccess: myDataSuccess } = useQuery('myinfo', () => getMyInfo(token), {
@@ -39,14 +44,16 @@ export default function DetailPosting() {
   });
 
   const ChangeState = () => {
-    mutationItem.mutate({
-      data: {
-        item_state: selected,
-        item_id: detailItems?.item_id,
-        member_id: myData?.member_id,
-      },
-      token: token,
-    });
+    if (selected !== '') {
+      mutationItem.mutate({
+        data: {
+          item_state: selected,
+          item_id: detailItems?.item_id,
+          member_id: myData?.member_id,
+        },
+        token: token,
+      });
+    }
   };
 
   //여기확인 필!!!!
@@ -121,7 +128,7 @@ export default function DetailPosting() {
         <PostingBox>
           <div className="layout">
             <h1>{detailItems.item_name}</h1>
-            {myData?.member_id === detailItems?.member_id && <DropBar setSelected={setSelected} />}
+            {myData?.member_id === detailItems?.member_id && <DropBar itemState={selected} setSelected={setSelected} />}
           </div>
           <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
           <div className="content">{detailItems.item_comment}</div>
