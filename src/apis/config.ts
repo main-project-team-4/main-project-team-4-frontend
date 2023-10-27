@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const baseInstance = axios.create({
-  // withCredentials: true,
   baseURL: 'https://api.chanyoungkang.com',
 });
 
