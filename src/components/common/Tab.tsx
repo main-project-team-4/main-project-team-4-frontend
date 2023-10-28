@@ -47,7 +47,6 @@ const TabMenusContainer = styled.div`
 
 const TabMenu = styled.button<{ active: number }>`
   cursor: pointer;
-  width: 6.1875rem;
   height: 1.8125rem;
   border: none;
   background: none;
