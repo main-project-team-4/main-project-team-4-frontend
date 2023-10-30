@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
 import SockJS from 'sockjs-client';
-import { Stomp } from '@types/stompjs';
+// import { Stomp } from '@stomp/stompjs';
 
 function WebSocketConnection() {
+  const Stomp = require('stompjs');
   useEffect(() => {
-    const sock = new SockJS('https://api.chanyoungkang.com/ws-stomp');
+    const sock = new SockJS('http://localhost:8080/ws-stomp');
     const ws = Stomp.over(sock);
 
     ws.connect(
       {},
-      frame => {
+      (frame: any) => {
         console.log('웹소켓 연결 성공:', frame);
       },
-      error => {
+      (error: any) => {
         console.error('웹소켓 연결 에러:', error);
       },
     );
