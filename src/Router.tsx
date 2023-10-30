@@ -13,7 +13,7 @@ const Register = lazy(() => import('./pages/Register'));
 const Info = lazy(() => import('./pages/Info'));
 const Root = lazy(() => import('./pages/Root'));
 const Welcome = lazy(() => import('./pages/Welcome'));
-const NotFound = lazy(() => import('./pages/NotFound.tsx'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 const router = createBrowserRouter([
   {
