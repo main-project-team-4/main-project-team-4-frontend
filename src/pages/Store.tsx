@@ -8,10 +8,12 @@ import { ShopItem } from '../apis/getItems/Item';
 import { useQuery, useQueries, useMutation, useQueryClient } from 'react-query';
 import { getCookie } from '../utils/cookie';
 import React, { useState, useEffect, useRef } from 'react';
-import { changeIntro, getMyInfo } from '../apis/mypage/members';
+import { changeIntro } from '../apis/mypage/members';
 import CardLayout from '../components/layout/CardLayout';
 import { theme } from '../styles/theme';
 import { useInput } from '../hooks/useInput';
+import { useRecoilValue } from 'recoil';
+import { myDataState } from '../Atoms';
 
 export default function Store() {
   const [checkMine, setCheckMine] = useState(false);
@@ -22,7 +24,6 @@ export default function Store() {
   useEffect(() => {}, [storeId]);
 
   const queryResults = useQueries([
-    { queryKey: ['myInfo'], queryFn: () => getMyInfo(token), enabled: !!token },
     { queryKey: ['shopInfo', state], queryFn: () => ShopInfo(state) },
     { queryKey: ['review', state], queryFn: () => Reviews(state) },
     { queryKey: ['followers', state], queryFn: () => Followers({ shopId: state, token }) },
@@ -30,13 +31,13 @@ export default function Store() {
     { queryKey: ['shopItem', state], queryFn: () => ShopItem({ shopId: state, size: 100 }) },
   ]);
 
-  const myData = queryResults[0].data;
-  const shopInfo = queryResults[1].data;
-  const shopInfoRefetch = queryResults[1].refetch;
-  const reviewData = queryResults[2].data;
-  const followers = queryResults[3].data;
-  const followings = queryResults[4].data;
-  const shopItem = queryResults[5].data;
+  const myData = useRecoilValue(myDataState);
+  const shopInfo = queryResults[0].data;
+  const shopInfoRefetch = queryResults[0].refetch;
+  const reviewData = queryResults[1].data;
+  const followers = queryResults[2].data;
+  const followings = queryResults[3].data;
+  const shopItem = queryResults[4].data;
 
   // 상점소개 상태관리
   const [intro, setIntro] = useState(shopInfo?.shop_intro);
