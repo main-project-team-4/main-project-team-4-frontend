@@ -7,8 +7,9 @@ import { useQuery } from 'react-query';
 import { useEffect } from 'react';
 import { getOrders, getSales, getWishList } from '../apis/mypage/items';
 import { getCookie } from '../utils/cookie';
-import { getMyInfo } from '../apis/mypage/members';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import { myDataState } from '../Atoms';
 
 function Mypage() {
   const token = getCookie('token');
@@ -33,12 +34,11 @@ function Mypage() {
   const wishlist = wishlistData?.data;
 
   // 내 정보 가져오기
-  const { data: myData, isSuccess } = useQuery('myinfo', () => getMyInfo(token));
-  useEffect(() => {}, [myData]);
+  const myData = useRecoilValue(myDataState);
 
   return (
     <>
-      {isSuccess ? (
+      {myData ? (
         <Container>
           <Profilepicture data={myData} />
           <InformationInput data={myData} />

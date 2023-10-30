@@ -113,19 +113,13 @@ function RegistrationItem() {
   // 상품 등록
   const saveItem = () => {
     const dataFormData = new FormData();
-
-    // if (mainImg instanceof File) {
-    // mainImg가 File 타입인지 확인
     dataFormData.append('main_image', mainImg);
-    // }
 
     if (Array.isArray(subImg) && subImg.length > 0) {
       // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        // if (file instanceof File) {
         // 각 항목이 File 타입인지 확인
         dataFormData.append(`sub_image`, file);
-        //}
       });
     } else {
       dataFormData.append('sub_image', '');
@@ -141,24 +135,18 @@ function RegistrationItem() {
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
     dataFormData.append('requestDto', blobData);
-
     mutation.mutate({ token, data: dataFormData }); // FormData 전송
   };
 
   // 상품 수정
   const modifyItemHandler = () => {
     const dataFormData = new FormData();
-
-    // mainImg가 File 타입인지 확인
     dataFormData.append('new_mainImage', mainImg);
 
     if (Array.isArray(subImg) && subImg.length > 0) {
       // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        // if (file instanceof File) {
-        // 각 항목이 File 타입인지 확인
         dataFormData.append(`new_subImages`, file);
-        // }
       });
     } else {
       dataFormData.append('sub_image', '');
@@ -174,7 +162,6 @@ function RegistrationItem() {
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
     dataFormData.append('requestDto', blobData);
-
     modifyMutation.mutate({ token, data: dataFormData, itemId }); // FormData 전송
   };
 

@@ -7,7 +7,8 @@ import { putWishes, checkWishes, changeItemState } from '../../apis/posting/post
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
 import DropBar from '../common/DropBar';
-import { getMyInfo } from '../../apis/mypage/members';
+import { useRecoilValue } from 'recoil';
+import { myDataState } from '../../Atoms';
 
 export default function DetailPosting() {
   const [mainImg, setMainImg] = useState('');
@@ -29,9 +30,7 @@ export default function DetailPosting() {
   }, [detailItems]);
 
   //내 정보 조회
-  const { data: myData, isSuccess: myDataSuccess } = useQuery('myinfo', () => getMyInfo(token), {
-    enabled: !!token,
-  });
+  const myData = useRecoilValue(myDataState);
 
   // 상품 상태 변경
   const mutationItem = useMutation(changeItemState, {
@@ -48,8 +47,8 @@ export default function DetailPosting() {
       mutationItem.mutate({
         data: {
           item_state: selected,
-          item_id: detailItems?.item_id,
-          member_id: myData?.member_id,
+          item_id: detailItems.item_id,
+          member_id: myData.member_id,
         },
         token: token,
       });
@@ -58,7 +57,7 @@ export default function DetailPosting() {
 
   //여기확인 필!!!!
   useEffect(() => {
-    if (detailSuccess && myDataSuccess) {
+    if (detailSuccess && !!myData) {
       if (myData.member_id === detailItems.member_id) {
         ChangeState();
       }
