@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { theme } from './styles/theme';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ScrollToTop from './components/common/ScrollToTop';
+import { RecoilRoot } from 'recoil';
 
 const queryClient = new QueryClient();
 
@@ -13,10 +14,12 @@ function App() {
     <>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <ScrollToTop>
-            <Outlet />
-          </ScrollToTop>
+          <RecoilRoot>
+            <GlobalStyle />
+            <ScrollToTop>
+              <Outlet />
+            </ScrollToTop>
+          </RecoilRoot>
         </ThemeProvider>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>

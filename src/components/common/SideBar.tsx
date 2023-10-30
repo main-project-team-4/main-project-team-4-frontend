@@ -7,6 +7,8 @@ import { removeCookie } from '../../utils/cookie';
 import { getCookie } from '../../utils/cookie';
 import LoginModal from '../login/LoginModal';
 import { getMyInfo } from '../../apis/mypage/members';
+import { useRecoilState } from 'recoil';
+import { myDataState } from '../../Atoms';
 
 type ItemType = {
   category_l_id: number;
@@ -41,10 +43,13 @@ function SideBar() {
   const { data: category } = useQuery('category', getCategory);
 
   // 유저 정보 가져오기
-  const { data: myData, isLoading } = useQuery('myInfo', () => getMyInfo(token), {
+  const { data: userData, isLoading } = useQuery('myInfo', () => getMyInfo(token), {
     enabled: !!token,
   });
-  useEffect(() => {}, [myData]);
+  const [myData, setMyData] = useRecoilState(myDataState);
+  useEffect(() => {
+    setMyData(userData);
+  }, [userData, setMyData]);
 
   // 클릭시 대분류 페이지로 이동
   const [largeId, setLargeID] = useState(0);
@@ -117,7 +122,7 @@ function SideBar() {
             </li>
             <li
               onClick={() => {
-                navigate(`/store/${myData.shop_id}`, { state: myData.shop_id });
+                navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
               }}
             >
               내 상점
