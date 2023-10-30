@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
+import FirstChat from '../components/chat/FirstChat';
 
 interface UserProps {
   selected?: boolean;
@@ -35,7 +36,7 @@ export default function Chat() {
       </ChatList>
       <ChatContainer>
         <Name>Jhon Abraham</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox /> : <div>채팅을 시작하세요</div>}</MessageLayout>
+        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" />
