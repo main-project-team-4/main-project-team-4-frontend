@@ -1,22 +1,18 @@
 import { useEffect } from 'react';
 import SockJS from 'sockjs-client';
+import { Stomp } from '@types/stompjs';
 
-
-declare module '@stomp/stompjs' {
-  export const Stomp: any;
-}
-
-function WebSocketConnection(): null {
+function WebSocketConnection() {
   useEffect(() => {
     const sock = new SockJS('https://api.chanyoungkang.com/ws-stomp');
     const ws = Stomp.over(sock);
 
     ws.connect(
       {},
-      (frame: any) => {
+      frame => {
         console.log('웹소켓 연결 성공:', frame);
       },
-      (error: any) => {
+      error => {
         console.error('웹소켓 연결 에러:', error);
       },
     );
@@ -29,7 +25,7 @@ function WebSocketConnection(): null {
     };
   }, []);
 
-  return null;
+  return null; // UI는 없으며 연결만을 담당
 }
 
 export default WebSocketConnection;
