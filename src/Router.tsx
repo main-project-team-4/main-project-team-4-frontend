@@ -1,21 +1,28 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
-import Home from './pages/Home';
-import Posting from './pages/Posting';
-import Mypage from './pages/Mypage';
-import Store from './pages/Store';
-import ViewItems from './pages/ViewItems';
-import Kakao from './pages/Redirect';
-import Chat from './pages/Chat';
-import Register from './pages/Register';
-import Info from './pages/Info';
-import Root from './pages/Root';
-import Welcome from './pages/Welcome';
+import { lazy, Suspense } from 'react';
+
+const App = lazy(() => import('./App'));
+const Home = lazy(() => import('./pages/Home'));
+const Posting = lazy(() => import('./pages/Posting'));
+const Mypage = lazy(() => import('./pages/Mypage'));
+const Store = lazy(() => import('./pages/Store'));
+const ViewItems = lazy(() => import('./pages/ViewItems'));
+const Kakao = lazy(() => import('./pages/Redirect'));
+const Chat = lazy(() => import('./pages/Chat'));
+const Register = lazy(() => import('./pages/Register'));
+const Info = lazy(() => import('./pages/Info'));
+const Root = lazy(() => import('./pages/Root'));
+const Welcome = lazy(() => import('./pages/Welcome'));
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+
+    element: (
+      <Suspense fallback={<div>로딩 중...</div>}>
+        <App />
+      </Suspense>
+    ),
     children: [
       {
         path: 'info',
