@@ -6,12 +6,13 @@ import { theme } from './styles/theme';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ScrollToTop from './components/common/ScrollToTop';
 import { RecoilRoot } from 'recoil';
-
+import WebSocketConnection from './apis/chat/chat';
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
+      <WebSocketConnection />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <RecoilRoot>
