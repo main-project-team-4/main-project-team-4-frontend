@@ -11,7 +11,7 @@ export default function CardLayout({ title, data, shop_Id }: ParamsType) {
   const storePath = path.includes('/store');
 
   const move = () => {
-    navigate(`/${title}`);
+    navigate(`items/${title}`);
   };
 
   return (

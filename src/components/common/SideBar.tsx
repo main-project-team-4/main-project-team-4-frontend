@@ -56,7 +56,7 @@ function SideBar() {
   };
   useEffect(() => {
     if (largeId && largeName) {
-      navigate(`category/${largeName}`, { state: { layer, id: largeId } });
+      navigate(`items/category/${largeName}`, { state: { layer, id: largeId } });
       setLargeName('');
     }
   }, [largeId, largeName]);
@@ -75,7 +75,7 @@ function SideBar() {
   };
   useEffect(() => {
     if (midId && midName) {
-      navigate(`category/${largeName2}/${midName}`, { state: { layer, id: midId } });
+      navigate(`items/category/${largeName2}/${midName}`, { state: { layer, id: midId } });
     }
   }, [midId, midName, midState]);
 

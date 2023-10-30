@@ -38,7 +38,7 @@ const router = createBrowserRouter([
             element: <Home />,
           },
           {
-            path: ':items/:LargeCategory?/:midCategoryId?/:last?',
+            path: 'items/:items/:LargeCategory?/:midCategoryId?/:last?',
             element: <ViewItems />,
           },
           {

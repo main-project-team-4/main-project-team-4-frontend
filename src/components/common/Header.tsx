@@ -42,7 +42,7 @@ export default function Header() {
     try {
       const { data: refetchedData } = await refetch();
       if (refetchedData && itemName) {
-        navigate(`search?keyword=${itemName}`, { state: refetchedData });
+        navigate(`items/search?keyword=${itemName}`, { state: refetchedData });
         setItemName('');
       }
     } catch (error) {
