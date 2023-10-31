@@ -105,7 +105,7 @@ function RegistrationItem() {
     onSuccess: response => {
       queryClient.invalidateQueries('modifyItem');
       if (response?.status === 200) {
-        navigate(`/posting/${title}`, { state: { id: response.data.item_id } });
+        navigate(`/posting/${title}`, { state: { id: detailItems.item_id } });
       }
     },
   });
@@ -140,13 +140,18 @@ function RegistrationItem() {
 
   // 상품 수정
   const modifyItemHandler = () => {
+    const modifyArr: string[] = [];
     const dataFormData = new FormData();
-    dataFormData.append('new_mainImage', mainImg);
+    dataFormData.append('main_image', mainImg);
 
     if (Array.isArray(subImg) && subImg.length > 0) {
       // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        dataFormData.append(`new_subImages`, file);
+        if (file instanceof File) {
+          dataFormData.append(`sub_image`, file);
+        } else {
+          modifyArr.push(file);
+        }
       });
     } else {
       dataFormData.append('sub_image', '');
@@ -158,6 +163,7 @@ function RegistrationItem() {
       item_comment: explain,
       item_with_delivery_fee: deliveryfee,
       category_m_id: category,
+      sub_image: modifyArr,
     };
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
