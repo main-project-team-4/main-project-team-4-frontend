@@ -163,7 +163,7 @@ function RegistrationItem() {
       item_comment: explain,
       item_with_delivery_fee: deliveryfee,
       category_m_id: category,
-      sub_image: modifyArr,
+      item_sub_image: modifyArr,
     };
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
