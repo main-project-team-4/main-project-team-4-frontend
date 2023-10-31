@@ -94,6 +94,7 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
     reorderedImages.splice(destination.index, 0, removed);
 
     setImages(reorderedImages);
+    setViewImages(reorderedImages);
   };
 
   const showHoverAlert = () => {
