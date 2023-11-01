@@ -14,6 +14,12 @@ import { useInput } from '../hooks/useInput';
 interface UserProps {
   selected?: boolean;
 }
+const dummyData = [
+  { type: 'TALK', sender: 'hwassell0', message: '이게 내가 보낸거야' },
+  { type: 'TALK', sender: 'lcroshaw6', message: '상대가 보낸거야' },
+  { type: 'TALK', sender: 'hwassell0', message: '이게 내가 보낸거야' },
+  { type: 'TALK', sender: 'lcroshaw6', message: '상대가 보낸거야' },
+];
 
 export default function Chat() {
   const token = getCookie('token');
@@ -26,6 +32,7 @@ export default function Chat() {
   const [message, setMessage, messageHandler] = useInput('');
   const [sender, setSender] = useState<string | null>(null);
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
+  const [messages, setMessages] = useState<Array<MessageType>>(dummyData);
 
   const chatRoomHandler = (roomId, roomName, sender) => {
     setSelectedUser(roomId);
@@ -49,8 +56,6 @@ export default function Chat() {
       messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
     }
   }, [selectedUser]);
-
-  const [messages, setMessages] = useState<Array<MessageType>>([]);
 
   // 쿼리 부분
   const queryResults = useQueries([
@@ -83,7 +88,21 @@ export default function Chat() {
 
     stompClientRef.current = stompClient;
 
+    //연결 부분
     stompClient.onConnect = (frame: any) => {
+      console.log('연결');
+      //수신
+      const data = {
+        type: 'TALK',
+        sender: 'hwassell0',
+        roomId: 5,
+        message: '내가 보낸거야',
+        roomName: 'hwassell0 님의 Juice - Prune 문의',
+      };
+      console.log('바로 보내보는거', data);
+
+      stompClient.publish(`/pub/chat/message`, data);
+
       if (ChatUserList) {
         ChatUserList.forEach(room => {
           stompClient.subscribe(`/sub/chat/room/${room.roomId}`, (message: any) => {
@@ -99,10 +118,13 @@ export default function Chat() {
 
     stompClient.activate();
 
+
+
     return () => {
       stompClient.deactivate();
     };
   }, [ChatUserList]);
+
   //메시지 수신
   useEffect(() => {
     if (stompClientRef.current) {
@@ -124,11 +146,12 @@ export default function Chat() {
       roomName: roomName,
     };
     console.log('Sending message:', data);
+    
     if (stompClientRef.current) {
-      stompClientRef.current.publish({ destination: `/app/chat/${chatRoom}`, body: JSON.stringify(data) });
-      console.log('Message sent!');
+      stompClientRef.current.publish(`/pub/chat/message`, data);
+      console.log('전송');
     } else {
-      console.log('Stomp client is not available!');
+      console.log('전송에러');
     }
   };
 
@@ -148,7 +171,7 @@ export default function Chat() {
       </ChatList>
       <ChatContainer>
         <Name>{roomName}</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} currentUser="username" /> : <FirstChat />}</MessageLayout>
+        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} />

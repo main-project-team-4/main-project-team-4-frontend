@@ -42,8 +42,6 @@ export const ChatRoom = async ({ token, itemId }: ChatListType) => {
 
 //메시지 가져오기
 export const getMessages = async ({ token, roomId }: ChatListType) => {
-  console.log(token, roomId);
-
   try {
     const response = await baseInstance.get(`/message/${roomId}`, {
       headers: {

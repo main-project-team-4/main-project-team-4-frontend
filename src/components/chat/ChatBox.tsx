@@ -1,55 +1,24 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox({ messages, currentUser }) {
+export default function ChatBox({ messages, sender }) {
+  // console.log('chatBox에서 잘 받고 있는지 확인', messages, sender);
+
   return (
     <>
-      {messages.map(message => (message.sender === currentUser ? <MyMessageContainer>...</MyMessageContainer> : <YourMessageContainer>...</YourMessageContainer>))}
-      <YourMessageContainer>
-        <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
-        <Name>이지은</Name>
-        <YourMessage>이거 봐야해</YourMessage>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>내 채팅</MyMessage>
-      </MyMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>내 채팅입니다아아ㅓ리나ㅓㅇ라ㅣㅓㄴ아ㅣ렁니</MyMessage>
-        <MyTime>09:25AM</MyTime>
-      </MyMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>잘되니</MyMessage>
-        <MyTime>09:25AM</MyTime>
-      </MyMessageContainer>
-
-      <YourMessageContainer>
-        <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
-        <Name>이지은</Name>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
+      {messages.map(message =>
+        message.sender === sender ? (
+          <MyMessageContainer>
+            <MyMessage>{message.message}</MyMessage>
+          </MyMessageContainer>
+        ) : (
+          <YourMessageContainer>
+            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
+            <Name>{message.sender}</Name>
+            <YourMessage>{message.message}</YourMessage>
+          </YourMessageContainer>
+        ),
+      )}
     </>
   );
 }

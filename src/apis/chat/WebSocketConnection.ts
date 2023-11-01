@@ -9,7 +9,7 @@ export default function WebSocketConnection() {
     });
 
     client.onConnect = function (frame: any) {
-      console.log('웹소켓 연결 성공:', frame);
+      // console.log('웹소켓 연결 성공:', frame);
     };
 
     client.onStompError = function (error: any) {
