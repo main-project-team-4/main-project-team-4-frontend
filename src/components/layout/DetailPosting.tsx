@@ -9,6 +9,7 @@ import { theme } from '../../styles/theme';
 import DropBar from '../common/DropBar';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../../Atoms';
+import { ChatRoom } from '../../apis/chat/chat';
 
 export default function DetailPosting() {
   const [mainImg, setMainImg] = useState('');
@@ -117,6 +118,19 @@ export default function DetailPosting() {
     </button>
   );
 
+  // 채팅 페이지로 이동
+  const chatRoomMutation = useMutation(ChatRoom, {
+    onSuccess: response => {
+      queryClient.invalidateQueries('ChatRoom');
+      console.log('response??', response.data);
+
+      navigate('/chat', { state: response.data });
+    },
+  });
+
+  const goChatRoom = () => {
+    chatRoomMutation.mutate({ token, itemId: detailItems.item_id }); // FormData 전송
+  };
   return detailItems ? (
     <Container>
       <ImageComtainer>
@@ -139,7 +153,9 @@ export default function DetailPosting() {
           ) : (
             <div>
               <RenderHeartButton wishState={wishState} onClick={onClickHeart} />
-              <button className="Chat-Button">채팅하기</button>
+              <button className="Chat-Button" onClick={goChatRoom}>
+                채팅하기
+              </button>
             </div>
           )}
         </PriceBox>

@@ -3,15 +3,46 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
 import FirstChat from '../components/chat/FirstChat';
+import { getChatList, getMessages } from '../apis/chat/chat';
+import { useQuery, useQueries } from 'react-query';
+import { getCookie } from '../utils/cookie';
+import { useLocation, useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { useInput } from '../hooks/useInput';
 
 interface UserProps {
   selected?: boolean;
 }
 
 export default function Chat() {
+  const token = getCookie('token');
+  const navigate = useNavigate();
+  const { state: chatData } = useLocation();
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [chatRoom, setChatRoom] = useState<number | null>(null);
+  const [roomName, setRoomName] = useState<string | null>(null);
+  const [message, setMessage, messageHandler] = useInput('');
+  const [sender, setSender] = useState<string | null>(null);
+  const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
 
+  const chatRoomHandler = (roomId, roomName, sender) => {
+    setSelectedUser(roomId);
+    setChatRoom(roomId);
+    setRoomName(roomName);
+    setSender(sender);
+  };
+  //채팅 정보 설정하는 부분
+  useEffect(() => {
+    if (!token) navigate('/');
+    if (chatData) {
+      setChatRoom(chatData.roomId);
+      setRoomName(chatData.roomName);
+      setSender(chatData.sender);
+    }
+  }, []);
+  //스크롤 부분
   useEffect(() => {
     const messageLayoutElement = messageLayoutRef.current;
     if (messageLayoutElement) {
@@ -19,28 +50,109 @@ export default function Chat() {
     }
   }, [selectedUser]);
 
+  const [messages, setMessages] = useState<Array<MessageType>>([]);
+
+  // 쿼리 부분
+  const queryResults = useQueries([
+    {
+      queryKey: 'chatList',
+      queryFn: () => getChatList(token),
+      enabled: !!token,
+    },
+    {
+      queryKey: 'getMessage',
+      queryFn: () => getMessages({ token, roomId: chatRoom }),
+      enabled: !!token && !!chatRoom,
+    },
+  ]);
+
+  const ChatUserList = queryResults[0].data;
+  const MessageData = queryResults[1].data;
+  console.log('MessageData', MessageData);
+
+  //웹소켓 부분
+  useEffect(() => {
+    const sock = new SockJS('http://43.200.8.55/ws-stomp');
+
+    const stompClient = new Client({
+      webSocketFactory: () => sock,
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    stompClientRef.current = stompClient;
+
+    stompClient.onConnect = (frame: any) => {
+      if (ChatUserList) {
+        ChatUserList.forEach(room => {
+          stompClient.subscribe(`/sub/chat/room/${room.roomId}`, (message: any) => {
+            // 받은 메시지 처리 ...
+          });
+        });
+      }
+    };
+
+    stompClient.onStompError = frame => {
+      console.error(`Broker reported error: ${frame.headers.message}`);
+    };
+
+    stompClient.activate();
+
+    return () => {
+      stompClient.deactivate();
+    };
+  }, [ChatUserList]);
+  //메시지 수신
+  useEffect(() => {
+    if (stompClientRef.current) {
+      stompClientRef.current.onMessageReceived = message => {
+        const parsedMessage = JSON.parse(message.body);
+        setMessages(prevMessages => [...prevMessages, parsedMessage]);
+        console.log('message', message);
+      };
+    }
+  }, []);
+
+  //메시지 전달
+  const sendMessage = () => {
+    const data = {
+      type: 'TALK',
+      sender: sender,
+      roomId: chatRoom,
+      message: message,
+      roomName: roomName,
+    };
+    console.log('Sending message:', data);
+    if (stompClientRef.current) {
+      stompClientRef.current.publish({ destination: `/app/chat/${chatRoom}`, body: JSON.stringify(data) });
+      console.log('Message sent!');
+    } else {
+      console.log('Stomp client is not available!');
+    }
+  };
+
   return (
     <Layout>
       <ChatList>
         <h3>채팅 목록</h3>
         <UserList>
-          <User onClick={() => setSelectedUser(1)} selected={selectedUser === 1}>
-            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="" />
-            사용자123456
-          </User>
-          <User onClick={() => setSelectedUser(2)} selected={selectedUser === 2}>
-            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="" />
-            사용자123456
-          </User>
+          {ChatUserList &&
+            ChatUserList.map(user => (
+              <User key={user.roomId} onClick={() => chatRoomHandler(user.roomId, user.roomName, user.sender)} selected={selectedUser === user.roomId}>
+                <img src="https://ifh.cc/g/kXNjcT.jpg" alt={user.sellerName} />
+                {user.sellerName}
+              </User>
+            ))}
         </UserList>
       </ChatList>
       <ChatContainer>
-        <Name>Jhon Abraham</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox /> : <FirstChat />}</MessageLayout>
+        <Name>{roomName}</Name>
+        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} currentUser="username" /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
-            <input type="text" placeholder=" 채팅을 입력해주세요" />
-            <button>
+            <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} />
+            <button onClick={sendMessage}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

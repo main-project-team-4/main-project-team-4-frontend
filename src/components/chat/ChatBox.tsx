@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox() {
+export default function ChatBox({ messages, currentUser }) {
   return (
     <>
+      {messages.map(message => (message.sender === currentUser ? <MyMessageContainer>...</MyMessageContainer> : <YourMessageContainer>...</YourMessageContainer>))}
       <YourMessageContainer>
         <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
         <Name>이지은</Name>
