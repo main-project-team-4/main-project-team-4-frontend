@@ -57,7 +57,7 @@ export default function Chat() {
     if (messageLayoutElement) {
       messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
     }
-  }, [selectedUser]);
+  }, [selectedUser, messages]);
 
   // 쿼리 부분
   const queryResults = useQueries([
@@ -111,11 +111,8 @@ export default function Chat() {
                 console.log('payload', payload);
 
                 // 현재 활성화된 채팅방 메시지만 상태 업데이트
-                if (room.roomId === chatRoom) {
-                  setMessages(prev => [...prev, payload]);
-                } else {
-                  // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
-                }
+                setMessages(prev => [...prev, payload]);
+                // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
               }
             });
             setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
@@ -162,7 +159,6 @@ export default function Chat() {
     if (event.nativeEvent.isComposing) return;
     if (event.key === 'Enter') {
       sendMessage();
-      setKeydown(false);
     }
   };
 
@@ -175,7 +171,7 @@ export default function Chat() {
             ChatUserList.map(user => (
               <User key={user.roomId} onClick={() => chatRoomHandler(user.roomId, user.roomName, user.sender)} selected={selectedUser === user.roomId}>
                 <img src="https://ifh.cc/g/kXNjcT.jpg" alt={user.sellerName} />
-                {user.sellerName}
+                {user.roomName}
               </User>
             ))}
         </UserList>
