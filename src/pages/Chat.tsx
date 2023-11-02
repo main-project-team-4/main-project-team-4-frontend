@@ -100,13 +100,12 @@ export default function Chat() {
         console.log('연결성공');
 
         if (ChatUserList) {
-          console.log('실행이 왜?');
-
           ChatUserList?.forEach(room => {
-            // if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
-            console.log(room.id);
+            if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
+              console.log('message', message);
+
               if (message.body) {
                 const payload = JSON.parse(message.body);
                 console.log('payload', payload);
@@ -153,7 +152,6 @@ export default function Chat() {
           destination: `/pub/chat/message`,
           body: JSON.stringify(data),
         });
-        setMessages(prev => [...prev, data]); // 내 메시지를 상태에 추가
 
         setMessage(''); // 메시지 초기화
       }
