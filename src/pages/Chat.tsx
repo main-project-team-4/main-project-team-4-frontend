@@ -33,6 +33,9 @@ export default function Chat() {
   const [sender, setSender] = useState<string | null>(null);
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
   const [messages, setMessages] = useState<Array<MessageType>>(dummyData);
+  const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
+  const [keydown, setKeydown] = useState(false);
+  console.log('chatRoom', chatRoom);
 
   const chatRoomHandler = (roomId, roomName, sender) => {
     setSelectedUser(roomId);
@@ -49,6 +52,7 @@ export default function Chat() {
       setSender(chatData.sender);
     }
   }, []);
+
   //스크롤 부분
   useEffect(() => {
     const messageLayoutElement = messageLayoutRef.current;
@@ -73,70 +77,66 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
-  console.log('MessageData', MessageData);
 
-  //웹소켓 부분
+  // console.log('MessageData', MessageData);
   useEffect(() => {
-    const sock = new SockJS('http://43.200.8.55/ws-stomp');
+    if (MessageData) {
+      setMessages(MessageData);
+    }
+  }, [MessageData]);
 
+  useEffect(() => {
+    if (!token) navigate('/');
+    if (chatData) {
+      setChatRoom(chatData.roomId);
+      setRoomName(chatData.roomName);
+      setSender(chatData.sender);
+    }
+
+    // WebSocket 연결 설정
+    const sock = new SockJS('http://43.200.8.55/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
       webSocketFactory: () => sock,
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      reconnectDelay: 200,
+      onConnect: (frame: any) => {
+        console.log('연결성공');
+
+        if (ChatUserList) {
+          ChatUserList?.forEach(room => {
+            if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
+
+            stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
+              if (message.body) {
+                const payload = JSON.parse(message.body);
+                console.log('payload', payload);
+
+                // 현재 활성화된 채팅방 메시지만 상태 업데이트
+                if (room.roomId === chatRoom) {
+                  setMessages(prev => [...prev, payload]);
+                } else {
+                  // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
+                }
+              }
+            });
+            setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
+          });
+        }
+      },
+      debug: str => {
+        console.log('STOMP DEBUG: ', str);
+      },
     });
+    stompClient.activate();
 
     stompClientRef.current = stompClient;
 
-    //연결 부분
-    stompClient.onConnect = (frame: any) => {
-      console.log('연결');
-      //수신
-      const data = {
-        type: 'TALK',
-        sender: 'hwassell0',
-        roomId: 5,
-        message: '내가 보낸거야',
-        roomName: 'hwassell0 님의 Juice - Prune 문의',
-      };
-      console.log('바로 보내보는거', data);
-
-      stompClient.publish(`/pub/chat/message`, data);
-
-      if (ChatUserList) {
-        ChatUserList.forEach(room => {
-          stompClient.subscribe(`/sub/chat/room/${room.roomId}`, (message: any) => {
-            // 받은 메시지 처리 ...
-          });
-        });
+    return () => {
+      if (stompClient.connected) {
+        stompClient.deactivate();
       }
     };
-
-    stompClient.onStompError = frame => {
-      console.error(`Broker reported error: ${frame.headers.message}`);
-    };
-
-    stompClient.activate();
-
-
-
-    return () => {
-      stompClient.deactivate();
-    };
-  }, [ChatUserList]);
-
-  //메시지 수신
-  useEffect(() => {
-    if (stompClientRef.current) {
-      stompClientRef.current.onMessageReceived = message => {
-        const parsedMessage = JSON.parse(message.body);
-        setMessages(prevMessages => [...prevMessages, parsedMessage]);
-        console.log('message', message);
-      };
-    }
   }, []);
 
-  //메시지 전달
   const sendMessage = () => {
     const data = {
       type: 'TALK',
@@ -145,13 +145,25 @@ export default function Chat() {
       message: message,
       roomName: roomName,
     };
-    console.log('Sending message:', data);
-    
-    if (stompClientRef.current) {
-      stompClientRef.current.publish(`/pub/chat/message`, data);
-      console.log('전송');
-    } else {
-      console.log('전송에러');
+
+    if (message) {
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.publish({
+          destination: `/pub/chat/message`,
+          body: JSON.stringify(data),
+        });
+        setMessages(prev => [...prev, data]); // 내 메시지를 상태에 추가
+
+        setMessage(''); // 메시지 초기화
+      }
+    }
+  };
+
+  const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return;
+    if (event.key === 'Enter') {
+      sendMessage();
+      setKeydown(false);
     }
   };
 
@@ -174,8 +186,8 @@ export default function Chat() {
         <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
-            <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} />
-            <button onClick={sendMessage}>
+            <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
+            <button onClick={sendMessage} disabled={!message.trim()}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

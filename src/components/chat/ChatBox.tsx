@@ -2,17 +2,17 @@ import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
 export default function ChatBox({ messages, sender }) {
-  // console.log('chatBox에서 잘 받고 있는지 확인', messages, sender);
+  console.log('ChatBox-messages', messages);
 
   return (
     <>
-      {messages.map(message =>
+      {messages?.map((message, index) =>
         message.sender === sender ? (
-          <MyMessageContainer>
+          <MyMessageContainer key={index}>
             <MyMessage>{message.message}</MyMessage>
           </MyMessageContainer>
         ) : (
-          <YourMessageContainer>
+          <YourMessageContainer key={index}>
             <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
             <Name>{message.sender}</Name>
             <YourMessage>{message.message}</YourMessage>
