@@ -53,6 +53,7 @@ const Layout = styled.div`
   display: flex;
   max-width: 37.5rem;
   min-width: 37.5rem;
+  height: 15rem;
   padding: 1.25rem;
   flex-direction: column;
   gap: 0.5rem;
@@ -104,6 +105,7 @@ const Info = styled.div`
 `;
 
 const Review = styled.div`
+  width: 35.625rem;
   font-weight: 400;
   overflow: hidden;
   margin-bottom: 0.625rem;

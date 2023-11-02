@@ -43,7 +43,7 @@ function Welcome() {
   const nicknameMutation = useMutation(changeNickName, {
     onSuccess: () => {
       queryClient.invalidateQueries('changeNick');
-      setModalInfo('사용가능한 아이디입니다.');
+      setModalInfo('사용가능한 상점명입니다.');
       setModalState(true);
       setNickDuplicated(false);
       setIsNickName(false);

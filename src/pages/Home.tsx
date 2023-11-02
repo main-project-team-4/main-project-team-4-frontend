@@ -45,9 +45,9 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <CardLayout title={'인기 상품'} data={topItemsResult.data} shop_Id="" />
-        <CardLayout title={'최신 상품'} data={itemsResult.data} shop_Id="" />
-        {token && <CardLayout title={'내 주위 상품'} data={nearByResult.data} shop_Id="" />}
+        <CardLayout title={'인기 상품'} data={topItemsResult.data} />
+        <CardLayout title={'최신 상품'} data={itemsResult.data} />
+        {token && <CardLayout title={'내 주위 상품'} data={nearByResult.data} />}
       </Layout>
     </>
   );

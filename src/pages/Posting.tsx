@@ -27,7 +27,7 @@ export default function Posting() {
   return (
     <Container>
       <DetailPosting />
-      {shopItem && <CardLayout title={`${shopItem[0]?.member_nickname} 상점의 다른 상품`} data={shopItem} shop_Id={shopId} />}
+      {shopItem && <CardLayout storeState={true} title={`${shopItem[0]?.shop_name} 상점의 다른 상품`} data={shopItem} shop_Id={shopId} />}
     </Container>
   );
 }
