@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
+import { useMutation, useQueryClient } from 'react-query';
+import { changeImage } from '../../apis/posting/posting';
 
 interface ImageProps {
   setViewImages: React.Dispatch<React.SetStateAction<string[]>>;
@@ -12,17 +14,31 @@ interface ImageProps {
   selectedPicture: string;
   setSelectedPicture: React.Dispatch<React.SetStateAction<string>>;
   setSubImg: React.Dispatch<React.SetStateAction<File[]>>;
+  detailItemState: boolean;
+  detailItemId: number;
 }
 
-function Image({ setViewImages, viewImages, images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }: ImageProps) {
+function Image({ detailItemId, detailItemState, setViewImages, viewImages, images, setImages, setMainImg, selectedPicture, setSelectedPicture, setSubImg }: ImageProps) {
   const [viewAlert, setViewAlert] = useState(false);
   const [hovered, setHovered] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation(changeImage, {
+    onSuccess: response => {
+      queryClient.invalidateQueries('changeSubImg');
+      if (response?.status === 200) {
+        setSubImg(prevImages => [...prevImages, ...response.data.item_image_list]);
+        setViewImages(prevImages => [...prevImages, ...response.data.item_image_list]);
+        setImages(prevImages => [...prevImages, ...response.data.item_image_list]);
+      }
+    },
+  });
+  // 사진 추가하기 버튼
   const handleClick = () => {
     fileRef?.current?.click();
   };
-
+  // 클릭한 이미지 크게 보이기
   const clickHandler = (index: number) => {
     setSelectedPicture(viewImages[index]);
   };
@@ -56,14 +72,28 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
 
       if (fileArray.length + images.length <= 5) {
         const imageArray = fileArray.map(file => URL.createObjectURL(file));
-        setImages(prevImages => [...prevImages, ...fileArray]);
-        setViewImages(prevImages => [...prevImages, ...imageArray]);
-        setSelectedPicture(imageArray[0]);
+        if (!detailItemState) {
+          setImages(prevImages => [...prevImages, ...fileArray]);
+          setViewImages(prevImages => [...prevImages, ...imageArray]);
+          setSelectedPicture(imageArray[0]);
+          setMainImg(fileArray[0]); // File 객체를 직접 설정
+          setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
 
-        setMainImg(fileArray[0]); // File 객체를 직접 설정
-        setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
+          event.currentTarget.value = '';
+        } else {
+          // 파일을 이미지 url로 변환
+          const dataFormData = new FormData();
+          if (fileArray) {
+            fileArray.forEach(file => {
+              if (file instanceof File) {
+                dataFormData.append('sub_image', file);
+              }
+            });
+          }
+          mutation.mutate({ data: dataFormData, itemId: detailItemId });
 
-        event.currentTarget.value = '';
+          event.currentTarget.value = '';
+        }
       } else {
         setViewAlert(true);
       }
@@ -94,7 +124,12 @@ function Image({ setViewImages, viewImages, images, setImages, setMainImg, selec
     reorderedImages.splice(destination.index, 0, removed);
 
     setImages(reorderedImages);
-    setViewImages(reorderedImages);
+    if (!detailItemState) {
+      const reorderedView = reorderedImages.map(reordered => URL.createObjectURL(reordered));
+      setViewImages(reorderedView);
+    } else {
+      setViewImages(reorderedImages);
+    }
   };
 
   const showHoverAlert = () => {

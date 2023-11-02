@@ -62,7 +62,7 @@ export const changeItemState = async ({ data, token }: ChangeItemStateType) => {
 // 상품 등록
 type UploadItem = {
   data: FormData;
-  token: string;
+  token?: string;
   itemId?: number;
 };
 export const uploadItem = async ({ token, data }: UploadItem) => {
@@ -86,6 +86,16 @@ export const modifyItem = async ({ token, data, itemId }: UploadItem) => {
         Authorization: token,
       },
     });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 이미지 변환
+export const changeImage = async ({ data, itemId }: UploadItem) => {
+  try {
+    const response = await baseInstance.post(`api/items/${itemId}/images`, data);
     return response;
   } catch (error) {
     console.log(error);
