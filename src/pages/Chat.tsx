@@ -100,6 +100,8 @@ export default function Chat() {
         console.log('연결성공');
 
         if (ChatUserList) {
+          console.log('실행이 왜?');
+
           ChatUserList?.forEach(room => {
             // if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
             console.log(room.id);
@@ -134,7 +136,7 @@ export default function Chat() {
         stompClient.deactivate();
       }
     };
-  }, []);
+  }, [ChatUserList]);
 
   const sendMessage = () => {
     const data = {
