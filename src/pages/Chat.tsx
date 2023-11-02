@@ -34,8 +34,6 @@ export default function Chat() {
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
   const [messages, setMessages] = useState<Array<MessageType>>(dummyData);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
-  const [keydown, setKeydown] = useState(false);
-  console.log('chatRoom', chatRoom);
 
   const chatRoomHandler = (roomId, roomName, sender) => {
     setSelectedUser(roomId);
@@ -103,7 +101,8 @@ export default function Chat() {
 
         if (ChatUserList) {
           ChatUserList?.forEach(room => {
-            if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
+            // if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
+            console.log(room.id);
 
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
               if (message.body) {
