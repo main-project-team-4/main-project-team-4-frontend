@@ -43,15 +43,15 @@ export default function Chat() {
     setMessages(MessageData);
   };
 
-  //채팅 정보 설정하는 부분
-  useEffect(() => {
-    if (!token) navigate('/');
-    if (chatData) {
-      setChatRoom(chatData.roomId);
-      setRoomName(chatData.roomName);
-      setSender(chatData.sender);
-    }
-  }, []);
+  // //채팅 정보 설정하는 부분
+  // useEffect(() => {
+  //   if (!token) navigate('/');
+  //   if (chatData) {
+  //     setChatRoom(chatData.roomId);
+  //     setRoomName(chatData.roomName);
+  //     setSender(chatData.sender);
+  //   }
+  // }, []);
 
   //스크롤 부분
   useEffect(() => {
@@ -110,10 +110,15 @@ export default function Chat() {
 
               // if (message) {
               const payload = JSON.parse(message.body);
-              console.log('payload', payload);
+              console.log('payload', payload.roomId);
+              console.log('chatRoom', chatRoom);
 
-              // 현재 활성화된 채팅방 메시지만 상태 업데이트
-              setMessages(prev => [...prev, payload]);
+              console.log(room.roomId === payload.roomId);
+
+              if (room.roomId === payload.roomId) {
+                // 현재 활성화된 채팅방 메시지만 상태 업데이트
+                setMessages(prev => [...prev, payload]);
+              }
               // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
               // }
             });
