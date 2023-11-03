@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <>
-      <WebSocketConnection />
+      {/* <WebSocketConnection /> */}
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <RecoilRoot>

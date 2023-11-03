@@ -5,7 +5,7 @@ import { Client } from '@stomp/stompjs';
 export default function WebSocketConnection() {
   useEffect(() => {
     const client = new Client({
-      webSocketFactory: () => new SockJS('http://43.200.8.55/ws-stomp'),
+      webSocketFactory: () => new SockJS('http://13.209.154.232/ws-stomp'),
     });
 
     client.onConnect = function (frame: any) {

@@ -2,18 +2,20 @@ import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
 export default function ChatBox({ messages, sender }) {
+  console.log('messages', messages);
+
   return (
     <>
       {messages?.map((message, index) =>
-        message.sender === sender ? (
+        message.chatroom_sender === sender ? (
           <MyMessageContainer key={index}>
-            <MyMessage>{message.message}</MyMessage>
+            <MyMessage>{message.chat_message}</MyMessage>
           </MyMessageContainer>
         ) : (
           <YourMessageContainer key={index}>
             <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
-            <Name>{message.sender}</Name>
-            <YourMessage>{message.message}</YourMessage>
+            <Name>{message.chatroom_sender}</Name>
+            <YourMessage>{message.chat_message}</YourMessage>
           </YourMessageContainer>
         ),
       )}

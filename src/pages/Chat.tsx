@@ -1,3 +1,5 @@
+// 하나하나 바꾼 코드
+
 import { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
@@ -14,12 +16,6 @@ import { useInput } from '../hooks/useInput';
 interface UserProps {
   selected?: boolean;
 }
-const dummyData = [
-  { type: 'TALK', sender: 'hwassell0', message: '이게 내가 보낸거야' },
-  { type: 'TALK', sender: 'lcroshaw6', message: '상대가 보낸거야' },
-  { type: 'TALK', sender: 'hwassell0', message: '이게 내가 보낸거야' },
-  { type: 'TALK', sender: 'lcroshaw6', message: '상대가 보낸거야' },
-];
 
 export default function Chat() {
   const token = getCookie('token');
@@ -32,7 +28,7 @@ export default function Chat() {
   const [message, setMessage, messageHandler] = useInput('');
   const [sender, setSender] = useState<string | null>(null);
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
-  const [messages, setMessages] = useState<Array<MessageType>>(dummyData);
+  const [messages, setMessages] = useState<Array<MessageType>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
 
   const chatRoomHandler = (roomId, roomName, sender) => {
@@ -82,7 +78,8 @@ export default function Chat() {
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
 
-  // console.log('MessageData', MessageData);
+  console.log('ChatUserList', ChatUserList);
+
   useEffect(() => {
     if (MessageData) {
       setMessages(MessageData);
@@ -98,7 +95,7 @@ export default function Chat() {
     // }
 
     // WebSocket 연결 설정
-    const sock = new SockJS('http://43.200.8.55/ws-stomp'); // 웹소켓 서버 주소
+    const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
       webSocketFactory: () => sock,
       reconnectDelay: 200,
@@ -107,21 +104,24 @@ export default function Chat() {
 
         if (ChatUserList) {
           ChatUserList?.forEach(room => {
-            if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
+            if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
 
-            stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
+            stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
               const payload = JSON.parse(message.body);
 
-              console.log('room.roomId', room.roomId);
-              console.log('payload.roomId', payload.roomId);
-
               const savedChatRoom = JSON.parse(localStorage.getItem('chatRoom'));
-              if (savedChatRoom === payload.roomId) {
+
+              console.log('savedChatRoom', savedChatRoom);
+              console.log('payload.roomId', payload);
+
+              console.log('savedChatRoom === payload.roomId', savedChatRoom === payload.chatroom_id);
+
+              if (savedChatRoom === payload.chatroom_id) {
                 // 현재 활성화된 채팅방 메시지만 상태 업데이트
                 setMessages(prev => [...prev, payload]);
               }
             });
-            setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
+            setSubscribedRooms(prev => [...prev, room.chatroom_id]); // 방을 구독한 리스트에 추가
           });
         }
       },
@@ -142,12 +142,13 @@ export default function Chat() {
 
   const sendMessage = () => {
     const data = {
-      type: 'TALK',
-      sender: sender,
-      roomId: chatRoom,
-      message: message,
-      roomName: roomName,
+      chat_type: 'TALK',
+      chatroom_sender: sender,
+      chatroom_id: chatRoom,
+      chat_message: message,
+      chatroom_name: roomName,
     };
+    console.log('data', data);
 
     if (message) {
       if (stompClientRef.current && stompClientRef.current.connected) {
@@ -175,9 +176,9 @@ export default function Chat() {
         <UserList>
           {ChatUserList &&
             ChatUserList.map(user => (
-              <User key={user.roomId} onClick={() => chatRoomHandler(user.roomId, user.roomName, user.sender)} selected={selectedUser === user.roomId}>
-                <img src="https://ifh.cc/g/kXNjcT.jpg" alt={user.sellerName} />
-                {user.roomName}
+              <User key={user.chatroom_id} onClick={() => chatRoomHandler(user.chatroom_id, user.chatroom_name, user.chatroom_sender)} selected={selectedUser === user.chatroom_id}>
+                <img src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
+                {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
               </User>
             ))}
         </UserList>
