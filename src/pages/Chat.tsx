@@ -34,17 +34,24 @@ export default function Chat() {
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
   const [messages, setMessages] = useState<Array<MessageType>>(dummyData);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
-  console.log('chatRoom', chatRoom);
 
   const chatRoomHandler = (roomId, roomName, sender) => {
-    console.log('roomIdroomId', roomId);
-
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
     setSender(sender);
     setMessages(MessageData);
   };
+
+  //채팅 정보 설정하는 부분
+  useEffect(() => {
+    if (!token) navigate('/');
+    if (chatData) {
+      setChatRoom(chatData.roomId);
+      setRoomName(chatData.roomName);
+      setSender(chatData.sender);
+    }
+  }, []);
 
   //스크롤 부분
   useEffect(() => {
@@ -71,24 +78,24 @@ export default function Chat() {
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
 
+  // console.log('MessageData', MessageData);
   useEffect(() => {
     if (MessageData) {
       setMessages(MessageData);
     }
-  }, [MessageData, chatRoom]);
+  }, [MessageData]);
 
   useEffect(() => {
-    //   if (!token) navigate('/');
-    //   if (chatData) {
-    //     setChatRoom(chatData.roomId);
-    //     setRoomName(chatData.roomName);
-    //     setSender(chatData.sender);
-    //   }
+    if (!token) navigate('/');
+    // if (chatData) {
+    //   setChatRoom(chatData.roomId);
+    //   setRoomName(chatData.roomName);
+    //   setSender(chatData.sender);
+    // }
 
     // WebSocket 연결 설정
     const sock = new SockJS('http://43.200.8.55/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
-      // brokerURL: 'ws://43.200.8.55/chat/room',
       webSocketFactory: () => sock,
       reconnectDelay: 200,
       onConnect: (frame: any) => {
@@ -99,6 +106,8 @@ export default function Chat() {
             if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
+              console.log('message', message);
+
               // if (message) {
               const payload = JSON.parse(message.body);
               console.log('payload', payload);
@@ -125,7 +134,7 @@ export default function Chat() {
         stompClient.deactivate();
       }
     };
-  }, [ChatUserList, chatRoom]);
+  }, [ChatUserList]);
 
   const sendMessage = () => {
     const data = {
@@ -154,17 +163,6 @@ export default function Chat() {
       sendMessage();
     }
   };
-
-  //메시지 수신
-  useEffect(() => {
-    if (stompClientRef.current) {
-      stompClientRef.current.onMessageReceived = message => {
-        const parsedMessage = JSON.parse(message.body);
-        setMessages(prevMessages => [...prevMessages, parsedMessage]);
-        console.log('message', message);
-      };
-    }
-  }, []);
 
   return (
     <Layout>
