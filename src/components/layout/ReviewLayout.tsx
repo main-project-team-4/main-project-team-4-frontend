@@ -21,7 +21,8 @@ export default function ReviewLayout({ reviewData }: ReviewData) {
       {reviewData.map((item: ItemType, index: number) => (
         <div key={index}>
           <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
-          {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />}
+          {/* {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />} */}
+          <Divider />
         </div>
       ))}
     </Container>
@@ -31,7 +32,7 @@ export default function ReviewLayout({ reviewData }: ReviewData) {
 const Container = styled.div`
   display: flex;
   width: 78.125rem;
-  gap: 0 3.12rem;
+  gap: 0 3.12rem 0 0;
   flex-wrap: wrap;
 `;
 

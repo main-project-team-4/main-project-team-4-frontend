@@ -175,31 +175,36 @@ export default function Store() {
             {!checkMine &&
               (isFollow ? (
                 <Button
+                  isfollow={1}
                   onClick={() => {
                     handleFollow();
                   }}
                 >
-                  팔로우 취소
+                  <img src="https://ifh.cc/g/2hzdJS.png" />
+                  팔로잉
                 </Button>
               ) : (
                 <Button
+                  isfollow={0}
                   onClick={() => {
                     handleFollow();
                   }}
                 >
-                  팔로우 하기
+                  <img src="https://ifh.cc/g/7qsV5L.png" /> 팔로우
                 </Button>
               ))}
           </FollowBox>
         </ProfileContainer>
-        <Tab
-          tabs={[
-            { name: '판매상품', content: <CardLayout data={shopItem} title="" shop_Id="" /> },
-            { name: '상점리뷰', content: <ReviewLayout reviewData={reviewData} /> },
-            { name: '팔로워', content: <FollowLayout data={followers} checkMine={checkMine} follow={'followers'} /> },
-            { name: '팔로잉', content: <FollowLayout data={followings} checkMine={checkMine} follow={'followings'} /> },
-          ]}
-        ></Tab>
+        <TabBox>
+          <Tab
+            tabs={[
+              { name: '판매상품', content: <CardLayout data={shopItem} title="" shop_Id="" /> },
+              { name: '상점리뷰', content: <ReviewLayout reviewData={reviewData} /> },
+              { name: '팔로워', content: <FollowLayout data={followers} checkMine={checkMine} follow={'followers'} /> },
+              { name: '팔로잉', content: <FollowLayout data={followings} checkMine={checkMine} follow={'followings'} /> },
+            ]}
+          ></Tab>
+        </TabBox>
         {/* <FollowerCard /> */}
       </Container>
       {/* )} */}
@@ -212,7 +217,6 @@ const Container = styled.div`
   height: 64.5625rem;
   display: flex;
   flex-direction: column;
-
   margin-top: 7.75rem;
 `;
 
@@ -390,7 +394,7 @@ const FollowPart = styled.div`
   }
 `;
 
-const Button = styled.div`
+const Button = styled.div<{ isfollow: number }>`
   width: 14rem;
   height: 3rem;
 
@@ -407,5 +411,13 @@ const Button = styled.div`
   letter-spacing: 0.03125rem;
 
   border-radius: 0.5rem;
-  background-color: ${theme.navy};
+  background-color: ${props => (props.isfollow !== 1 ? theme.pointColor : theme.navy)};
+`;
+
+const TabBox = styled.div`
+  background-color: white;
+  width: 78.125rem;
+  padding: 1.88rem;
+  box-sizing: border-box;
+  border-radius: 0.75rem;
 `;

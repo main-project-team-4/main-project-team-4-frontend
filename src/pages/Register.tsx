@@ -16,8 +16,6 @@ function RegistrationItem() {
   const [title, setTitle, titleHandleChange] = useInput('');
   const [explain, setExplain, explainHandleChange] = useInput('');
   const [price, setPrice, viewPrice, setViewPrice, notice, priceHandleChange] = usePriceInput();
-  const [mainImg, setMainImg] = useState<any>();
-  const [subImg, setSubImg] = useState<File[]>([]);
   const [category, setCategory] = useState(0);
   const [deliveryfee, setDeliveryfee] = useState(true);
   const [viewModal, setViewModal] = useState(false);
@@ -25,9 +23,11 @@ function RegistrationItem() {
   const [itemId, setItemId] = useState(0);
 
   //이미지 state 관리
-  const [images, setImages] = useState<File[]>([]);
+  const [images, setImages] = useState<File[]>([]); // 최초에 파일 형태 그대로 담기며, 전체 이미지
   const [selectedPicture, setSelectedPicture] = useState('');
   const [viewImages, setViewImages] = useState<string[]>([]);
+  const [mainImg, setMainImg] = useState<any>();
+  const [subImg, setSubImg] = useState<File[]>([]);
 
   // 카테고리 state 관리
   const [largeSelected, setlargeSelected] = useState('대분류');
@@ -91,7 +91,7 @@ function RegistrationItem() {
     explainHandleChange(e);
   };
 
-  // 상품 등록
+  // 상품 등록 mutation
   const mutation = useMutation(uploadItem, {
     onSuccess: response => {
       queryClient.invalidateQueries('uploadItem');
@@ -100,7 +100,7 @@ function RegistrationItem() {
       }
     },
   });
-  // 상품 수정
+  // 상품 수정 mutation
   const modifyMutation = useMutation(modifyItem, {
     onSuccess: response => {
       queryClient.invalidateQueries('modifyItem');
@@ -116,9 +116,7 @@ function RegistrationItem() {
     dataFormData.append('main_image', mainImg);
 
     if (Array.isArray(subImg) && subImg.length > 0) {
-      // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        // 각 항목이 File 타입인지 확인
         dataFormData.append(`sub_image`, file);
       });
     } else {
@@ -132,24 +130,20 @@ function RegistrationItem() {
       item_with_delivery_fee: deliveryfee,
       category_m_id: category,
     };
-    // requestDto의 데이터를 FormData에 추가
+
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
     dataFormData.append('requestDto', blobData);
-    mutation.mutate({ token, data: dataFormData }); // FormData 전송
+    mutation.mutate({ token, data: dataFormData });
   };
 
   // 상품 수정
   const modifyItemHandler = () => {
     const modifyArr: string[] = [];
     const dataFormData = new FormData();
-    dataFormData.append('main_image', mainImg);
 
     if (Array.isArray(subImg) && subImg.length > 0) {
-      // subImg가 배열이며, 길이가 0보다 큰지 확인
       subImg.forEach(file => {
-        if (file instanceof File) {
-          dataFormData.append(`sub_image`, file);
-        } else {
+        if (!(file instanceof File)) {
           modifyArr.push(file);
         }
       });
@@ -163,7 +157,8 @@ function RegistrationItem() {
       item_comment: explain,
       item_with_delivery_fee: deliveryfee,
       category_m_id: category,
-      sub_image: modifyArr,
+      item_main_image: mainImg,
+      item_sub_image: modifyArr,
     };
     // requestDto의 데이터를 FormData에 추가
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
@@ -193,6 +188,8 @@ function RegistrationItem() {
             setSelectedPicture={setSelectedPicture}
             setMainImg={setMainImg}
             setSubImg={setSubImg}
+            detailItemState={detailItems ? true : false}
+            detailItemId={detailItems.item_id}
           />
 
           <Layout>
@@ -213,7 +210,7 @@ function RegistrationItem() {
               <h3>가격 </h3>
               {notice && <span>숫자만 입력해주세요</span>}
             </PriceLayout>
-            <input placeholder="가격을 입력해주세요" value={viewPrice as any} onChange={priceHandleChange as any}></input>
+            <input placeholder="가격을 입력해주세요" value={viewPrice as number} onChange={priceHandleChange}></input>
             <DeliveryBox>
               <Delivery onClick={onClickInclude} className={clicked ? ' active' : ''}>
                 배송비 포함
@@ -384,7 +381,7 @@ const Btn = styled.div<{ backcolor: string }>`
   color: white;
   font-size: 0.875rem;
   font-weight: 600;
-  line-height: 1.25rem; /* 142.857% */
+  line-height: 1.25rem;
   letter-spacing: 0.04rem;
   text-transform: uppercase;
 
