@@ -43,6 +43,10 @@ export default function Chat() {
     setMessages(MessageData);
   };
 
+  useEffect(() => {
+    localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
+  }, [chatRoom]);
+
   // //채팅 정보 설정하는 부분
   // useEffect(() => {
   //   if (!token) navigate('/');
@@ -106,21 +110,16 @@ export default function Chat() {
             if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
-              console.log('message', message);
-
-              // if (message) {
               const payload = JSON.parse(message.body);
-              console.log('payload', payload.roomId);
-              console.log('chatRoom', chatRoom);
 
-              console.log(room.roomId === payload.roomId);
+              console.log('room.roomId', room.roomId);
+              console.log('payload.roomId', payload.roomId);
 
-              if (room.roomId === payload.roomId) {
+              const savedChatRoom = JSON.parse(localStorage.getItem('chatRoom'));
+              if (savedChatRoom === payload.roomId) {
                 // 현재 활성화된 채팅방 메시지만 상태 업데이트
                 setMessages(prev => [...prev, payload]);
               }
-              // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
-              // }
             });
             setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
           });
