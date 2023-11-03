@@ -181,76 +181,6 @@ export default function Chat() {
     }
   };
 
-  // 쿼리 부분
-  const queryResults = useQueries([
-    {
-      queryKey: 'chatList',
-      queryFn: () => getChatList(token),
-      enabled: !!token,
-    },
-    {
-      queryKey: 'getMessage',
-      queryFn: () => getMessages({ token, roomId: chatRoom }),
-      enabled: !!token && !!chatRoom,
-    },
-  ]);
-
-  const ChatUserList = queryResults[0].data;
-  const MessageData = queryResults[1].data;
-  console.log('MessageData', MessageData);
-
-  //웹소켓 부분
-  useEffect(() => {
-    const sock = new SockJS('http://43.200.8.55/ws-stomp');
-
-    const stompClient = new Client({
-      webSocketFactory: () => sock,
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
-
-    stompClientRef.current = stompClient;
-
-    //연결 부분
-    stompClient.onConnect = (frame: any) => {
-      console.log('연결');
-      //수신
-      const data = {
-        type: 'TALK',
-        sender: 'hwassell0',
-        roomId: 5,
-        message: '내가 보낸거야',
-        roomName: 'hwassell0 님의 Juice - Prune 문의',
-      };
-
-      stompClient.publish({ destination: `/pub/chat/message`, body: JSON.stringify(data) });
-
-      if (ChatUserList) {
-        ChatUserList.forEach(room => {
-          stompClient.subscribe(`/sub/chat/room/${room.roomId}`, (message: any) => {
-            console.log(message, 'msg');
-
-            const parsedMessage = JSON.parse(message.body);
-            setMessages(prevMessages => [...prevMessages, parsedMessage]);
-            console.log('message', message);
-            // 받은 메시지 처리 ...
-          });
-        });
-      }
-    };
-
-    stompClient.onStompError = frame => {
-      console.error(`Broker reported error: ${frame.headers.message}`);
-    };
-
-    stompClient.activate();
-
-    return () => {
-      stompClient.deactivate();
-    };
-  }, [ChatUserList]);
-
   //메시지 수신
   useEffect(() => {
     if (stompClientRef.current) {
@@ -261,28 +191,6 @@ export default function Chat() {
       };
     }
   }, []);
-
-  //메시지 전달
-  const sendMessage = () => {
-    const data = {
-      type: 'TALK',
-      sender: sender,
-      roomId: chatRoom,
-      message: message,
-      roomName: roomName,
-    };
-    console.log('Sending message:', data);
-
-    if (stompClientRef.current) {
-      stompClientRef.current.publish({
-        destination: `/pub/chat/message`,
-        body: JSON.stringify(data),
-      });
-      console.log('전송');
-    } else {
-      console.log('전송에러');
-    }
-  };
 
   return (
     <Layout>
