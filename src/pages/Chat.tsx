@@ -42,22 +42,10 @@ export default function Chat() {
     setSender(sender);
     setMessages(MessageData);
 
-    // //구독 다시
-    // if (stompClientRef.current && stompClientRef.current.connected) {
-    //   stompClientRef.current.subscribe(`/sub/chat/room/${roomId}`, message => {
-    //     console.log('message', message);
-
-    //     // if (message) {
-    //     const payload = JSON.parse(message.body);
-    //     console.log('payload', payload);
-
-    //     // 현재 활성화된 채팅방 메시지만 상태 업데이트
-    //     setMessages(prev => [...prev, payload]);
-    //     // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
-    //     // }
-    //   });
-    //   setSubscribedRooms(prev => [...prev, roomId]); // 방을 구독한 리스트에 추가
-    // }
+    if (chatRoom !== roomId) {
+      // 새로운 방을 선택했을 경우
+      setMessages([]); // 메시지 초기화
+    }
   };
   //채팅 정보 설정하는 부분
   useEffect(() => {
@@ -94,7 +82,6 @@ export default function Chat() {
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
 
-  // console.log('MessageData', MessageData);
   useEffect(() => {
     if (MessageData) {
       setMessages(MessageData);
@@ -123,16 +110,13 @@ export default function Chat() {
             if (subscribedRooms.includes(room.roomId)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
-              console.log('message', message);
-
-              // if (message) {
               const payload = JSON.parse(message.body);
-              console.log('payload', payload);
-
-              // 현재 활성화된 채팅방 메시지만 상태 업데이트
-              setMessages(prev => [...prev, payload]);
-              // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
-              // }
+              if (payload.roomId === chatRoom) {
+                // 현재 채팅방의 메시지인지 확인
+                setMessages(prev => [...prev, payload]); // 현재 채팅방에만 메시지 추가
+              } else {
+                // 다른 채팅방 메시지는 여기서 처리 (예: 알림 생성)
+              }
             });
             setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
           });
@@ -151,7 +135,7 @@ export default function Chat() {
         stompClient.deactivate();
       }
     };
-  }, [ChatUserList]);
+  }, [ChatUserList, chatRoom]);
 
   const sendMessage = () => {
     const data = {
