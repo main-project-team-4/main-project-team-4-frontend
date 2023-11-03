@@ -40,6 +40,24 @@ export default function Chat() {
     setChatRoom(roomId);
     setRoomName(roomName);
     setSender(sender);
+    setMessages(MessageData);
+
+    // //구독 다시
+    // if (stompClientRef.current && stompClientRef.current.connected) {
+    //   stompClientRef.current.subscribe(`/sub/chat/room/${roomId}`, message => {
+    //     console.log('message', message);
+
+    //     // if (message) {
+    //     const payload = JSON.parse(message.body);
+    //     console.log('payload', payload);
+
+    //     // 현재 활성화된 채팅방 메시지만 상태 업데이트
+    //     setMessages(prev => [...prev, payload]);
+    //     // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
+    //     // }
+    //   });
+    //   setSubscribedRooms(prev => [...prev, roomId]); // 방을 구독한 리스트에 추가
+    // }
   };
   //채팅 정보 설정하는 부분
   useEffect(() => {
@@ -67,7 +85,7 @@ export default function Chat() {
       enabled: !!token,
     },
     {
-      queryKey: 'getMessage',
+      queryKey: ['getMessage', chatRoom],
       queryFn: () => getMessages({ token, roomId: chatRoom }),
       enabled: !!token && !!chatRoom,
     },
@@ -94,6 +112,7 @@ export default function Chat() {
     // WebSocket 연결 설정
     const sock = new SockJS('http://43.200.8.55/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
+      // brokerURL: 'ws://43.200.8.55/chat/room',
       webSocketFactory: () => sock,
       reconnectDelay: 200,
       onConnect: (frame: any) => {
@@ -106,14 +125,14 @@ export default function Chat() {
             stompClient.subscribe(`/sub/chat/room/${room.roomId}`, message => {
               console.log('message', message);
 
-              if (message.body) {
-                const payload = JSON.parse(message.body);
-                console.log('payload', payload);
+              // if (message) {
+              const payload = JSON.parse(message.body);
+              console.log('payload', payload);
 
-                // 현재 활성화된 채팅방 메시지만 상태 업데이트
-                setMessages(prev => [...prev, payload]);
-                // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
-              }
+              // 현재 활성화된 채팅방 메시지만 상태 업데이트
+              setMessages(prev => [...prev, payload]);
+              // 다른 채팅방에 대한 메시지는 알림 처리 (예: 알림 표시 등)
+              // }
             });
             setSubscribedRooms(prev => [...prev, room.roomId]); // 방을 구독한 리스트에 추가
           });
