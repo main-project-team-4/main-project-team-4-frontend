@@ -10,21 +10,34 @@ type MessageType = {
   chat_message: string;
 };
 export default function ChatBox({ messages, sender }: ChatBoxType) {
+
+  // 시간 포맷 함수
+  const formatTime = dateTimeString => {
+    const tIndex = dateTimeString.indexOf('T');
+    if (tIndex !== -1) {
+      return dateTimeString.substring(tIndex + 1, tIndex + 6);
+    }
+    return '';
+  };
+
   return (
     <>
-      {messages?.map((message, index) =>
-        message.chatroom_sender === sender ? (
+      {messages?.map((message, index) => {
+        const formattedTime = formatTime(message.chat_created_at);
+        return message.chatroom_sender === sender ? (
           <MyMessageContainer key={index}>
             <MyMessage>{message.chat_message}</MyMessage>
+            <MyTime>{formattedTime}</MyTime>
           </MyMessageContainer>
         ) : (
           <YourMessageContainer key={index}>
             <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
             <Name>{message.chatroom_sender}</Name>
             <YourMessage>{message.chat_message}</YourMessage>
+            <YourTime>{formattedTime}</YourTime>
           </YourMessageContainer>
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
@@ -68,12 +81,12 @@ const YourMessage = styled.div`
   background-color: #ffffff;
 `;
 
-// const YourTime = styled.div`
-//   margin-top: 0.62rem;
-//   color: ${theme.cancelBtn};
-//   font-size: 0.875rem;
-//   font-weight: 400;
-// `;
+const YourTime = styled.div`
+  margin-top: 0.62rem;
+  color: ${theme.cancelBtn};
+  font-size: 0.875rem;
+  font-weight: 400;
+`;
 
 const MyMessageContainer = styled.div`
   display: flex;
@@ -97,10 +110,10 @@ const MyMessage = styled.div`
   color: white;
 `;
 
-// const MyTime = styled.div`
-//   margin-top: 0.62rem;
-//   margin-left: auto;
-//   color: ${theme.cancelBtn};
-//   font-size: 0.875rem;
-//   font-weight: 400;
-// `;
+const MyTime = styled.div`
+  margin-top: 0.62rem;
+  margin-left: auto;
+  color: ${theme.cancelBtn};
+  font-size: 0.875rem;
+  font-weight: 400;
+`;

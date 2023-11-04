@@ -183,10 +183,10 @@ const ImageComtainer = styled.div`
   gap: 0.75rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 
   .firstImg {
-    width: 37.5rem;
+    width: 31.25rem;
     height: 31.25rem;
     border-radius: 0.75rem;
     background-color: white;
@@ -204,6 +204,7 @@ const ImageBox = styled.div`
   img {
     width: 4.125rem;
     height: 3.75rem;
+    background-color: white;
     border-radius: 0.375rem;
     cursor: pointer;
   }
