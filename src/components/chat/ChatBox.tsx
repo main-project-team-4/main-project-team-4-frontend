@@ -85,6 +85,8 @@ const YourMessage = styled.div`
   gap: 0.5rem;
   border-radius: 0rem 1.25rem 1.25rem 1.25rem;
   background-color: #ffffff;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 `;
 
 const YourTime = styled.div`
@@ -114,6 +116,8 @@ const MyMessage = styled.div`
   border-radius: 1.25rem 0rem 1.25rem 1.25rem;
   background: ${theme.pointColor};
   color: white;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 `;
 
 const MyTime = styled.div`
