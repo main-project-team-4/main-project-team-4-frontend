@@ -1,7 +1,15 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox({ messages, sender }) {
+type ChatBoxType = {
+  messages: MessageType[];
+  sender: string | null;
+};
+type MessageType = {
+  chatroom_sender: string;
+  chat_message: string;
+};
+export default function ChatBox({ messages, sender }: ChatBoxType) {
   return (
     <>
       {messages?.map((message, index) =>
@@ -60,12 +68,12 @@ const YourMessage = styled.div`
   background-color: #ffffff;
 `;
 
-const YourTime = styled.div`
-  margin-top: 0.62rem;
-  color: ${theme.cancelBtn};
-  font-size: 0.875rem;
-  font-weight: 400;
-`;
+// const YourTime = styled.div`
+//   margin-top: 0.62rem;
+//   color: ${theme.cancelBtn};
+//   font-size: 0.875rem;
+//   font-weight: 400;
+// `;
 
 const MyMessageContainer = styled.div`
   display: flex;
@@ -89,10 +97,10 @@ const MyMessage = styled.div`
   color: white;
 `;
 
-const MyTime = styled.div`
-  margin-top: 0.62rem;
-  margin-left: auto;
-  color: ${theme.cancelBtn};
-  font-size: 0.875rem;
-  font-weight: 400;
-`;
+// const MyTime = styled.div`
+//   margin-top: 0.62rem;
+//   margin-left: auto;
+//   color: ${theme.cancelBtn};
+//   font-size: 0.875rem;
+//   font-weight: 400;
+// `;

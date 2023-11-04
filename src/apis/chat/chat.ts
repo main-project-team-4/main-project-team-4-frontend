@@ -4,11 +4,11 @@ import { baseInstance } from '../config';
 
 type ChatListType = {
   token: string;
-  itemId: string;
-  roomId: number;
+  itemId?: string;
+  roomId?: number | null;
 };
 
-export const getChatList = async (token: ChatListType) => {
+export const getChatList = async (token: string) => {
   try {
     const response = await baseInstance.get(`/chat/rooms`, {
       headers: {

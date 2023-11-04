@@ -8,7 +8,7 @@ export default function WebSocketConnection() {
       webSocketFactory: () => new SockJS('http://13.209.154.232/ws-stomp'),
     });
 
-    client.onConnect = function (frame: any) {
+    client.onConnect = function () {
       // console.log('웹소켓 연결 성공:', frame);
     };
 

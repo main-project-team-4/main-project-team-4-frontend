@@ -6,7 +6,7 @@ import { theme } from './styles/theme';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import ScrollToTop from './components/common/ScrollToTop';
 import { RecoilRoot } from 'recoil';
-import WebSocketConnection from './apis/chat/WebSocketConnection';
+// import WebSocketConnection from './apis/chat/WebSocketConnection';
 const queryClient = new QueryClient();
 
 function App() {

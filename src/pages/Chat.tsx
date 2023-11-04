@@ -6,9 +6,9 @@ import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
 import FirstChat from '../components/chat/FirstChat';
 import { getChatList, getMessages } from '../apis/chat/chat';
-import { useQuery, useQueries } from 'react-query';
+import { useQueries } from 'react-query';
 import { getCookie } from '../utils/cookie';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useInput } from '../hooks/useInput';
@@ -16,11 +16,17 @@ import { useInput } from '../hooks/useInput';
 interface UserProps {
   selected?: boolean;
 }
+type ChatRoomType = {
+  roomId: number;
+  roomName: string;
+  sender: string;
+  itemName: string;
+};
 
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
-  const { state: chatData } = useLocation();
+  // const { state: chatData } = useLocation();
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [chatRoom, setChatRoom] = useState<number | null>(null);
@@ -28,11 +34,11 @@ export default function Chat() {
   const [message, setMessage, messageHandler] = useInput('');
   const [sender, setSender] = useState<string | null>(null);
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
-  const [messages, setMessages] = useState<Array<MessageType>>([]);
+  const [messages, setMessages] = useState<Array<any>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
   const [itemName, setItemName] = useState('');
 
-  const chatRoomHandler = (roomId, roomName, sender, itemName) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
@@ -99,15 +105,16 @@ export default function Chat() {
     const stompClient = new Client({
       webSocketFactory: () => sock,
       reconnectDelay: 200,
-      onConnect: (frame: any) => {
+      onConnect: () => {
         if (ChatUserList) {
-          ChatUserList?.forEach(room => {
+          ChatUserList?.forEach((room: any) => {
             if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
               const payload = JSON.parse(message.body);
 
-              const savedChatRoom = JSON.parse(localStorage.getItem('chatRoom'));
+              const chatRoomData = localStorage.getItem('chatRoom');
+              const savedChatRoom = chatRoomData ? JSON.parse(chatRoomData) : null;
 
               if (savedChatRoom === payload.chatroom_id) {
                 // 현재 활성화된 채팅방 메시지만 상태 업데이트
@@ -118,7 +125,7 @@ export default function Chat() {
           });
         }
       },
-      debug: str => {
+      debug: () => {
         // console.log('STOMP DEBUG: ', str);
       },
     });
@@ -167,8 +174,12 @@ export default function Chat() {
         <h3>채팅 목록</h3>
         <UserList>
           {ChatUserList &&
-            ChatUserList.map(user => (
-              <User key={user.chatroom_id} onClick={() => chatRoomHandler(user.chatroom_id, user.chatroom_name, user.chatroom_sender, user.item_name)} selected={selectedUser === user.chatroom_id}>
+            ChatUserList.map((user: UserType) => (
+              <User
+                key={user.chatroom_id}
+                onClick={() => chatRoomHandler({ roomId: user.chatroom_id, roomName: user.chatroom_name, sender: user.chatroom_sender, itemName: user.item_name })}
+                selected={selectedUser === user.chatroom_id}
+              >
                 <Profile>
                   <img className="member" src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
@@ -196,6 +207,17 @@ export default function Chat() {
     </Layout>
   );
 }
+type UserType = {
+  chatroom_id: number;
+  chatroom_name: string;
+  chatroom_sender: string;
+  item_name: string;
+  member_image: string;
+  chatroom_consumer_name: string;
+  chatroom_seller_name: string;
+  item_main_image: string;
+  sellerName: string;
+};
 
 const Layout = styled.div`
   display: flex;

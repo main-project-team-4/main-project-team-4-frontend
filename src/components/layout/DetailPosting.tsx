@@ -123,7 +123,7 @@ export default function DetailPosting() {
     onSuccess: response => {
       queryClient.invalidateQueries('ChatRoom');
 
-      navigate('/chat', { state: response.data });
+      navigate('/chat', { state: response?.data });
     },
   });
 
