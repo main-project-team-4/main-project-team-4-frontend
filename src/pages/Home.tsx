@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getMyInfo } from '../apis/mypage/members';
 import { getCookie } from '../utils/cookie';
+import { SyncLoader } from 'react-spinners';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -35,11 +36,15 @@ export default function Home() {
   const nearByResult = queryResults[2];
 
   if (itemsResult.isLoading || topItemsResult.isLoading) {
-    return <h2>로딩중입니다</h2>;
+    return (
+      <Loading>
+        <SyncLoader color="black" margin={10} size={28} />
+      </Loading>
+    );
   }
 
   if (itemsResult.isError || !itemsResult.data || topItemsResult.isError || !topItemsResult.data) {
-    return <h2>오류가 발생하였습니다</h2>;
+    return navigate('/');
   }
 
   return (
@@ -60,4 +65,12 @@ const Layout = styled.div`
   margin-top: 3.13rem;
   margin-bottom: 3.13rem;
   gap: 3.12rem;
+`;
+
+const Loading = styled.div`
+  display: flex;
+  width: 100%;
+  height: 67.5rem;
+  justify-content: center;
+  align-items: center;
 `;

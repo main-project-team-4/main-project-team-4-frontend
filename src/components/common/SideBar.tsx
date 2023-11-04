@@ -43,7 +43,7 @@ function SideBar() {
   const { data: category } = useQuery('category', getCategory);
 
   // 유저 정보 가져오기
-  const { data: userData, isLoading } = useQuery('myInfo', () => getMyInfo(token), {
+  const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
     enabled: !!token,
   });
   const [myData, setMyData] = useRecoilState(myDataState);
@@ -89,9 +89,6 @@ function SideBar() {
     setVisibleMypage(!visibleMypage);
   };
 
-  if (isLoading) {
-    return <div> ... 로딩중</div>;
-  }
   return (
     <>
       <Container>

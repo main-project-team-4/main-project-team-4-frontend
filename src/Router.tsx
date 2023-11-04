@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
+import { SyncLoader } from 'react-spinners';
 
 const App = lazy(() => import('./App'));
 const Home = lazy(() => import('./pages/Home'));
@@ -13,13 +14,20 @@ const Register = lazy(() => import('./pages/Register'));
 const Info = lazy(() => import('./pages/Info'));
 const Root = lazy(() => import('./pages/Root'));
 const Welcome = lazy(() => import('./pages/Welcome'));
+const NotFound = lazy(() => import('./pages/NotFound.tsx'));
 
 const router = createBrowserRouter([
   {
     path: '/',
 
     element: (
-      <Suspense fallback={<div>로딩 중...</div>}>
+      <Suspense
+        fallback={
+          <div style={{ width: '100%', height: '67.5rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <SyncLoader color="black" margin={10} size={28} />
+          </div>
+        }
+      >
         <App />
       </Suspense>
     ),
@@ -72,6 +80,7 @@ const router = createBrowserRouter([
         ],
       },
     ],
+    errorElement: <NotFound />,
   },
 ]);
 

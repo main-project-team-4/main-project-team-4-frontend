@@ -5,28 +5,32 @@ import { useNavigate } from 'react-router-dom';
 function NotFound() {
   const navigate = useNavigate();
   return (
-    <Container>
-      <h1>404</h1>
-      <h2>ERROR</h2>
-      <h3>페이지를 찾을 수 없습니다</h3>
-      <p>
-        페이지가 존재하지 않거 사용할 수 없는 페이지입니다. <br /> 입력하신 주소가 정확한지 다시 한 번 확인해주세요.{' '}
-      </p>
-      <button onClick={() => navigate('/')}>홈으로 이동</button>
-    </Container>
+    <Layout>
+      <Container>
+        <h1>404</h1>
+        <h2>ERROR</h2>
+        <h3>페이지를 찾을 수 없습니다</h3>
+        <p>
+          페이지가 존재하지 않거 사용할 수 없는 페이지입니다. <br /> 입력하신 주소가 정확한지 다시 한 번 확인해주세요.{' '}
+        </p>
+        <button onClick={() => navigate('/')}>홈으로 이동</button>
+      </Container>
+    </Layout>
   );
 }
 
 export default NotFound;
+const Layout = styled.div`
+  display: flex;
+  height: 67.5rem;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Container = styled.div`
   background-color: white;
-
   width: 100rem;
   height: 55rem;
-
-  margin: 6.25rem 10rem;
-
   display: flex;
   flex-direction: column;
   align-items: center;

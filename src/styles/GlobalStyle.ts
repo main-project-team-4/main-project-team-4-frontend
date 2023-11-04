@@ -38,6 +38,8 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {  
   max-width: 120rem;
+  margin-left: auto;
+  margin-right: auto;
   line-height: 1;
   font-weight: 300;
   font-family: 'Pretendard-Regular', 'Source Sans Pro', sans-serif;
