@@ -74,11 +74,15 @@ const Name = styled.div`
 
 const YourMessage = styled.div`
   display: flex;
-  padding: 0.9375rem;
-  flex-direction: column;
-  margin-right: auto;
-  gap: 0.5rem;
+  width: auto;
   max-width: 15rem;
+  margin-right: auto;
+
+  padding: 0.9375rem;
+  align-items: stretch;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
   border-radius: 0rem 1.25rem 1.25rem 1.25rem;
   background-color: #ffffff;
 `;
