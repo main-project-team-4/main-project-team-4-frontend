@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
 export default function ChatBox({ messages, sender }) {
-  console.log('messages', messages);
-
   return (
     <>
       {messages?.map((message, index) =>

@@ -30,13 +30,15 @@ export default function Chat() {
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
   const [messages, setMessages] = useState<Array<MessageType>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
+  const [itemName, setItemName] = useState('');
 
-  const chatRoomHandler = (roomId, roomName, sender) => {
+  const chatRoomHandler = (roomId, roomName, sender, itemName) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
     setSender(sender);
     setMessages(MessageData);
+    setItemName(itemName);
   };
 
   useEffect(() => {
@@ -78,8 +80,6 @@ export default function Chat() {
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
 
-  console.log('ChatUserList', ChatUserList);
-
   useEffect(() => {
     if (MessageData) {
       setMessages(MessageData);
@@ -100,8 +100,6 @@ export default function Chat() {
       webSocketFactory: () => sock,
       reconnectDelay: 200,
       onConnect: (frame: any) => {
-        console.log('연결성공');
-
         if (ChatUserList) {
           ChatUserList?.forEach(room => {
             if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
@@ -110,11 +108,6 @@ export default function Chat() {
               const payload = JSON.parse(message.body);
 
               const savedChatRoom = JSON.parse(localStorage.getItem('chatRoom'));
-
-              console.log('savedChatRoom', savedChatRoom);
-              console.log('payload.roomId', payload);
-
-              console.log('savedChatRoom === payload.roomId', savedChatRoom === payload.chatroom_id);
 
               if (savedChatRoom === payload.chatroom_id) {
                 // 현재 활성화된 채팅방 메시지만 상태 업데이트
@@ -126,7 +119,7 @@ export default function Chat() {
         }
       },
       debug: str => {
-        console.log('STOMP DEBUG: ', str);
+        // console.log('STOMP DEBUG: ', str);
       },
     });
     stompClient.activate();
@@ -148,7 +141,6 @@ export default function Chat() {
       chat_message: message,
       chatroom_name: roomName,
     };
-    console.log('data', data);
 
     if (message) {
       if (stompClientRef.current && stompClientRef.current.connected) {
@@ -176,15 +168,18 @@ export default function Chat() {
         <UserList>
           {ChatUserList &&
             ChatUserList.map(user => (
-              <User key={user.chatroom_id} onClick={() => chatRoomHandler(user.chatroom_id, user.chatroom_name, user.chatroom_sender)} selected={selectedUser === user.chatroom_id}>
-                <img src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
-                {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
+              <User key={user.chatroom_id} onClick={() => chatRoomHandler(user.chatroom_id, user.chatroom_name, user.chatroom_sender, user.item_name)} selected={selectedUser === user.chatroom_id}>
+                <Profile>
+                  <img className="member" src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
+                  {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
+                </Profile>
+                <ItemImg src={user.item_main_image} />
               </User>
             ))}
         </UserList>
       </ChatList>
       <ChatContainer>
-        <Name>{roomName}</Name>
+        <Name>{itemName}</Name>
         <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
@@ -241,14 +236,26 @@ const User = styled.div<UserProps>`
   background: ${({ selected }) => (selected ? theme.blueBackground : theme.bgColor)};
   gap: 0.75rem;
   cursor: pointer;
-
-  img {
+  justify-content: space-between;
+  .member {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
   }
 `;
 
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.62rem;
+`;
+
+const ItemImg = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 5px;
+`;
 const ChatContainer = styled.div`
   width: 50rem;
   height: 100%;

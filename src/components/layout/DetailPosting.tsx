@@ -122,7 +122,6 @@ export default function DetailPosting() {
   const chatRoomMutation = useMutation(ChatRoom, {
     onSuccess: response => {
       queryClient.invalidateQueries('ChatRoom');
-      console.log('response??', response.data);
 
       navigate('/chat', { state: response.data });
     },

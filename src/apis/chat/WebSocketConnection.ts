@@ -21,8 +21,6 @@ export default function WebSocketConnection() {
     // 컴포넌트가 언마운트될 때 실행될 로직
     return () => {
       client.deactivate();
-
-      console.log('웹소켓 연결 종료');
     };
   }, []);
 
