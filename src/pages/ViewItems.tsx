@@ -42,6 +42,7 @@ export default function ViewItems() {
     data: infiniteQueryData,
     fetchNextPage,
     refetch,
+    isSuccess,
   } = useInfiniteQuery(['items', params.items, path], fetchItems, {
     getNextPageParam: (_, pages) => {
       return pages.length;
@@ -88,7 +89,7 @@ export default function ViewItems() {
           </>
         )}
       </Title>
-      {dataToRender?.length === 0 ? (
+      {isSuccess && dataToRender?.length === 0 ? (
         <NotExits>
           {params.items === 'search' ? (
             <>

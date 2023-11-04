@@ -34,11 +34,17 @@ function InformationInput({ data }: DataInfo) {
   const [nickBtnState, setNickBtnState] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const [modalState, setModalState] = useState(false);
+  const [duplication, setDuplication] = useState(false);
 
   const mutationNick = useMutation(changeNickName, {
     onSuccess: () => {
+      setDuplication(false);
+      setNickBtnState(true);
       queryClient.invalidateQueries('myinfo');
       queryClient.invalidateQueries('changeNick');
+    },
+    onError: () => {
+      setDuplication(true);
     },
   });
   const onChangeNick = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +66,6 @@ function InformationInput({ data }: DataInfo) {
   };
   const completeNick = () => {
     mutationNick.mutate({ token, nickName });
-    setNickBtnState(true);
   };
 
   // 주소 변경
@@ -77,6 +82,8 @@ function InformationInput({ data }: DataInfo) {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
         oncomplete: function (data: any) {
+          console.log(data);
+
           setAddress(data.address);
           setLocBtnState(false);
         },
@@ -114,7 +121,7 @@ function InformationInput({ data }: DataInfo) {
 
   return (
     <Container>
-      <InputBox boxname="nickName">
+      <InputBox boxname="nickName" duplication={duplication ? 1 : 0}>
         <h3>상점명</h3>
         {nickBtnState ? (
           <>
@@ -134,7 +141,8 @@ function InformationInput({ data }: DataInfo) {
           </>
         )}
       </InputBox>
-      <InputBox boxname="address">
+      {duplication && <span>중복된 상점명입니다.</span>}
+      <InputBox boxname="address" duplication={3}>
         <h3>주소</h3>
         {locBtnState ? (
           <>
@@ -150,9 +158,9 @@ function InformationInput({ data }: DataInfo) {
       </InputBox>
       <ButtonBox onClick={goMyStore}>
         내 상점 가기
-        <div>
-          <span className="material-symbols-outlined">chevron_right</span>
-        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" width="1.0625rem" height="1.0625rem" viewBox="0 0 18 18" fill="none">
+          <path d="M5.8125 15.375L12.1875 9L5.8125 2.625" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </ButtonBox>
       <WithdrawalButton onClick={onClickDelete}>회원탈퇴</WithdrawalButton>
       {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 삭제 하시겠습니까?" />}
@@ -164,7 +172,7 @@ export default InformationInput;
 
 const Container = styled.div`
   width: 78.125rem;
-  height: 22.5rem;
+  height: 23.8rem;
   margin-top: 3.12rem;
   margin-bottom: 6.25rem;
 
@@ -178,15 +186,22 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  span {
+    position: absolute;
+    top: 6.4rem;
+    left: 23.5rem;
+    color: red;
+  }
 `;
 
-const InputBox = styled.div<{ boxname: string }>`
+const InputBox = styled.div<{ boxname: string; duplication: number }>`
   width: 40.3125rem;
   height: 2.8125rem;
 
   display: flex;
   align-items: center;
-  margin-bottom: ${props => (props.boxname === 'nickName' ? '1.25rem' : '3.12rem')};
+  margin-bottom: ${props => (props.boxname === 'nickName' ? '2.25rem' : '3.12rem')};
   border-radius: 0.75rem;
 
   h3 {
@@ -250,8 +265,7 @@ const ButtonBox = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.625rem;
-
+  gap: 0.62rem;
   border-radius: 0.75rem;
   margin-bottom: 4.19rem;
 
@@ -261,21 +275,6 @@ const ButtonBox = styled.button`
   line-height: normal;
   color: white;
   cursor: pointer;
-
-  div {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 1.875rem;
-    height: 1.875rem;
-    flex-shrink: 0;
-    border-radius: 100%;
-
-    span {
-      color: white;
-    }
-  }
 `;
 
 const WithdrawalButton = styled.button`
