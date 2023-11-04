@@ -21,6 +21,8 @@ type ChatRoomType = {
   roomName: string;
   sender: string;
   itemName: string;
+  sellerImage?: string | null;
+  consumerImage?: string | null;
 };
 
 export default function Chat() {
@@ -37,14 +39,20 @@ export default function Chat() {
   const [messages, setMessages] = useState<Array<any>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
   const [itemName, setItemName] = useState('');
+  const [sellerImage, setSellerImage] = useState('');
+  const [consumerImage, setConsumerImage] = useState('');
+  const [sellerName, setSellerName] = useState('');
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
     setSender(sender);
     setMessages(MessageData);
     setItemName(itemName);
+    setSellerImage(sellerImage);
+    setConsumerImage(consumerImage);
+    setSellerName(sellerName);
   };
 
   useEffect(() => {
@@ -85,6 +93,7 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
+  console.log(ChatUserList, 'ChatUserList');
 
   useEffect(() => {
     if (MessageData) {
@@ -126,7 +135,7 @@ export default function Chat() {
           });
         }
       },
-      debug: () => {
+      debug: str => {
         // console.log('STOMP DEBUG: ', str);
       },
     });
@@ -168,6 +177,18 @@ export default function Chat() {
       sendMessage();
     }
   };
+  //이미지 처리
+
+  const DEFAULT_IMAGE: string = 'https://ifh.cc/g/kXNjcT.jpg';
+
+  const getImage = (sender: string, seller: string, sellerImage: string | null, consumerImage: string | null): string => {
+    if (sender === seller && consumerImage) {
+      return consumerImage;
+    } else if (sender !== seller && sellerImage) {
+      return sellerImage;
+    }
+    return DEFAULT_IMAGE;
+  };
 
   return (
     <Layout>
@@ -178,11 +199,21 @@ export default function Chat() {
             ChatUserList.map((user: UserType) => (
               <User
                 key={user.chatroom_id}
-                onClick={() => chatRoomHandler({ roomId: user.chatroom_id, roomName: user.chatroom_name, sender: user.chatroom_sender, itemName: user.item_name })}
+                onClick={() =>
+                  chatRoomHandler({
+                    roomId: user.chatroom_id,
+                    roomName: user.chatroom_name,
+                    sender: user.chatroom_sender,
+                    itemName: user.item_name,
+                    sellerImage: user.chatroom_seller_image,
+                    consumerImage: user.chatroom_consumer_image,
+                    sellerName: user.chatroom_seller_name,
+                  })
+                }
                 selected={selectedUser === user.chatroom_id}
               >
                 <Profile>
-                  <img className="member" src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
+                  <img className="member" src={getImage(user.chatroom_sender, user.chatroom_seller_name, user.chatroom_seller_image, user.chatroom_consumer_image)} alt={user.sellerName} />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
                 </Profile>
                 <ItemImg src={user.item_main_image} />
@@ -192,7 +223,7 @@ export default function Chat() {
       </ChatList>
       <ChatContainer>
         <Name>{itemName}</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
+        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
