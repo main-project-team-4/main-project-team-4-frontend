@@ -93,7 +93,6 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
-  console.log(ChatUserList, 'ChatUserList');
 
   useEffect(() => {
     if (MessageData) {

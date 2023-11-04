@@ -13,9 +13,6 @@ type MessageType = {
   chat_message: string;
 };
 export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
-  console.log('messages', messages);
-  // console.log('sender', sender);//본인
-
   // 시간 포맷 함수
   const formatTime = dateTimeString => {
     const tIndex = dateTimeString.indexOf('T');
@@ -36,7 +33,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
           </MyMessageContainer>
         ) : (
           <YourMessageContainer key={index}>
-            <img src={sender === sellerName ? sellerImage || 'https://ifh.cc/g/kXNjcT.jpg' : consumerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
+            <img src={sender === sellerName ? consumerImage || 'https://ifh.cc/g/kXNjcT.jpg' : sellerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
 
             {/* <img src={message.member_image ? message.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" /> */}
             <Name>{message.chatroom_sender}</Name>
