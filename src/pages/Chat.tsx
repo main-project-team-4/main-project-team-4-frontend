@@ -142,8 +142,8 @@ export default function Chat() {
           });
         }
       },
-      debug: () => {
-        // console.log('STOMP DEBUG: ', str);
+      debug: str => {
+        console.log('STOMP DEBUG: ', str);
       },
     });
     stompClient.activate();
