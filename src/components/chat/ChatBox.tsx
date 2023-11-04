@@ -11,10 +11,11 @@ type ChatBoxType = {
 type MessageType = {
   chatroom_sender: string;
   chat_message: string;
+  chat_created_at: string;
 };
 export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
   // 시간 포맷 함수
-  const formatTime = dateTimeString => {
+  const formatTime = (dateTimeString: string) => {
     const tIndex = dateTimeString.indexOf('T');
     if (tIndex !== -1) {
       return dateTimeString.substring(tIndex + 1, tIndex + 6);

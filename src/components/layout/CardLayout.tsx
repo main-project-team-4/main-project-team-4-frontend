@@ -4,8 +4,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 import TabLayout from './TabLayout';
 
-const getTabData = (dataName): string => {
-  const NameMatch = {
+interface TabData {
+  icon: string;
+  text: string;
+}
+
+type TabDataName = 'ordered' | 'sales' | 'wishlist';
+
+const defaultTabData: TabData = {
+  icon: '',
+  text: 'No data available.',
+};
+
+const getTabData = (dataName?: TabDataName): TabData => {
+  const NameMatch: Record<TabDataName, TabData> = {
     ordered: {
       icon: 'production_quantity_limits',
       text: '구매 완료한 상품이 없습니다.',
@@ -19,7 +31,8 @@ const getTabData = (dataName): string => {
       text: '찜한 상품이 없습니다.',
     },
   };
-  return NameMatch[dataName] || {};
+
+  return dataName ? NameMatch[dataName] : defaultTabData;
 };
 
 export default function CardLayout({ storeState, title, data, shop_Id, dataName }: ParamsType) {
@@ -118,13 +131,13 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
     </>
   );
 }
-type ParamsType = {
+interface ParamsType {
   data: ItemType[];
   title: string;
   shop_Id?: string;
   storeState?: boolean;
-  dataName?: string;
-};
+  dataName?: TabDataName; // 'ordered', 'sales', 'wishlist' 중 하나거나, undefined일 수 있음
+}
 type ItemType = {
   category_m_id: 2;
   category_m_name: string;
