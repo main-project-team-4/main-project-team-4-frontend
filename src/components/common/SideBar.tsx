@@ -218,6 +218,7 @@ const ProfileBox = styled.div`
     height: 1.875rem;
     border-radius: 100%;
     color: #c1c7cd;
+    background-color: white;
   }
 `;
 
