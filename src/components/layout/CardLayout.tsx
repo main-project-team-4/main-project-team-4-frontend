@@ -2,13 +2,34 @@ import styled from 'styled-components';
 import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../styles/theme';
+import TabLayout from './TabLayout';
 
-export default function CardLayout({ storeState, title, data, shop_Id }: ParamsType) {
+const getTabData = (dataName): string => {
+  const NameMatch = {
+    ordered: {
+      icon: 'production_quantity_limits',
+      text: '구매 완료한 상품이 없습니다.',
+    },
+    sales: {
+      icon: 'sell',
+      text: '판매 완료한 상품이 없습니다.',
+    },
+    wishlist: {
+      icon: 'favorite',
+      text: '찜한 상품이 없습니다.',
+    },
+  };
+  return NameMatch[dataName] || {};
+};
+
+export default function CardLayout({ storeState, title, data, shop_Id, dataName }: ParamsType) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
   const goShop = path.includes('/posting');
   const storePath = path.includes('/store');
+
+  const tabData = getTabData(dataName);
 
   const move = () => {
     navigate(`items/${title}`);
@@ -50,9 +71,34 @@ export default function CardLayout({ storeState, title, data, shop_Id }: ParamsT
               {title}
             </Title>
             <CardWrapper>
-              {data.map((item: ItemType) => (
-                <Card key={item.item_id} categoryTitle={title} itemState={item.item_state} id={item.item_id} img={item.item_main_image} itemTitle={item.item_name} price={item.item_price} />
-              ))}
+              {data && data.length === 0 ? (
+                <>
+                  {tabData ? (
+                    <>
+                      <TabLayout icon={tabData.icon} text={tabData.text} />
+                    </>
+                  ) : (
+                    <>
+                      <TabLayout icon="production_quantity_limits" text="판매 상품이 없습니다." />
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  {data.map((item: ItemType) => (
+                    <Card
+                      key={item.item_id}
+                      storePath={storePath}
+                      categoryTitle={title}
+                      itemState={item.item_state}
+                      id={item.item_id}
+                      img={item.item_main_image}
+                      itemTitle={item.item_name}
+                      price={item.item_price}
+                    />
+                  ))}
+                </>
+              )}
             </CardWrapper>
 
             {goShop ? (
@@ -77,6 +123,7 @@ type ParamsType = {
   title: string;
   shop_Id?: string;
   storeState?: boolean;
+  dataName?: string;
 };
 type ItemType = {
   category_m_id: 2;
@@ -94,6 +141,7 @@ const Layout = styled.div<{ title: string }>`
   display: flex;
   flex-direction: column;
   width: 78.125rem;
+
   gap: 1.25rem;
   margin-top: ${props => (props.title === '인기 상품' ? '3.34rem' : '')};
   position: relative;
