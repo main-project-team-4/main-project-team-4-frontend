@@ -16,13 +16,23 @@ import { useInput } from '../hooks/useInput';
 interface UserProps {
   selected?: boolean;
 }
+// type ChatRoomType = {
+//   roomId: number;
+//   roomName: string;
+//   sender: string;
+//   itemName: string;
+//   sellerImage?: string | null;
+//   consumerImage?: string | null;
+// };
 type ChatRoomType = {
   roomId: number;
   roomName: string;
-  sender: string;
-  itemName: string;
+  sender?: string;
+  itemName?: string;
+  sellerImage?: string | null;
+  consumerImage?: string | null;
+  sellerName?: string;
 };
-
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
@@ -36,15 +46,21 @@ export default function Chat() {
   const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
   const [messages, setMessages] = useState<Array<any>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
-  const [itemName, setItemName] = useState('');
+  const [itemName, setItemName] = useState<string | null | undefined>('');
+  const [sellerImage, setSellerImage] = useState<string | null | undefined>('');
+  const [consumerImage, setConsumerImage] = useState<string | null | undefined>('');
+  const [sellerName, setSellerName] = useState<string | undefined>('');
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
-    setSender(sender);
+    setSender(sender || null);
     setMessages(MessageData);
     setItemName(itemName);
+    setSellerImage(sellerImage);
+    setConsumerImage(consumerImage);
+    setSellerName(sellerName);
   };
 
   useEffect(() => {
@@ -168,6 +184,18 @@ export default function Chat() {
       sendMessage();
     }
   };
+  //이미지 처리
+
+  const DEFAULT_IMAGE: string = 'https://ifh.cc/g/kXNjcT.jpg';
+
+  const getImage = ({ sender, seller, sellerImage, consumerImage }: { sender: string; seller: string; sellerImage: string | null | undefined; consumerImage: string | undefined | null }) => {
+    if (sender === seller && consumerImage) {
+      return consumerImage;
+    } else if (sender !== seller && sellerImage) {
+      return sellerImage;
+    }
+    return DEFAULT_IMAGE;
+  };
 
   return (
     <Layout>
@@ -178,11 +206,25 @@ export default function Chat() {
             ChatUserList.map((user: UserType) => (
               <User
                 key={user.chatroom_id}
-                onClick={() => chatRoomHandler({ roomId: user.chatroom_id, roomName: user.chatroom_name, sender: user.chatroom_sender, itemName: user.item_name })}
+                onClick={() =>
+                  chatRoomHandler({
+                    roomId: user.chatroom_id,
+                    roomName: user.chatroom_name,
+                    sender: user.chatroom_sender,
+                    itemName: user.item_name,
+                    sellerImage: user.chatroom_seller_image,
+                    consumerImage: user.chatroom_consumer_image,
+                    sellerName: user.chatroom_seller_name,
+                  })
+                }
                 selected={selectedUser === user.chatroom_id}
               >
                 <Profile>
-                  <img className="member" src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
+                  <img
+                    className="member"
+                    src={getImage({ sender: user.chatroom_sender, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
+                    alt={user.sellerName}
+                  />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
                 </Profile>
                 <ItemImg src={user.item_main_image} />
@@ -192,7 +234,9 @@ export default function Chat() {
       </ChatList>
       <ChatContainer>
         <Name>{itemName}</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
+        <MessageLayout ref={messageLayoutRef}>
+          {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
+        </MessageLayout>
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
@@ -218,6 +262,10 @@ type UserType = {
   chatroom_seller_name: string;
   item_main_image: string;
   sellerName: string;
+  sellerImage: string;
+  consumerImage: string;
+  chatroom_seller_image?: string;
+  chatroom_consumer_image?: string;
 };
 
 const Layout = styled.div`

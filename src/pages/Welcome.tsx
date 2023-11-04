@@ -6,9 +6,9 @@ import { getCookie } from '../utils/cookie';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../styles/theme';
 import { Modal } from '../components/common/Modal';
-import { getMyInfo } from '../apis/mypage/members';
-import { useQuery } from 'react-query';
 import { motion } from 'framer-motion';
+import { useRecoilValue } from 'recoil';
+import { myDataState } from '../Atoms';
 
 type AddressType = {
   roadAddress: string;
@@ -19,7 +19,7 @@ function Welcome() {
   const token = getCookie('token');
   const navigate = useNavigate();
 
-  const { data } = useQuery('myinfo', () => getMyInfo(token));
+  const data = useRecoilValue(myDataState);
   useEffect(() => {
     if (data?.shop_name && data?.location_name) {
       navigate('/');
@@ -210,7 +210,6 @@ export default Welcome;
 
 const Layout = styled.div`
   height: 100vh;
-  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;

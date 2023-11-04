@@ -33,6 +33,7 @@ export default function Tab({ tabs = [] }: PropsType) {
 const TabLayout = styled.div`
   width: 78.125rem;
   height: auto;
+  min-height: 44rem;
   display: flex;
   flex-direction: column;
 
@@ -43,6 +44,7 @@ const TabMenusContainer = styled.div`
   display: flex;
   height: 1.8125rem;
   gap: 3.12rem;
+  margin-bottom: 3rem;
 `;
 
 const TabMenu = styled.button<{ active: number }>`

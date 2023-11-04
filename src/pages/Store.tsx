@@ -14,6 +14,7 @@ import { theme } from '../styles/theme';
 import { useInput } from '../hooks/useInput';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
+import { SyncLoader } from 'react-spinners';
 
 export default function Store() {
   const [checkMine, setCheckMine] = useState(false);
@@ -106,7 +107,11 @@ export default function Store() {
   const isLoading = queryResults.some(result => result.isLoading);
 
   if (isLoading) {
-    return <h2>로딩중입니다</h2>;
+    return (
+      <Loading>
+        <SyncLoader color="black" margin={10} size={28} />
+      </Loading>
+    );
   }
 
   if (queryResults.some(result => result.isError)) {
@@ -420,4 +425,12 @@ const TabBox = styled.div`
   padding: 1.88rem;
   box-sizing: border-box;
   border-radius: 0.75rem;
+`;
+
+const Loading = styled.div`
+  display: flex;
+  width: 100%;
+  height: 67.5rem;
+  justify-content: center;
+  align-items: center;
 `;

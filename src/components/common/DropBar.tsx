@@ -110,7 +110,7 @@ const Option = styled.li`
   cursor: pointer;
 
   &:hover {
-    background-color: #efefef;
+    background-color: #beddffbb;
   }
 `;
 

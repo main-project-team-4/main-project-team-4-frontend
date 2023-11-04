@@ -26,8 +26,7 @@ export default function LoginModal({ closeModal }: PropsType) {
               //test 서버
               // window.location.href = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=851d6c649ed19d32afa2743c91134e57&redirect_uri=http://localhost:5173/kakao';
               //배포서버
-              window.location.href =
-                'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=851d6c649ed19d32afa2743c91134e57&redirect_uri=https://main-project-team-4-frontend.vercel.app/kakao';
+              window.location.href = 'https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=851d6c649ed19d32afa2743c91134e57&redirect_uri=https://www.re-use.store/kakao';
             }}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
