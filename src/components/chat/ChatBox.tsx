@@ -50,7 +50,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
 const YourMessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: auto;
+  width: 100%;
   height: auto;
   margin-top: 0.62rem;
   margin-left: 2.5rem;
@@ -74,14 +74,11 @@ const Name = styled.div`
 
 const YourMessage = styled.div`
   display: flex;
-  width: auto;
-  max-width: 15rem;
-
   padding: 0.9375rem;
-  align-items: stretch;
   flex-direction: column;
-  align-items: flex-start;
+  margin-right: auto;
   gap: 0.5rem;
+  max-width: 15rem;
   border-radius: 0rem 1.25rem 1.25rem 1.25rem;
   background-color: #ffffff;
 `;
