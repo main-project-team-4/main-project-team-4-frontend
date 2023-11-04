@@ -9,7 +9,7 @@ type ItemsType = {
 };
 export const AllItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}`);
+    const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}&sort=createdAt,desc`);
 
     return response.data.content;
   } catch (error) {

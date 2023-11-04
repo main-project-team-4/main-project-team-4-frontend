@@ -1386,6 +1386,13 @@
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.13.tgz"
   integrity sha512-RbSSoHliUbnXj3ny0CNFOoxrIDV6SUGyStHsvDqosw6CkdPV8TtWGlfecuK4ToyMEAql6pzNxgCFKanovUzlgQ==
 
+"@types/node@*":
+  version "20.8.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.8.9.tgz#646390b4fab269abce59c308fc286dcd818a2b08"
+  integrity sha512-UzykFsT3FhHb1h7yD4CA4YhBHq545JC0YnEz41xkipN88eKQtL6rSgocL5tbAP6Ola9Izm/Aw4Ora8He4x0BHg==
+  dependencies:
+    undici-types "~5.26.4"
+
 "@types/prop-types@*":
   version "15.7.8"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.8.tgz"
@@ -1453,9 +1460,16 @@
 
 "@types/sockjs-client@^1.5.3":
   version "1.5.3"
-  resolved "https://registry.npmjs.org/@types/sockjs-client/-/sockjs-client-1.5.3.tgz"
+  resolved "https://registry.yarnpkg.com/@types/sockjs-client/-/sockjs-client-1.5.3.tgz#6d6e4d281eceeb18a372f406fc89e2bace063f0e"
   integrity sha512-U5DqdWpogbb3ocbyK9+Gzt343a0fTOMdX46WVHWpatEbWj7jO//kpWC9bGZ1bDDWqUnEw9DPsXJsa3bxeuKOlg==
 
+"@types/stompjs@^2.3.7":
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/@types/stompjs/-/stompjs-2.3.7.tgz#f83af8d259615e79e66931da2dd3cdb41798bc1a"
+  integrity sha512-E9Gw+P2ifAIdo6DFXVvR8sDqmCadVVJc5JyEh3hAGIBz24dMidxfrrMahfQT+zDbDYnvi4rDpvrpSI+3UkiSPw==
+  dependencies:
+    "@types/node" "*"
+    
 "@types/stylis@^4.0.2":
   version "4.2.1"
   resolved "https://registry.npmjs.org/@types/stylis/-/stylis-4.2.1.tgz"
@@ -2710,7 +2724,6 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.2:
 
 http-parser-js@>=0.5.1:
   version "0.5.8"
-
   resolved "https://registry.yarnpkg.com/http-parser-js/-/http-parser-js-0.5.8.tgz#af23090d9ac4e24573de6f6aecc9d84a48bf20e3"
   integrity sha512-SGeBX54F94Wgu5RH3X5jsDtf4eHyRogWX1XGT3b4HuW3tQPM4AaBzoUji/4AAJNXCEOWZ5O0DgZmJw1947gD5Q==
 
@@ -4128,6 +4141,11 @@ unbox-primitive@^1.0.2:
     has-bigints "^1.0.2"
     has-symbols "^1.0.3"
     which-boxed-primitive "^1.0.2"
+
+undici-types@~5.26.4:
+  version "5.26.5"
+  resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-5.26.5.tgz#bcd539893d00b56e964fd2657a4866b221a65617"
+  integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
 
 unicode-canonical-property-names-ecmascript@^2.0.0:
   version "2.0.0"
