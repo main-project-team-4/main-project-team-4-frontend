@@ -81,7 +81,7 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
 export default FollowerCard;
 
 const FollowerBox = styled.div`
-  width: 15.625rem;
+  width: 12.5rem;
   padding: 2.25rem 0;
   box-sizing: border-box;
   display: flex;

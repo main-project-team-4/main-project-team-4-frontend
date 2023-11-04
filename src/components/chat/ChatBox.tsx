@@ -1,54 +1,30 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox() {
+type ChatBoxType = {
+  messages: MessageType[];
+  sender: string | null;
+};
+type MessageType = {
+  chatroom_sender: string;
+  chat_message: string;
+};
+export default function ChatBox({ messages, sender }: ChatBoxType) {
   return (
     <>
-      <YourMessageContainer>
-        <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
-        <Name>이지은</Name>
-        <YourMessage>이거 봐야해</YourMessage>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>내 채팅</MyMessage>
-      </MyMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>내 채팅입니다아아ㅓ리나ㅓㅇ라ㅣㅓㄴ아ㅣ렁니</MyMessage>
-        <MyTime>09:25AM</MyTime>
-      </MyMessageContainer>
-
-      <MyMessageContainer>
-        <MyMessage>잘되니</MyMessage>
-        <MyTime>09:25AM</MyTime>
-      </MyMessageContainer>
-
-      <YourMessageContainer>
-        <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
-        <Name>이지은</Name>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-      </YourMessageContainer>
-
-      <YourMessageContainer>
-        <YourMessage>이거 봐야해</YourMessage>
-        <YourTime>09:25AM</YourTime>
-      </YourMessageContainer>
+      {messages?.map((message, index) =>
+        message.chatroom_sender === sender ? (
+          <MyMessageContainer key={index}>
+            <MyMessage>{message.chat_message}</MyMessage>
+          </MyMessageContainer>
+        ) : (
+          <YourMessageContainer key={index}>
+            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="profile" />
+            <Name>{message.chatroom_sender}</Name>
+            <YourMessage>{message.chat_message}</YourMessage>
+          </YourMessageContainer>
+        ),
+      )}
     </>
   );
 }
@@ -92,12 +68,12 @@ const YourMessage = styled.div`
   background-color: #ffffff;
 `;
 
-const YourTime = styled.div`
-  margin-top: 0.62rem;
-  color: ${theme.cancelBtn};
-  font-size: 0.875rem;
-  font-weight: 400;
-`;
+// const YourTime = styled.div`
+//   margin-top: 0.62rem;
+//   color: ${theme.cancelBtn};
+//   font-size: 0.875rem;
+//   font-weight: 400;
+// `;
 
 const MyMessageContainer = styled.div`
   display: flex;
@@ -121,10 +97,10 @@ const MyMessage = styled.div`
   color: white;
 `;
 
-const MyTime = styled.div`
-  margin-top: 0.62rem;
-  margin-left: auto;
-  color: ${theme.cancelBtn};
-  font-size: 0.875rem;
-  font-weight: 400;
-`;
+// const MyTime = styled.div`
+//   margin-top: 0.62rem;
+//   margin-left: auto;
+//   color: ${theme.cancelBtn};
+//   font-size: 0.875rem;
+//   font-weight: 400;
+// `;

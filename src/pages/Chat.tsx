@@ -1,45 +1,201 @@
+// 하나하나 바꾼 코드
+
 import { useRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
+import FirstChat from '../components/chat/FirstChat';
+import { getChatList, getMessages } from '../apis/chat/chat';
+import { useQueries } from 'react-query';
+import { getCookie } from '../utils/cookie';
+import { useNavigate } from 'react-router-dom';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
+import { useInput } from '../hooks/useInput';
 
 interface UserProps {
   selected?: boolean;
 }
+type ChatRoomType = {
+  roomId: number;
+  roomName: string;
+  sender: string;
+  itemName: string;
+};
 
 export default function Chat() {
+  const token = getCookie('token');
+  const navigate = useNavigate();
+  // const { state: chatData } = useLocation();
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
+  const [chatRoom, setChatRoom] = useState<number | null>(null);
+  const [roomName, setRoomName] = useState<string | null>(null);
+  const [message, setMessage, messageHandler] = useInput('');
+  const [sender, setSender] = useState<string | null>(null);
+  const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
+  const [messages, setMessages] = useState<Array<any>>([]);
+  const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
+  const [itemName, setItemName] = useState('');
 
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName }: ChatRoomType) => {
+    setSelectedUser(roomId);
+    setChatRoom(roomId);
+    setRoomName(roomName);
+    setSender(sender);
+    setMessages(MessageData);
+    setItemName(itemName);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
+  }, [chatRoom]);
+
+  // //채팅 정보 설정하는 부분
+  // useEffect(() => {
+  //   if (!token) navigate('/');
+  //   if (chatData) {
+  //     setChatRoom(chatData.roomId);
+  //     setRoomName(chatData.roomName);
+  //     setSender(chatData.sender);
+  //   }
+  // }, []);
+
+  //스크롤 부분
   useEffect(() => {
     const messageLayoutElement = messageLayoutRef.current;
     if (messageLayoutElement) {
       messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
     }
-  }, [selectedUser]);
+  }, [selectedUser, messages]);
+
+  // 쿼리 부분
+  const queryResults = useQueries([
+    {
+      queryKey: 'chatList',
+      queryFn: () => getChatList(token),
+      enabled: !!token,
+    },
+    {
+      queryKey: ['getMessage', chatRoom],
+      queryFn: () => getMessages({ token, roomId: chatRoom }),
+      enabled: !!token && !!chatRoom,
+    },
+  ]);
+
+  const ChatUserList = queryResults[0].data;
+  const MessageData = queryResults[1].data;
+
+  useEffect(() => {
+    if (MessageData) {
+      setMessages(MessageData);
+    }
+  }, [MessageData]);
+
+  useEffect(() => {
+    if (!token) navigate('/');
+    // if (chatData) {
+    //   setChatRoom(chatData.roomId);
+    //   setRoomName(chatData.roomName);
+    //   setSender(chatData.sender);
+    // }
+
+    // WebSocket 연결 설정
+    const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
+    const stompClient = new Client({
+      webSocketFactory: () => sock,
+      reconnectDelay: 200,
+      onConnect: () => {
+        if (ChatUserList) {
+          ChatUserList?.forEach((room: any) => {
+            if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
+
+            stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
+              const payload = JSON.parse(message.body);
+
+              const chatRoomData = localStorage.getItem('chatRoom');
+              const savedChatRoom = chatRoomData ? JSON.parse(chatRoomData) : null;
+
+              if (savedChatRoom === payload.chatroom_id) {
+                // 현재 활성화된 채팅방 메시지만 상태 업데이트
+                setMessages(prev => [...prev, payload]);
+              }
+            });
+            setSubscribedRooms(prev => [...prev, room.chatroom_id]); // 방을 구독한 리스트에 추가
+          });
+        }
+      },
+      debug: () => {
+        // console.log('STOMP DEBUG: ', str);
+      },
+    });
+    stompClient.activate();
+
+    stompClientRef.current = stompClient;
+
+    return () => {
+      if (stompClient.connected) {
+        stompClient.deactivate();
+      }
+    };
+  }, [ChatUserList]);
+
+  const sendMessage = () => {
+    const data = {
+      chat_type: 'TALK',
+      chatroom_sender: sender,
+      chatroom_id: chatRoom,
+      chat_message: message,
+      chatroom_name: roomName,
+    };
+
+    if (message) {
+      if (stompClientRef.current && stompClientRef.current.connected) {
+        stompClientRef.current.publish({
+          destination: `/pub/chat/message`,
+          body: JSON.stringify(data),
+        });
+
+        setMessage(''); // 메시지 초기화
+      }
+    }
+  };
+
+  const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.nativeEvent.isComposing) return;
+    if (event.key === 'Enter') {
+      sendMessage();
+    }
+  };
 
   return (
     <Layout>
       <ChatList>
         <h3>채팅 목록</h3>
         <UserList>
-          <User onClick={() => setSelectedUser(1)} selected={selectedUser === 1}>
-            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="" />
-            사용자123456
-          </User>
-          <User onClick={() => setSelectedUser(2)} selected={selectedUser === 2}>
-            <img src="https://ifh.cc/g/kXNjcT.jpg" alt="" />
-            사용자123456
-          </User>
+          {ChatUserList &&
+            ChatUserList.map((user: UserType) => (
+              <User
+                key={user.chatroom_id}
+                onClick={() => chatRoomHandler({ roomId: user.chatroom_id, roomName: user.chatroom_name, sender: user.chatroom_sender, itemName: user.item_name })}
+                selected={selectedUser === user.chatroom_id}
+              >
+                <Profile>
+                  <img className="member" src={user.member_image ? user.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt={user.sellerName} />
+                  {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
+                </Profile>
+                <ItemImg src={user.item_main_image} />
+              </User>
+            ))}
         </UserList>
       </ChatList>
       <ChatContainer>
-        <Name>Jhon Abraham</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox /> : <div>채팅을 시작하세요</div>}</MessageLayout>
+        <Name>{itemName}</Name>
+        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} /> : <FirstChat />}</MessageLayout>
         <ChatInputLayout>
           <ChatInput>
-            <input type="text" placeholder=" 채팅을 입력해주세요" />
-            <button>
+            <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
+            <button onClick={sendMessage} disabled={!message.trim()}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -51,6 +207,17 @@ export default function Chat() {
     </Layout>
   );
 }
+type UserType = {
+  chatroom_id: number;
+  chatroom_name: string;
+  chatroom_sender: string;
+  item_name: string;
+  member_image: string;
+  chatroom_consumer_name: string;
+  chatroom_seller_name: string;
+  item_main_image: string;
+  sellerName: string;
+};
 
 const Layout = styled.div`
   display: flex;
@@ -91,14 +258,26 @@ const User = styled.div<UserProps>`
   background: ${({ selected }) => (selected ? theme.blueBackground : theme.bgColor)};
   gap: 0.75rem;
   cursor: pointer;
-
-  img {
+  justify-content: space-between;
+  .member {
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 50%;
   }
 `;
 
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.62rem;
+`;
+
+const ItemImg = styled.img`
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 5px;
+`;
 const ChatContainer = styled.div`
   width: 50rem;
   height: 100%;

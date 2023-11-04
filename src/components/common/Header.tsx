@@ -89,7 +89,7 @@ export default function Header() {
           </svg>
         </Logo>
         <Search>
-          <input onKeyDown={activeEnter} value={itemName} onChange={onChangeItem} type="text" />
+          <input onKeyDown={activeEnter} value={itemName} onChange={onChangeItem} type="text" placeholder="검색어를 입력해주세요." />
           <span onClick={onClickSearch} className="material-symbols-outlined">
             search
           </span>
