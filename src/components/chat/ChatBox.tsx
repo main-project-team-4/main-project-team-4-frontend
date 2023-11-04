@@ -50,7 +50,6 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
 const YourMessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
   height: auto;
   margin-top: 0.62rem;
   margin-left: 2.5rem;
