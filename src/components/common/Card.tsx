@@ -54,7 +54,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
 }
 
 const Layout = styled.div<{ displaybtn: number }>`
-  width: 18.125rem;
+  width: 19.06255rem;
   height: ${props => (props.displaybtn ? '22.4375rem' : '20rem')};
   border-radius: 0.5rem;
   cursor: pointer;

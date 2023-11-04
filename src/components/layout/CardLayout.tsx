@@ -96,12 +96,13 @@ const Layout = styled.div<{ title: string }>`
   width: 78.125rem;
   gap: 1.25rem;
   margin-top: ${props => (props.title === '인기 상품' ? '3.34rem' : '')};
+  position: relative;
 `;
 
 const PointBox = styled.div`
   position: absolute;
-  top: 9.38rem;
-  left: 30rem;
+  top: -2rem;
+  left: -2rem;
   width: 90rem;
   height: 19.3125rem;
   flex-shrink: 0;

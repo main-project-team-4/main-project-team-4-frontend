@@ -3,8 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { kakaoLogin } from '../apis/login/kakao';
 import { useEffect } from 'react';
+import { SyncLoader } from 'react-spinners';
+import styled from 'styled-components';
 
-function Kakao() {
+export default function Kakao() {
   const navigate = useNavigate();
 
   // useSearchParams 훅을 사용하여 쿼리 매개변수를 읽어옴
@@ -26,7 +28,13 @@ function Kakao() {
   }, [isSuccess]);
 
   if (isLoading) {
-    return <div>카카오 로그인 처리 중...</div>;
+    return (
+      <>
+        <Layout>
+          <SyncLoader color="black" margin={10} size={28} />
+        </Layout>
+      </>
+    );
   }
 
   if (isError) {
@@ -34,4 +42,10 @@ function Kakao() {
   }
 }
 
-export default Kakao;
+const Layout = styled.div`
+  display: flex;
+  width: 100%;
+  height: 67.5rem;
+  justify-content: center;
+  align-items: center;
+`;
