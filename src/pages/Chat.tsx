@@ -222,7 +222,9 @@ export default function Chat() {
       </ChatList>
       <ChatContainer>
         <Name>{itemName}</Name>
-        <MessageLayout ref={messageLayoutRef}>{selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} /> : <FirstChat />}</MessageLayout>
+        <MessageLayout ref={messageLayoutRef}>
+          {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
+        </MessageLayout>
         <ChatInputLayout>
           <ChatInput>
             <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
