@@ -72,13 +72,9 @@ const Name = styled.div`
 `;
 
 const YourMessage = styled.div`
-  display: flex;
-  width: auto;
   max-width: 15rem;
   margin-right: auto;
-
   padding: 0.9375rem;
-  align-items: stretch;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
