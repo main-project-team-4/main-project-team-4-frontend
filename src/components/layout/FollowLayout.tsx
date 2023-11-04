@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import FollowerCard from '../store/FollowerCard';
 import React from 'react';
+import TabLayout from './TabLayout';
 
 type FollowType = {
   data: ItemType[];
@@ -17,12 +18,24 @@ type ItemType = {
 export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
     <Container>
-      {data.map((item: ItemType, index: number) => (
-        <React.Fragment key={item.member_id}>
-          <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
-          {(index + 1) % 5 === 0 && <Divider />}
-        </React.Fragment>
-      ))}
+      {data.length === 0 ? (
+        follow === 'followers' ? (
+          <>
+            <TabLayout icon="account_circle" text="팔로워가 없습니다." />
+          </>
+        ) : (
+          <>
+            <TabLayout icon="account_circle" text="팔로잉이 없습니다." />
+          </>
+        )
+      ) : (
+        data.map((item: ItemType, index: number) => (
+          <React.Fragment key={item.member_id}>
+            <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
+            {(index + 1) % 5 === 0 && <Divider />}
+          </React.Fragment>
+        ))
+      )}
     </Container>
   );
 }
@@ -30,6 +43,7 @@ export default function FollowLayout({ data, checkMine, follow }: FollowType) {
 const Container = styled.div`
   display: flex;
   width: 73.75rem;
+  min-height: 38rem;
   gap: 0.625rem 2.8125rem;
   flex-wrap: wrap;
 `;

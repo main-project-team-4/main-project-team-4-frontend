@@ -10,9 +10,10 @@ interface CardProps {
   price: string;
   categoryTitle: string;
   itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  storePath?: boolean;
 }
 
-export default function Card({ id, img, itemTitle, price, itemState, categoryTitle }: CardProps) {
+export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath }: CardProps) {
   const navigate = useNavigate();
 
   const formattedPrice = Number(price).toLocaleString('ko-KR');
@@ -41,6 +42,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
         displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
+        storepath={storePath ? 1 : 0}
       >
         <Image src={img} />
         <TextLayout>
@@ -53,8 +55,8 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   );
 }
 
-const Layout = styled.div<{ displaybtn: number }>`
-  width: 19.06255rem;
+const Layout = styled.div<{ displaybtn: number; storepath: number }>`
+  width: ${props => (props.storepath ? '18.125rem' : '19.0625rem')};
   height: ${props => (props.displaybtn ? '22.4375rem' : '20rem')};
   border-radius: 0.5rem;
   cursor: pointer;

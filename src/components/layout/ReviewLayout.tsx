@@ -1,5 +1,6 @@
 import ReviewCard from '../store/ReviewCard';
 import styled from 'styled-components';
+import TabLayout from './TabLayout';
 
 type ReviewData = {
   reviewData: ItemType[];
@@ -17,21 +18,30 @@ type ItemType = {
 };
 export default function ReviewLayout({ reviewData }: ReviewData) {
   return (
-    <Container>
-      {reviewData.map((item: ItemType, index: number) => (
-        <div key={index}>
-          <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
-          {/* {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />} */}
-          <Divider />
-        </div>
-      ))}
+    <Container reviewwidth={reviewData.length === 0 ? 1 : 0}>
+      {reviewData.length === 0 ? (
+        <>
+          <TabLayout icon="edit_note" text="리뷰가 없습니다." />
+        </>
+      ) : (
+        <>
+          {reviewData.map((item: ItemType, index: number) => (
+            <div key={index}>
+              <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
+              {/* {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />} */}
+              <Divider />
+            </div>
+          ))}
+        </>
+      )}
     </Container>
   );
 }
 
-const Container = styled.div`
+const Container = styled.div<{ reviewwidth: number }>`
   display: flex;
-  width: 78.125rem;
+  width: ${props => (props.reviewwidth === 1 ? '73.75rem' : '78.125rem')};
+  min-height: 38rem;
   gap: 0 3.12rem 0 0;
   flex-wrap: wrap;
 `;
