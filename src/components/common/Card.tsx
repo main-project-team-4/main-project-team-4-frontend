@@ -33,7 +33,6 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
         setDisplayItemState('');
     }
   }, [itemState]);
-  console.log(categoryTitle);
 
   return (
     <>
