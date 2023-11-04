@@ -43,9 +43,9 @@ export default function Home() {
     );
   }
 
-  if (itemsResult.isError || !itemsResult.data || topItemsResult.isError || !topItemsResult.data) {
-    return navigate('/');
-  }
+  // if (itemsResult.isError || !itemsResult.data || topItemsResult.isError || !topItemsResult.data) {
+  //   return navigate('/');
+  // }
 
   return (
     <>
