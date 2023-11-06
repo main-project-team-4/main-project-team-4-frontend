@@ -37,7 +37,9 @@ function Profilepicture({ data }: DataInfo) {
         const compressedFile = await imageCompression(file, options);
         const result = await imageCompression.getDataUrlFromFile(compressedFile);
 
-        const newFile = new File([compressedFile], 'image.jpg');
+        const newFile = new File([compressedFile], 'image.jpeg', { type: 'image/jpeg' });
+        console.log(newFile);
+
         const newFormData = new FormData();
         newFormData.append('image', newFile);
 

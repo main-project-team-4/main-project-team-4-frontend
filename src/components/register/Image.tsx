@@ -79,7 +79,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
       // 이미지 최적화
       const newFileArray = fileArrays.map(file => imageCompression(file, option));
       const compressedFiles = await Promise.all(newFileArray);
-      const fileArray = compressedFiles.map(file => new File([file], 'image.jpg'));
+      const fileArray = compressedFiles.map(file => new File([file], `image-${file}`, { type: 'image/jpeg' }));
 
       if (fileArray.length + images.length <= 5) {
         const imageArray = fileArray.map(file => URL.createObjectURL(file));
@@ -89,7 +89,10 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
           setSelectedPicture(imageArray[0]);
           setMainImg(fileArray[0]);
           setSubImg(fileArray.slice(1));
-          event.currentTarget.value = '';
+
+          if (event.currentTarget) {
+            event.currentTarget.value = '';
+          }
         } else {
           // 파일을 이미지 url로 변환
           const dataFormData = new FormData();
