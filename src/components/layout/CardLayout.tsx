@@ -12,8 +12,8 @@ interface TabData {
 type TabDataName = 'ordered' | 'sales' | 'wishlist';
 
 const defaultTabData: TabData = {
-  icon: '',
-  text: 'No data available.',
+  icon: 'production_quantity_limits',
+  text: '구매 완료한 상품이 없습니다.',
 };
 
 const getTabData = (dataName?: TabDataName): TabData => {
