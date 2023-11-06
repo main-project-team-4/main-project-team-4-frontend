@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Tab from '../components/common/Tab';
 import ReviewLayout from '../components/layout/ReviewLayout';
 import FollowLayout from '../components/layout/FollowLayout';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ShopInfo, FollowCheck, Reviews, Followers, Followings, Follow } from '../apis/shop/shop';
 import { ShopItem } from '../apis/getItems/Item';
 import { useQuery, useQueries, useMutation, useQueryClient } from 'react-query';
