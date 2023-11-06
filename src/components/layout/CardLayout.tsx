@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { theme } from '../../styles/theme';
 import TabLayout from './TabLayout';
 import { ReviewModal } from '../store/ReviewModal';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface TabData {
   icon: string;
@@ -65,7 +64,7 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
       <Layout title={title}>
         {data && (
           <>
-            {title === '인기 상품' && <PointBox></PointBox>}
+            {/* {title === '인기 상품' && <PointBox></PointBox>} */}
             <Title
               title={title}
               onClick={() => {
@@ -179,18 +178,6 @@ const Layout = styled.div<{ title: string }>`
   position: relative;
 `;
 
-const PointBox = styled.div`
-  position: absolute;
-  top: -2rem;
-  left: -2rem;
-  width: 90rem;
-  height: 19.3125rem;
-  flex-shrink: 0;
-  background-color: ${theme.pointColor};
-  z-index: -1;
-  border-radius: 1.25rem 0rem 0rem 0rem;
-`;
-
 const CardWrapper = styled.div`
   display: flex;
   gap: 0.62rem;
@@ -208,7 +195,6 @@ const Title = styled.p`
   line-height: normal;
   align-self: flex-start;
   cursor: pointer;
-  color: ${props => (props.title === '인기 상품' ? 'white' : '')};
 `;
 
 const ViewAll = styled.button`

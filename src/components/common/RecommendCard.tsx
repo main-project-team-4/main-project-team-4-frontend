@@ -11,28 +11,12 @@ interface CardProps {
   categoryTitle: string;
   itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
   storePath?: boolean;
+  shopName: string;
 }
 
-export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath }: CardProps) {
+export default function RecommendCard({ shopName, id, img, itemTitle, price, itemState, categoryTitle, storePath }: CardProps) {
   const navigate = useNavigate();
   const formattedPrice = Number(price).toLocaleString('ko-KR');
-
-  const [displayItemState, setDisplayItemState] = useState('');
-  useEffect(() => {
-    switch (itemState) {
-      case 'RESERVED':
-        setDisplayItemState('예약중');
-        break;
-      case 'SOLDOUT':
-        setDisplayItemState('판매완료');
-        break;
-      case 'SELLING':
-        setDisplayItemState('판매중');
-        break;
-      default:
-        setDisplayItemState('');
-    }
-  }, [itemState]);
 
   return (
     <>
@@ -40,12 +24,10 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
         onClick={() => {
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
-        displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
-        storepath={storePath ? 1 : 0}
       >
+        <h1>{shopName}</h1>
         <Image src={img} />
         <TextLayout>
-          {categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && <Sale>{displayItemState}</Sale>}
           <h1>{itemTitle}</h1>
           <Price>{formattedPrice}원</Price>
         </TextLayout>
@@ -54,9 +36,9 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   );
 }
 
-const Layout = styled.div<{ displaybtn: number; storepath: number }>`
-  width: ${props => (props.storepath ? '18.125rem' : '19.0625rem')};
-  height: ${props => (props.displaybtn ? '22.4375rem' : '20rem')};
+const Layout = styled.div`
+  width: 21.875rem;
+  height: 29.25rem;
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid ${theme.outline};
