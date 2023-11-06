@@ -82,8 +82,6 @@ function InformationInput({ data }: DataInfo) {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
         oncomplete: function (data: any) {
-          console.log(data);
-
           setAddress(data.address);
           setLocBtnState(false);
         },
@@ -163,7 +161,7 @@ function InformationInput({ data }: DataInfo) {
         </svg>
       </ButtonBox>
       <WithdrawalButton onClick={onClickDelete}>회원탈퇴</WithdrawalButton>
-      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 삭제 하시겠습니까?" />}
+      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 탈퇴 하시겠습니까?" />}
     </Container>
   );
 }
