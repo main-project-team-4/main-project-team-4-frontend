@@ -99,7 +99,15 @@ function SideBar() {
                 <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
                 <h3>{myData?.member_nickname}</h3>
                 <button>
-                  <span className="expand-icon material-symbols-outlined">expand_more</span>
+                  {token && visibleMypage ? (
+                    <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none" style={{ transform: 'rotate(180deg)' }}>
+                      <path d="M16.3327 7.5L10.4993 13.3333L4.66602 7.5" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Arrow>
+                  ) : (
+                    <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none">
+                      <path d="M16.3327 7.5L10.4993 13.3333L4.66602 7.5" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Arrow>
+                  )}
                 </button>
               </div>
             ) : (
@@ -158,6 +166,9 @@ function SideBar() {
 }
 
 export default SideBar;
+const Arrow = styled.svg`
+  transition: transform 0.3s ease-in-out;
+`;
 
 const Container = styled.div`
   width: 15.625rem;

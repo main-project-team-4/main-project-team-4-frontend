@@ -3,6 +3,8 @@ import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 import TabLayout from './TabLayout';
+import { ReviewModal } from '../store/ReviewModal';
+import React, { useEffect, useState } from 'react';
 
 interface TabData {
   icon: string;
@@ -41,7 +43,15 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
   const path = location.pathname;
   const goShop = path.includes('/posting');
   const storePath = path.includes('/store');
+  // 모달 상태관리
+  const [modalState, setModalState] = useState(true);
 
+  const modalConfirm = () => {
+    setModalState(false);
+  };
+  const modalClose = () => {
+    setModalState(false);
+  };
   const tabData = getTabData(dataName);
 
   const move = () => {
@@ -50,11 +60,20 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
 
   return (
     <>
+      {modalState && storeState && <ReviewModal modalClose={modalClose} />}
+
       <Layout title={title}>
         {data && (
           <>
             {title === '인기 상품' && <PointBox></PointBox>}
-            <Title title={title}>
+            <Title
+              title={title}
+              onClick={() => {
+                if (storeState) {
+                  navigate(`/store/${shop_Id}`, { state: shop_Id });
+                } else move();
+              }}
+            >
               {storeState && (
                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
                   <path d="M4.375 14.584V27.709C4.375 29.3199 5.68084 30.6257 7.29167 30.6257H27.7083C29.3192 30.6257 30.625 29.3199 30.625 27.709V14.584" stroke="#0F172A" strokeWidth="2" />
@@ -188,6 +207,7 @@ const Title = styled.p`
   font-weight: 700;
   line-height: normal;
   align-self: flex-start;
+  cursor: pointer;
   color: ${props => (props.title === '인기 상품' ? 'white' : '')};
 `;
 

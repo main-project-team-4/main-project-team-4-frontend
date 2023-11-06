@@ -163,7 +163,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
             <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
             <Explain>
               <span className="material-symbols-outlined">imagesmode</span>
-              <h2>사진을 드래그하여 업로드 하세요</h2>
+              <h2>사진을 업로드 하세요</h2>
               <p>(0/5)</p>
               <FileBtn onClick={handleClick}>파일 열기</FileBtn>
             </Explain>

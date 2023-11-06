@@ -189,7 +189,9 @@ export default function Store() {
                     handleFollow();
                   }}
                 >
-                  <img src="https://ifh.cc/g/2hzdJS.png" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                    <path d="M3.5 13.2L8.64286 18L21.5 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                   팔로잉
                 </Button>
               ) : (
@@ -199,7 +201,10 @@ export default function Store() {
                     handleFollow();
                   }}
                 >
-                  <img src="https://ifh.cc/g/7qsV5L.png" /> 팔로우
+                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                    <path d="M10.5 1V19M19.5 10L1.5 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  팔로우
                 </Button>
               ))}
           </FollowBox>

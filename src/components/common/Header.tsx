@@ -90,9 +90,17 @@ export default function Header() {
         </Logo>
         <Search>
           <input onKeyDown={activeEnter} value={itemName} onChange={onChangeItem} type="text" placeholder="검색어를 입력해주세요." />
-          <span onClick={onClickSearch} className="material-symbols-outlined">
-            search
-          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+            <path
+              d="M11.5004 19.0008C15.9189 19.0008 19.5008 15.4189 19.5008 11.0004C19.5008 6.5819 15.9189 3 11.5004 3C7.0819 3 3.5 6.5819 3.5 11.0004C3.5 15.4189 7.0819 19.0008 11.5004 19.0008Z"
+              stroke="#0F172A"
+              strokeWidth="1.50001"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path d="M21.4987 21.0026L17.1484 16.6523L21.4987 21.0026Z" fill="#0F172A" />
+            <path d="M21.4987 21.0026L17.1484 16.6523" stroke="#0F172A" strokeWidth="1.50001" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         </Search>
         <BtnLayout>
           {token ? (
@@ -118,9 +126,15 @@ export default function Header() {
                   navigate('/register', { state: '' });
                 }}
               >
-                <span style={{ color: 'white' }} className="material-symbols-outlined">
-                  upload
-                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                  <path
+                    d="M1.5 14.5L1.5 15.625C1.5 17.489 3.01104 19 4.875 19L16.125 19C17.989 19 19.5 17.489 19.5 15.625L19.5 14.5M15 5.5L10.5 1M10.5 1L6 5.5M10.5 1L10.5 14.5"
+                    stroke="white"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
                 상품등록
               </Btn>
             </>
