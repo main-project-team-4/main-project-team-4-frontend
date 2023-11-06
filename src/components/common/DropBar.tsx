@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useState, useRef, useEffect } from 'react';
 import { theme } from '../../styles/theme';
+import SelectbuyerModal from '../register/SelectbuyerModal';
 
 const data = [
   { state_name: '판매중', item_state: 'SELLING' },
@@ -12,9 +13,10 @@ const data = [
 interface DropBarProps {
   setSelected: (state: string) => void;
   itemState: string;
+  itemId: number;
 }
 
-export default function DropBar({ setSelected, itemState }: DropBarProps) {
+export default function DropBar({ setSelected, itemState, itemId }: DropBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     switch (itemState) {
@@ -33,11 +35,12 @@ export default function DropBar({ setSelected, itemState }: DropBarProps) {
   }, [itemState]);
 
   const [selectedView, setSelectedView] = useState(itemState);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [selectBuyer, setSelectBuyer] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+      if (dropdownRef.current && e.target instanceof Node && !dropdownRef.current.contains(e.target)) {
         setIsOpen(false);
       }
     };
@@ -53,13 +56,18 @@ export default function DropBar({ setSelected, itemState }: DropBarProps) {
   };
 
   const handleOptionClick = (item_state: string, state_name: string) => {
-    setSelected(item_state);
-    setSelectedView(state_name);
-    setIsOpen(false);
+    if (item_state === 'SOLDOUT') {
+      setSelectBuyer(true);
+    } else {
+      setSelected(item_state);
+      setSelectedView(state_name);
+      setIsOpen(false);
+    }
   };
 
   return (
     <Container ref={dropdownRef}>
+      {selectBuyer && <SelectbuyerModal itemId={itemId} setSelectedView={setSelectedView} setSelected={setSelected} setSelectBuyer={setSelectBuyer} setIsOpen={setIsOpen} />}
       <Options isopen={isOpen ? 1 : 0}>
         {isOpen ? (
           data.map((option, index) => (
