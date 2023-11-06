@@ -175,7 +175,7 @@ export default function DetailPosting() {
         <PostingBox>
           <div className="layout">
             <h1>{detailItems.item_name}</h1>
-            {myData?.member_id === detailItems?.member_id && <DropBar itemState={selected} setSelected={setSelected} />}
+            {myData?.member_id === detailItems?.member_id && <DropBar itemId={detailItems.item_id} itemState={selected} setSelected={setSelected} />}
           </div>
           <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
           <div className="content">{detailItems.item_comment}</div>
