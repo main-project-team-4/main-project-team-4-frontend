@@ -17,12 +17,16 @@ import { myDataState } from '../Atoms';
 import { SyncLoader } from 'react-spinners';
 
 export default function Store() {
+  const location = useLocation();
+  const [pathName, setPathName] = useState('123');
   const [checkMine, setCheckMine] = useState(false);
   const { state } = useLocation();
   const queryClient = useQueryClient();
   const token = getCookie('token');
-  const { storeId } = useParams();
-  useEffect(() => {}, [storeId]);
+
+  useEffect(() => {
+    setPathName(location.pathname);
+  }, [location.pathname, pathName]);
 
   const queryResults = useQueries([
     { queryKey: ['shopInfo', state], queryFn: () => ShopInfo(state) },

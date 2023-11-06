@@ -101,3 +101,17 @@ export const changeImage = async ({ data, itemId }: UploadItem) => {
     console.log(error);
   }
 };
+
+// 상품 삭제
+export const deleteItem = async ({ token, itemId }: ChangeItemStateType) => {
+  try {
+    const response = await baseInstance.delete(`/api/items/${itemId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

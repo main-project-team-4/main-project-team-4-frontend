@@ -3,7 +3,7 @@ import { DetailItem } from '../../apis/getItems/Item';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { putWishes, checkWishes, changeItemState } from '../../apis/posting/posting';
+import { putWishes, checkWishes, changeItemState, deleteItem } from '../../apis/posting/posting';
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
 import DropBar from '../common/DropBar';
@@ -44,7 +44,7 @@ export default function DetailPosting() {
   });
 
   const ChangeState = () => {
-    if (selected !== '') {
+    if (selected !== '' && selected !== 'DELETE') {
       mutationItem.mutate({
         data: {
           item_state: selected,
@@ -56,11 +56,34 @@ export default function DetailPosting() {
     }
   };
 
+  // 상품 삭제
+  const mutationDelete = useMutation(deleteItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('deleteitem');
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+
+  const ItelmDelete = () => {
+    if (selected !== '' && selected === 'DELETE') {
+      mutationDelete.mutate({
+        token: token,
+        itemId: detailItems.item_id,
+      });
+      navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
+    }
+  };
+
   //여기확인 필!!!!
   useEffect(() => {
     if (detailSuccess && !!myData) {
       if (myData.member_id === detailItems.member_id) {
         ChangeState();
+      }
+      if (token && selected === 'DELETE') {
+        ItelmDelete();
       }
     }
   }, [selected]);

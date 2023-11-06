@@ -6,6 +6,7 @@ const data = [
   { state_name: '판매중', item_state: 'SELLING' },
   { state_name: '예약중', item_state: 'RESERVED' },
   { state_name: '판매완료', item_state: 'SOLDOUT' },
+  { state_name: '삭제', item_state: 'DELETE' },
 ];
 
 interface DropBarProps {
@@ -34,18 +35,18 @@ export default function DropBar({ setSelected, itemState }: DropBarProps) {
   const [selectedView, setSelectedView] = useState(itemState);
   const dropdownRef = useRef(null);
 
-  // useEffect(() => {
-  //   const handleClickOutside = (e: MouseEvent) => {
-  //     if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-  //       setIsOpen(false);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
 
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, []);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleDropdownToggle = () => {
     setIsOpen(!isOpen);
@@ -98,7 +99,7 @@ const Options = styled.ul<{ isopen: number }>`
   border-radius: 10px;
   background-color: white;
   list-style: none;
-  height: ${({ isopen }) => (isopen === 1 ? '8.1875rem' : '2.6875rem')};
+  height: ${({ isopen }) => (isopen === 1 ? '10.835rem' : '2.6875rem')};
   overflow: hidden;
 `;
 
