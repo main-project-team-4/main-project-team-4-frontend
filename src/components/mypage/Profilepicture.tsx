@@ -29,15 +29,17 @@ function Profilepicture({ data }: DataInfo) {
     if (event.currentTarget.files) {
       const file = event.currentTarget.files[0];
       const options = {
-        maxSizeMB: 0.2, // 이미지 최대 용량
-        maxWidthOrHeight: 840, // 최대 넓이
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 840,
         useWebWorker: true,
       };
       try {
         const compressedFile = await imageCompression(file, options);
         const result = await imageCompression.getDataUrlFromFile(compressedFile);
 
-        const newFile = new File([compressedFile], 'image.jpg');
+        const newFile = new File([compressedFile], 'image.jpeg', { type: 'image/jpeg' });
+        console.log(newFile);
+
         const newFormData = new FormData();
         newFormData.append('image', newFile);
 
