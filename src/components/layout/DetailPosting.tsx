@@ -10,6 +10,7 @@ import DropBar from '../common/DropBar';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../../Atoms';
 import { ChatRoom } from '../../apis/chat/chat';
+import LoginModal from '../login/LoginModal';
 
 export default function DetailPosting() {
   const [mainImg, setMainImg] = useState('');
@@ -19,7 +20,16 @@ export default function DetailPosting() {
   const token = getCookie('token');
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<string>('');
+  const [modal, setModal] = useState(false);
 
+  // 모달 열기 함수
+  const openModal = () => {
+    setModal(true);
+  };
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setModal(false);
+  };
   // 상품 조회
   const { data: detailItems, isSuccess: detailSuccess } = useQuery(['detailitem', id], () => {
     return DetailItem(id);
@@ -106,7 +116,7 @@ export default function DetailPosting() {
     if (token) {
       mutation.mutate({ token, itemId: detailItems.item_id });
       setWishState(wishState);
-    }
+    } else openModal();
   };
 
   // 찜여부 확인
@@ -151,7 +161,9 @@ export default function DetailPosting() {
   });
 
   const goChatRoom = () => {
-    chatRoomMutation.mutate({ token, itemId: detailItems.item_id }); // FormData 전송
+    if (token) {
+      chatRoomMutation.mutate({ token, itemId: detailItems.item_id });
+    } else openModal();
   };
   return detailItems ? (
     <Container>
@@ -182,6 +194,7 @@ export default function DetailPosting() {
           )}
         </PriceBox>
       </PostingContainer>
+      {modal && <LoginModal closeModal={closeModal} />}
     </Container>
   ) : null;
 }
