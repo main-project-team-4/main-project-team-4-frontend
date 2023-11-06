@@ -29,8 +29,8 @@ function Profilepicture({ data }: DataInfo) {
     if (event.currentTarget.files) {
       const file = event.currentTarget.files[0];
       const options = {
-        maxSizeMB: 0.2, // 이미지 최대 용량
-        maxWidthOrHeight: 840, // 최대 넓이
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 840,
         useWebWorker: true,
       };
       try {
