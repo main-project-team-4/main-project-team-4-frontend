@@ -90,7 +90,7 @@ export default function Header() {
         </Logo>
         <Search>
           <input onKeyDown={activeEnter} value={itemName} onChange={onChangeItem} type="text" placeholder="검색어를 입력해주세요." />
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 24" fill="none">
             <path
               d="M11.5004 19.0008C15.9189 19.0008 19.5008 15.4189 19.5008 11.0004C19.5008 6.5819 15.9189 3 11.5004 3C7.0819 3 3.5 6.5819 3.5 11.0004C3.5 15.4189 7.0819 19.0008 11.5004 19.0008Z"
               stroke="#0F172A"
@@ -110,7 +110,7 @@ export default function Header() {
                   navigate('/chat');
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 24" fill="none">
                   <path
                     d="M13 21C8.02948 21 4 16.9705 4 12C4 7.02943 8.02948 3 13 3C17.9706 3 22 7.02943 22 12C22 13.6393 21.5617 15.1762 20.796 16.5L21.55 20.55L17.5 19.796C16.1762 20.5617 14.6393 21 13 21Z"
                     stroke="white"
@@ -126,7 +126,7 @@ export default function Header() {
                   navigate('/register', { state: '' });
                 }}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 21 20" fill="none">
                   <path
                     d="M1.5 14.5L1.5 15.625C1.5 17.489 3.01104 19 4.875 19L16.125 19C17.989 19 19.5 17.489 19.5 15.625L19.5 14.5M15 5.5L10.5 1M10.5 1L6 5.5M10.5 1L10.5 14.5"
                     stroke="white"
@@ -158,71 +158,66 @@ const Layout = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 120rem;
-  height: 4.875rem;
-  padding: 1.3125rem, 10rem;
+  width: 100%;
+  height: 3.25rem; /* 4.875rem의 약 2/3 */
   box-sizing: border-box;
-
   background-color: white;
 `;
 
 const Logo = styled.div`
-  width: 7.25rem;
-  height: 2.625rem;
+  width: 4.833rem; /* 7.25rem의 약 2/3 */
+  height: 1.75rem; /* 2.625rem의 약 2/3 */
   display: flex;
   align-items: center;
-  margin-left: 10rem;
+  /* margin-left: 6.666rem; //10rem의 약 2/3 */
   cursor: pointer;
 `;
 
 const Search = styled.div`
   box-sizing: border-box;
-  width: 31.25rem;
-  height: 2rem;
-  border-radius: 3.125rem;
-  padding: 1.5rem 0.62rem;
+  width: 20.833rem; /* 31.25rem의 약 2/3 */
+  height: 1.333rem; /* 2rem의 약 2/3 */
+  border-radius: 2.083rem; /* 3.125rem의 약 2/3 */
+  padding: 1rem 0.413rem; /* padding도 비례해서 조정 */
 
   display: flex;
   justify-content: center;
   align-items: center;
-
   background-color: #f4f4f4;
 
   input {
-    width: 26.125rem;
-    height: 1.875rem;
+    width: 17.416rem; /* 26.125rem의 약 2/3 */
+    height: 1.25rem; /* 1.875rem의 약 2/3 */
     border: none;
     outline-style: none;
     background-color: #f4f4f4;
+    font-size: 0.875rem;
   }
 
   span {
-    font-size: 1.5rem;
+    font-size: 1rem; /* 글자 크기 설정 */
     background-color: transparent;
-
     cursor: pointer;
   }
 `;
 
 const BtnLayout = styled.div`
   display: flex;
-  gap: 0.625rem;
-
-  margin-right: 10rem;
+  gap: 0.416rem; /* 0.625rem의 약 2/3 */
+  //margin-right: 6.666rem; /* 10rem의 약 2/3 */
 `;
 
 const Btn = styled.button`
   all: unset;
   cursor: pointer;
-  width: 7.5rem;
-  height: 2.75rem;
-  border-radius: 0.375rem;
+  width: 5rem; /* 7.5rem의 약 2/3 */
+  height: 1.833rem; /* 2.75rem의 약 2/3 */
+  border-radius: 0.25rem; /* 0.375rem의 약 2/3 */
   display: flex;
-  /* padding: 0.625rem 1.5rem; */
   justify-content: center;
   align-items: center;
-
-  gap: 0.375rem;
+  gap: 0.25rem; /* 0.375rem의 약 2/3 */
   color: white;
   background-color: ${props => props.theme.navy};
+  font-size: 0.875rem;
 `;

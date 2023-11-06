@@ -18,7 +18,7 @@ export default function Root() {
 }
 
 const Container = styled.div`
-  max-width: 120rem;
+  max-width: 80rem;
   margin: 0 auto;
 `;
 const Content = styled.div`

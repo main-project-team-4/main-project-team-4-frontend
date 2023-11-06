@@ -171,18 +171,12 @@ const Arrow = styled.svg`
 `;
 
 const Container = styled.div`
-  width: 15.625rem;
-  /* gap: 0.62rem; */
-
-  display: flex;
+  display: none;
+  width: 10.4167rem; /* 15.625rem * 2/3 */
+  /* display: flex; */
   flex-direction: column;
   align-items: center;
-
-  margin: 3.13rem 6.25rem 3.13rem 10rem;
-
-  ul {
-    list-style-type: none;
-  }
+  margin: 2.0867rem 4.1667rem 2.0867rem 0; /* 기존 간격 * 2/3 */
 `;
 
 const ProfileContainer = styled.div`
@@ -190,8 +184,7 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  gap: 0.62rem;
+  gap: 0.4134rem; /* 0.62rem * 2/3 */
 `;
 
 const ProfileBox = styled.div`
@@ -199,9 +192,8 @@ const ProfileBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  width: 15.625rem;
-  height: 3.125rem;
+  width: 10.4167rem; /* 15.625rem * 2/3 */
+  height: 2.0833rem; /* 3.125rem * 2/3 */
 
   div {
     display: flex;
@@ -209,58 +201,41 @@ const ProfileBox = styled.div`
   }
 
   h3 {
-    font-size: 1.25rem;
-    font-style: normal;
+    font-size: 1rem; /* 폰트 사이즈는 1rem로 설정 */
     font-weight: 700;
-    line-height: 1.25rem;
-
-    margin-left: 0.94rem;
+    margin-left: 0.6267rem; /* 0.94rem * 2/3 */
   }
 
   button {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    font-size: 1.125rem;
-    line-height: 1;
   }
   img {
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 1.25rem; /* 1.875rem * 2/3 */
+    height: 1.25rem; /* 1.875rem * 2/3 */
     border-radius: 100%;
-    color: #c1c7cd;
   }
 `;
 
 const MypageMenu = styled.ul`
-  width: 15.625rem;
-
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
-
+  width: 10.4167rem; /* 15.625rem * 2/3 */
+  font-size: 1rem; /* 최소 1rem 유지 */
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  max-height: 0;
-  overflow: hidden;
   transition: max-height 0.3s ease-in-out;
-  gap: 0.62rem;
+  gap: 0.4134rem; /* 0.62rem * 2/3 */
 
   &.visible {
-    max-height: 14rem;
+    max-height: 9.3333rem; /* 14rem * 2/3 */
   }
 
   li {
     cursor: pointer;
-    height: 2.25rem;
-    padding: 0.5rem 0rem 0.5rem 0rem;
-    font-style: normal;
+    height: 1.5rem; /* 2.25rem * 2/3 */
+    padding: 0.3334rem 0; /* 0.5rem * 2/3 */
     font-weight: 500;
-    line-height: 1.25rem;
-    letter-spacing: 0.00625rem;
   }
 `;
 
@@ -268,15 +243,14 @@ const CategoryContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  gap: 0.62rem;
+  gap: 0.4134rem; /* 0.62rem * 2/3 */
 
   div {
     background-color: white;
-    width: 15.625rem;
-    padding: 0.75rem 1.5rem;
+    width: 10.4167rem; /* 15.625rem * 2/3 */
+    padding: 0.5rem 1rem; /* 패딩도 비례해서 조정 */
     box-sizing: border-box;
-    border-radius: 0.75rem;
+    border-radius: 0.5rem; /* 둥근 모서리도 비례해서 조정 */
   }
 
   ul {
@@ -284,28 +258,19 @@ const CategoryContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
+    padding: 0.5rem 1rem; /* 패딩도 비례해서 조정 */
     box-sizing: border-box;
 
     h3 {
-      margin: 0;
-      font-size: 1rem;
-      font-style: normal;
+      font-size: 1rem; /* 최소 1rem 유지 */
+      margin-bottom: 0.6667rem; /* 1rem * 2/3 */
       font-weight: 700;
-      line-height: normal;
-      letter-spacing: 0.00625rem;
-      padding: 0.875rem 0.75rem;
-
-      cursor: pointer;
     }
-
     li {
-      padding: 0.75rem 1.5rem 0.75rem 1rem;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-
+      font-size: 0.8333rem; /* 1.25rem * 2/3 */
+      padding: 0.3334rem 0; /* 0.5rem * 2/3 */
       cursor: pointer;
+      font-weight: 500;
     }
   }
 `;
