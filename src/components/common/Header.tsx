@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { searchItems } from '../../apis/header/Header';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LoginModal from '../login/LoginModal';
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
@@ -58,6 +58,23 @@ export default function Header() {
   ///
   // 유저 정보 가져오기
   const [visibleMypage, setVisibleMypage] = useState(false);
+  const mypageMenuRef = useRef(null); // MypageMenu에 대한 ref를 생성합니다.
+
+  // 외부 클릭을 감지하기 위한 함수
+  const handleClickOutside = event => {
+    if (mypageMenuRef.current && !mypageMenuRef.current.contains(event.target)) {
+      setVisibleMypage(false); // 외부 클릭이면 visibleMypage를 false로 설정
+    }
+  };
+
+  useEffect(() => {
+    // 컴포넌트가 마운트되면 document에 클릭 리스너를 추가합니다.
+    document.addEventListener('mousedown', handleClickOutside);
+    // 컴포넌트가 언마운트될 때 리스너를 정리합니다.
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []); // 빈 배열을 전달하여 마운트될 때만 실행되도록 합니다.
   const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
     enabled: !!token,
   });
@@ -163,9 +180,10 @@ export default function Header() {
               </Btn>
             )}
           </ProfileBox>
-          <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
+          <MypageMenu ref={mypageMenuRef} className={token && visibleMypage ? 'visible' : ''}>
             <li
               onClick={() => {
+                setVisibleMypage(false);
                 navigate('/mypage');
               }}
             >
@@ -173,6 +191,7 @@ export default function Header() {
             </li>
             <li
               onClick={() => {
+                setVisibleMypage(false);
                 navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
               }}
             >
