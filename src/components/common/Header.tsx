@@ -2,9 +2,15 @@ import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { searchItems } from '../../apis/header/Header';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LoginModal from '../login/LoginModal';
 import { getCookie } from '../../utils/cookie';
+import { theme } from '../../styles/theme';
+
+import { removeCookie } from '../../utils/cookie';
+import { getMyInfo } from '../../apis/mypage/members';
+import { useRecoilState } from 'recoil';
+import { myDataState } from '../../Atoms';
 
 export default function Header() {
   const [modal, setModal] = useState(false);
@@ -49,7 +55,21 @@ export default function Header() {
       console.error('Error refetching data:', error);
     }
   };
+  ///
+  // 유저 정보 가져오기
+  const [visibleMypage, setVisibleMypage] = useState(false);
+  const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
+    enabled: !!token,
+  });
+  const [myData, setMyData] = useRecoilState(myDataState);
+  useEffect(() => {
+    setMyData(userData);
+  }, [userData, setMyData]);
 
+  // 프로필 밑에 있는 마이페이지 토글
+  const toggleMypage = () => {
+    setVisibleMypage(!visibleMypage);
+  };
   return (
     <>
       <Layout>
@@ -102,53 +122,73 @@ export default function Header() {
             <path d="M21.4987 21.0026L17.1484 16.6523" stroke="#0F172A" strokeWidth="1.50001" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </Search>
-        <BtnLayout>
-          {token ? (
-            <>
-              <Btn
-                onClick={() => {
-                  navigate('/chat');
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 24" fill="none">
-                  <path
-                    d="M13 21C8.02948 21 4 16.9705 4 12C4 7.02943 8.02948 3 13 3C17.9706 3 22 7.02943 22 12C22 13.6393 21.5617 15.1762 20.796 16.5L21.55 20.55L17.5 19.796C16.1762 20.5617 14.6393 21 13 21Z"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
+        <ProfileContainer>
+          <ProfileBox>
+            {token ? (
+              <div onClick={toggleMypage}>
+                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/9qGZ1j.png'} />
+                <h3>{myData?.member_nickname}</h3>
+                <button>
+                  {token && visibleMypage ? (
+                    <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none" style={{ transform: 'rotate(180deg)' }}>
+                      <path d="M16.3327 7.5L10.4993 13.3333L4.66602 7.5" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Arrow>
+                  ) : (
+                    <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none">
+                      <path d="M16.3327 7.5L10.4993 13.3333L4.66602 7.5" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </Arrow>
+                  )}
+                </button>
+              </div>
+            ) : (
+              <Btn onClick={openModal}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <g clip-path="url(#clip0_1414_3712)">
+                    <path
+                      d="M12.5 6.66659V4.99992C12.5 4.55789 12.3244 4.13397 12.0118 3.82141C11.6993 3.50885 11.2754 3.33325 10.8333 3.33325H4.16667C3.72464 3.33325 3.30072 3.50885 2.98816 3.82141C2.67559 4.13397 2.5 4.55789 2.5 4.99992V14.9999C2.5 15.4419 2.67559 15.8659 2.98816 16.1784C3.30072 16.491 3.72464 16.6666 4.16667 16.6666H10.8333C11.2754 16.6666 11.6993 16.491 12.0118 16.1784C12.3244 15.8659 12.5 15.4419 12.5 14.9999V13.3333"
+                      stroke="#0F172A"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path d="M17.5003 10H6.66699M6.66699 10L9.16699 12.5M6.66699 10L9.16699 7.5" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_1414_3712">
+                      <rect width="20" height="20" fill="white" />
+                    </clipPath>
+                  </defs>
                 </svg>
-                채팅
+                로그인
               </Btn>
-              <Btn
-                onClick={() => {
-                  navigate('/register', { state: '' });
-                }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 21 20" fill="none">
-                  <path
-                    d="M1.5 14.5L1.5 15.625C1.5 17.489 3.01104 19 4.875 19L16.125 19C17.989 19 19.5 17.489 19.5 15.625L19.5 14.5M15 5.5L10.5 1M10.5 1L6 5.5M10.5 1L10.5 14.5"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                상품등록
-              </Btn>
-            </>
-          ) : (
-            <Btn onClick={openModal}>
-              <span style={{ color: 'white' }} className="material-symbols-outlined">
-                logout
-              </span>
-              로그인
-            </Btn>
-          )}
-        </BtnLayout>
+            )}
+          </ProfileBox>
+          <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
+            <li
+              onClick={() => {
+                navigate('/mypage');
+              }}
+            >
+              마이페이지
+            </li>
+            <li
+              onClick={() => {
+                navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
+              }}
+            >
+              내 상점
+            </li>
+            <li
+              onClick={() => {
+                removeCookie('token');
+                navigate('/');
+              }}
+            >
+              로그아웃
+            </li>
+          </MypageMenu>
+        </ProfileContainer>
       </Layout>
-
       {modal && <LoginModal closeModal={closeModal} />}
     </>
   );
@@ -156,29 +196,31 @@ export default function Header() {
 
 const Layout = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 100%;
-  height: 3.25rem; /* 4.875rem의 약 2/3 */
+
+  width: 78.125rem;
+  height: 3.25rem;
   box-sizing: border-box;
-  background-color: white;
 `;
 
 const Logo = styled.div`
-  width: 4.833rem; /* 7.25rem의 약 2/3 */
-  height: 1.75rem; /* 2.625rem의 약 2/3 */
+  width: 6.0625rem;
+  height: 1.875rem;
   display: flex;
   align-items: center;
-  /* margin-left: 6.666rem; //10rem의 약 2/3 */
+
   cursor: pointer;
 `;
 
 const Search = styled.div`
   box-sizing: border-box;
-  width: 20.833rem; /* 31.25rem의 약 2/3 */
-  height: 1.333rem; /* 2rem의 약 2/3 */
-  border-radius: 2.083rem; /* 3.125rem의 약 2/3 */
-  padding: 1rem 0.413rem; /* padding도 비례해서 조정 */
+  width: 25rem;
+  height: 2.5rem;
+  border-radius: 2.083rem;
+  padding: 1rem 0.62rem;
+
+  margin-left: auto;
+  margin-right: 1.88rem;
 
   display: flex;
   justify-content: center;
@@ -186,8 +228,8 @@ const Search = styled.div`
   background-color: #f4f4f4;
 
   input {
-    width: 17.416rem; /* 26.125rem의 약 2/3 */
-    height: 1.25rem; /* 1.875rem의 약 2/3 */
+    width: 21.125rem;
+    height: 1.25rem;
     border: none;
     outline-style: none;
     background-color: #f4f4f4;
@@ -195,29 +237,103 @@ const Search = styled.div`
   }
 
   span {
-    font-size: 1rem; /* 글자 크기 설정 */
+    font-size: 1rem;
     background-color: transparent;
     cursor: pointer;
   }
 `;
 
-const BtnLayout = styled.div`
-  display: flex;
-  gap: 0.416rem; /* 0.625rem의 약 2/3 */
-  //margin-right: 6.666rem; /* 10rem의 약 2/3 */
-`;
-
 const Btn = styled.button`
   all: unset;
   cursor: pointer;
-  width: 5rem; /* 7.5rem의 약 2/3 */
-  height: 1.833rem; /* 2.75rem의 약 2/3 */
-  border-radius: 0.25rem; /* 0.375rem의 약 2/3 */
+
+  width: 9rem;
+  height: 1.833rem;
+  font-size: 0.875rem;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.25rem; /* 0.375rem의 약 2/3 */
-  color: white;
-  background-color: ${props => props.theme.navy};
-  font-size: 0.875rem;
+  gap: 0.38rem;
+
+  border-left: 0.0625rem solid ${theme.outline};
+  padding-left: 1.5rem;
+`;
+
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  border-left: 0.0625rem solid ${theme.outline};
+  padding-left: 1.5rem;
+  width: 9rem;
+`;
+const ProfileBox = styled.div`
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.0833rem;
+  div {
+    display: flex;
+    align-items: center;
+  }
+
+  h3 {
+    font-size: 1rem; /* 폰트 사이즈는 1rem로 설정 */
+    font-weight: 700;
+    margin-left: 0.6267rem; /* 0.94rem * 2/3 */
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  img {
+    width: 1.25rem; /* 1.875rem * 2/3 */
+    height: 1.25rem; /* 1.875rem * 2/3 */
+    border-radius: 100%;
+  }
+`;
+
+const Arrow = styled.svg`
+  transition: transform 0.3s ease-in-out;
+`;
+
+const MypageMenu = styled.ul`
+  position: absolute;
+  top: 2rem;
+  width: 7rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  max-height: 0rem;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 0.375rem;
+  transition: max-height 0.2s ease-in-out;
+
+  &.visible {
+    max-height: 9.3333rem;
+    border: 1px solid ${theme.pointColor};
+    padding: 0.625rem 0rem;
+  }
+
+  li {
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+    &:hover {
+      color: ${theme.pointColor};
+    }
+  }
 `;
