@@ -64,7 +64,7 @@ function SelectbuyerModal({ setSelectedView, setSelected, setSelectBuyer, setIsO
     <Overlay>
       {modalState && <Modal modalClose={modalClose} modalInfo="판매완료!" />}
       <Container>
-        <h1>구매자 선택</h1>
+        <p>구매자 선택</p>
         <ChatList>
           <p>채팅목록</p>
           {data?.map((buyer: BuyerType) => {
@@ -121,7 +121,7 @@ const Container = styled.div`
   border-radius: 0.75rem;
   border: 1px solid var(--outline-color, #e7e8ea);
 
-  h1 {
+  p {
     margin: 1.38rem auto 1.38rem 1.38rem;
     font-size: 1.5rem;
     font-style: normal;

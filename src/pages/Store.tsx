@@ -158,7 +158,7 @@ export default function Store() {
                     <div>
                       <span>{inputCount}</span>
                       <span>/ 60자</span>
-                    </div>{' '}
+                    </div>
                   </TextArea>
                 ) : intro ? (
                   <p>{intro}</p>

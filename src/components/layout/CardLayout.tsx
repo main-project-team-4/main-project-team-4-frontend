@@ -3,7 +3,7 @@ import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 import TabLayout from './TabLayout';
-import { ReviewModal } from '../store/ReviewModal';
+import { ReviewInputModal, ReviewModal } from '../mypage/ReviewModal';
 import React, { useEffect, useState } from 'react';
 
 interface TabData {
@@ -43,16 +43,9 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
   const path = location.pathname;
   const goShop = path.includes('/posting');
   const storePath = path.includes('/store');
-  // 모달 상태관리
-  const [modalState, setModalState] = useState(true);
 
-  const modalConfirm = () => {
-    setModalState(false);
-  };
-  const modalClose = () => {
-    setModalState(false);
-  };
   const tabData = getTabData(dataName);
+  console.log('data', data);
 
   const move = () => {
     navigate(`items/${title}`);
@@ -60,8 +53,6 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
 
   return (
     <>
-      {modalState && storeState && <ReviewModal modalClose={modalClose} />}
-
       <Layout title={title}>
         {data && (
           <>
@@ -127,6 +118,9 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
                       img={item.item_main_image}
                       itemTitle={item.item_name}
                       price={item.item_price}
+                      dataName={dataName}
+                      review={item.is_review_written}
+                      shopId={item.shop_id}
                     />
                   ))}
                 </>

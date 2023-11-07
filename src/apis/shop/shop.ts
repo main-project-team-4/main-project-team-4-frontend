@@ -70,3 +70,28 @@ export const Reviews = async (shopId: ShopType) => {
     console.log(error);
   }
 };
+
+// 리뷰 등록
+export const ReviewRegistration = async ({ token, data }: ShopType) => {
+  try {
+    const response = await baseInstance.post(`/api/reviews`, data, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//리뷰 가져오기
+export const getReviews = async ({ itemId, token }: ShopType) => {
+  try {
+    const response = await baseInstance.get(`/api/items/${itemId}/reviews`, {
+      headers: { Authorization: token },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -171,7 +171,7 @@ const Arrow = styled.svg`
 `;
 
 const Container = styled.div`
-  display: none;
+  /* display: none; */
   width: 10.4167rem; /* 15.625rem * 2/3 */
   /* display: flex; */
   flex-direction: column;
