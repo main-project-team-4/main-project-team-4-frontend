@@ -5,7 +5,7 @@ import { theme } from '../../styles/theme';
 import { ReviewInputModal, ReviewModal } from '../mypage/ReviewModal';
 import { useQuery } from 'react-query';
 import { getReviews } from '../../apis/shop/shop';
-
+import { getCookie } from '../../utils/cookie';
 interface CardProps {
   id: number;
   img: string;
@@ -22,7 +22,7 @@ interface CardProps {
 export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, shopId }: CardProps) {
   const navigate = useNavigate();
   console.log(review, 'review');
-
+  const token = getCookie('token');
   const formattedPrice = Number(price).toLocaleString('ko-KR');
   // 모달 상태관리
   const [modalState, setModalState] = useState(true);
@@ -56,17 +56,22 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   }, [itemState]);
 
   //리뷰 정보 가져오기
-  // const { data,refetch } = useQuery('reviewData', () => getReviews(itemId:itemId,data:data), { enabled: false });
+  const { data: reviewInfo, refetch } = useQuery('reviewData', () => getReviews({ itemId: id, token }), { enabled: false });
+  console.log('리뷰 가져오기', reviewInfo);
 
+  const ReviewOnClick = () => {
+    refetch();
+    setModalState(false);
+  };
   return (
     <>
       {/* {modalState && dataName === 'ordered' && <ReviewInputModal shopId={shopId} modalClose={modalClose} />} */}
-      {modalState && dataName === 'ordered' && <ReviewModal data={data} shopId={shopId} modalClose={modalClose} />}
+      {modalState && dataName === 'ordered' && <ReviewModal shopId={shopId} modalClose={modalClose} />}
       {modalState && dataName === 'sales' && <ReviewModal modalClose={modalClose} />}
       <Layout
         onClick={event => {
           event.stopPropagation();
-          return;
+          // return;
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
         displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
@@ -89,7 +94,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                     <Btn long={'short'} sales={dataName === 'sales' ? 1 : 2}>
                       <Pencil /> 리뷰삭제
                     </Btn>
-                    <Btn long={'short'} sales={dataName === 'sales' ? 1 : 2}>
+                    <Btn onClick={ReviewOnClick} long={'short'} sales={dataName === 'sales' ? 1 : 2}>
                       <Pencil /> 리뷰보기
                     </Btn>
                   </BtnLayout>
@@ -97,6 +102,24 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                   <BtnLayout>
                     <Btn long={'long'} onClick={modalOpen}>
                       <Pencil /> 리뷰작성
+                    </Btn>
+                  </BtnLayout>
+                )}
+              </>
+            )}
+
+            {dataName === 'sales' && (
+              <>
+                {review ? (
+                  <BtnLayout>
+                    <Btn review={review ? 1 : 0} onClick={ReviewOnClick} long={'long'} sales={dataName === 'sales' ? 1 : 2}>
+                      <Pencil /> 리뷰보기
+                    </Btn>
+                  </BtnLayout>
+                ) : (
+                  <BtnLayout>
+                    <Btn review={review ? 1 : 0} sales={dataName === 'sales' ? 1 : 2} long={'long'} onClick={modalOpen}>
+                      <Pencil /> 리뷰가 아직 없어요
                     </Btn>
                   </BtnLayout>
                 )}
@@ -206,7 +229,7 @@ const BtnLayout = styled.div`
   margin-top: 0.62rem;
 `;
 
-const Btn = styled.button<{ sales: number; long: string }>`
+const Btn = styled.button<{ sales: number; long: string; review: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -214,7 +237,8 @@ const Btn = styled.button<{ sales: number; long: string }>`
   width: ${props => (props.long === 'long' ? '17.0625rem' : '8.28125rem')};
   height: 2.6875rem;
   border-radius: 0.5rem;
-  background: ${props => (props.sales === 1 ? theme.navy : theme.pointColor)};
+  background: ${props => (props.sales === 1 ? (props.review ? theme.navy : 'gray') : theme.pointColor)};
+
   padding: 0.75rem 1rem;
   box-sizing: border-box;
   border: none;

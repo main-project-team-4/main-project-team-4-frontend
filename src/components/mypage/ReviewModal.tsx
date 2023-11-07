@@ -98,13 +98,17 @@ export function ReviewInputModal({ modalConfirm, modalClose, onRatingChange, sho
 }
 
 export function ReviewModal({ data, modalConfirm, modalClose, shopId }: ModalProps) {
-  console.log('data',data);
-  
+  console.log('data', data);
+
   return (
     <>
       <Overlay>
         <Container>
-          <CloseBtn />
+          <CloseBtn onClick={modalClose}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" fill="none">
+              <path d="M7.5 22.5L22.5 7.5M7.5 7.5L22.5 22.5" />
+            </svg>
+          </CloseBtn>
           <Title>리뷰</Title>
           <hr style={{ backgroundColor: '#E7E8EA', position: 'absolute', top: '4.56rem', left: '0rem', border: 'none', height: '1px', width: '100%' }} />
           <Layout>
@@ -164,13 +168,24 @@ const Star = ({ filled, onMouseEnter }) => {
   );
 };
 
-const CloseBtn = () => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
-      <path d="M7.5 22.5L22.5 7.5M7.5 7.5L22.5 22.5" stroke="#0F172A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-  );
-};
+const CloseBtn = styled.button`
+  position: absolute;
+  top: 1.38rem;
+  right: 1.38rem;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  svg {
+    stroke: #0f172a;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+`;
 const Overlay = styled.div`
   z-index: 19;
   position: fixed;
@@ -188,6 +203,7 @@ const Overlay = styled.div`
 
 const Container = styled.div`
   width: 33.75rem;
+  position: relative;
   /* height: 25.5725rem; */
   box-sizing: border-box;
   background-color: white;
