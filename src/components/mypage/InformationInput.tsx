@@ -35,6 +35,7 @@ function InformationInput({ data }: DataInfo) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [modalState, setModalState] = useState(false);
   const [duplication, setDuplication] = useState(false);
+  const [validation, setValidation] = useState(false);
 
   const mutationNick = useMutation(changeNickName, {
     onSuccess: () => {
@@ -65,7 +66,12 @@ function InformationInput({ data }: DataInfo) {
     }
   };
   const completeNick = () => {
+    if (nickName.length < 1 || nickName.length > 20) {
+      setValidation(true);
+      return;
+    }
     mutationNick.mutate({ token, nickName });
+    setValidation(false);
   };
 
   // 주소 변경
@@ -134,12 +140,14 @@ function InformationInput({ data }: DataInfo) {
               ref={inputRef}
               onChange={onChangeNick}
               placeholder="상점명"
+              value={nickName}
             />
             <button onClick={completeNick}>수정완료</button>
           </>
         )}
       </InputBox>
       {duplication && <span>중복된 상점명입니다.</span>}
+      {validation && <span>상점명은 최소 1자 이상이어야 하며, 최대 20자를 초과할 수 없습니다.</span>}
       <InputBox boxname="address" duplication={3}>
         <h3>주소</h3>
         {locBtnState ? (

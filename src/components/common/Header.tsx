@@ -55,26 +55,11 @@ export default function Header() {
       console.error('Error refetching data:', error);
     }
   };
-  ///
+
   // 유저 정보 가져오기
   const [visibleMypage, setVisibleMypage] = useState(false);
-  const mypageMenuRef = useRef(null); // MypageMenu에 대한 ref를 생성합니다.
+  const mypageMenuRef = useRef<HTMLUListElement>(null);
 
-  // 외부 클릭을 감지하기 위한 함수
-  const handleClickOutside = event => {
-    if (mypageMenuRef.current && !mypageMenuRef.current.contains(event.target)) {
-      setVisibleMypage(false); // 외부 클릭이면 visibleMypage를 false로 설정
-    }
-  };
-
-  useEffect(() => {
-    // 컴포넌트가 마운트되면 document에 클릭 리스너를 추가합니다.
-    document.addEventListener('mousedown', handleClickOutside);
-    // 컴포넌트가 언마운트될 때 리스너를 정리합니다.
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []); // 빈 배열을 전달하여 마운트될 때만 실행되도록 합니다.
   const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
     enabled: !!token,
   });
@@ -83,7 +68,18 @@ export default function Header() {
     setMyData(userData);
   }, [userData, setMyData]);
 
-  // 프로필 밑에 있는 마이페이지 토글
+  // 외부 클릭시 토글 비활성화
+  const handleClickOutside = (event: MouseEvent) => {
+    if (mypageMenuRef.current && !mypageMenuRef.current.contains(event.target as Node)) {
+      setVisibleMypage(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   const toggleMypage = () => {
     setVisibleMypage(!visibleMypage);
   };

@@ -37,6 +37,7 @@ function Welcome() {
   const [nickName, setNickName] = useState('');
   const [nickDuplicated, setNickDuplicated] = useState(false);
   const [isNickname, setIsNickName] = useState(false);
+  const [validation, setValidation] = useState(false);
   const nickOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setNickName(value);
@@ -48,6 +49,7 @@ function Welcome() {
       setModalState(true);
       setNickDuplicated(false);
       setIsNickName(false);
+      setValidation(false);
     },
     onError: () => {
       setNickDuplicated(true);
@@ -56,8 +58,15 @@ function Welcome() {
   });
   const nickOnClick = () => {
     if (!nickName) {
+      setValidation(false);
       setNickDuplicated(false);
       setIsNickName(true);
+      return;
+    }
+    if (nickName.length < 1 || nickName.length > 20) {
+      setValidation(false);
+      setValidation(true);
+      setIsNickName(false);
       return;
     }
     nicknameMutation.mutate({ token, nickName });
@@ -181,6 +190,7 @@ function Welcome() {
           </div>
           {nickDuplicated && <span>중복된 상점명입니다.</span>}
           {isNickname && <span>닉네임을 입력해주세요.</span>}
+          {validation && <span>상점명은 최소 1자 이상이어야 하며, 최대 20자를 초과할 수 없습니다.</span>}
         </InputBox>
 
         <InputBox>
