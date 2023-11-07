@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { theme } from '../../styles/theme';
 
 interface CardProps {
@@ -14,7 +13,7 @@ interface CardProps {
   shopName: string;
 }
 
-export default function RecommendCard({ shopName, id, img, itemTitle, price, itemState, categoryTitle, storePath }: CardProps) {
+export default function RecommendCard({ shopName, id, img, itemTitle, price }: CardProps) {
   const navigate = useNavigate();
   const formattedPrice = Number(price).toLocaleString('ko-KR');
 
@@ -25,10 +24,12 @@ export default function RecommendCard({ shopName, id, img, itemTitle, price, ite
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
       >
-        <h1>{shopName}</h1>
+        <Profile>
+          <p>{shopName}</p>
+        </Profile>
         <Image src={img} />
         <TextLayout>
-          <h1>{itemTitle}</h1>
+          <p>{itemTitle}</p>
           <Price>{formattedPrice}원</Price>
         </TextLayout>
       </Layout>
@@ -38,16 +39,31 @@ export default function RecommendCard({ shopName, id, img, itemTitle, price, ite
 
 const Layout = styled.div`
   width: 21.875rem;
-  height: 29.25rem;
+  height: 29.875rem;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid ${theme.outline};
   background-color: white;
 `;
 
+const Profile = styled.div`
+  margin: 1rem auto 0.62rem 0.62rem;
+  height: 3.125rem;
+
+  p {
+    font-size: 1.25rem;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+`;
 const Image = styled.img`
-  width: 100%;
-  height: 14.25rem;
+  width: 20.625rem;
+  height: 18.75rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
   border-bottom: 1px solid #e7e8ea7e;
@@ -55,7 +71,6 @@ const Image = styled.img`
 
 const TextLayout = styled.div`
   display: flex;
-  padding: 0rem 1rem;
   box-sizing: border-box;
   flex-direction: column;
 
@@ -63,42 +78,19 @@ const TextLayout = styled.div`
 
   margin-bottom: 1.25rem;
   gap: 0.62rem;
-
-  h1 {
-    font-size: 1.125rem;
+  p {
+    font-size: 1.25rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    height: 1.375rem;
-    width: 17rem;
-    overflow: hidden;
-    text-align: left;
   }
 `;
 
-const Sale = styled.div`
-  width: 4.5rem;
-  height: 2rem;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  border-radius: 6.25rem;
-  background: #ececec;
-
-  font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 1.25rem;
-  letter-spacing: 0.04rem;
-  color: black;
-`;
-
 const Price = styled.div`
-  font-size: 1.25rem;
+  font-size: 1.375rem;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   text-align: left;
+  color: ${theme.pointColor};
 `;

@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import RecommendCard from '../common/RecommendCard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, Autoplay, EffectCoverflow } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+// import 'swiper/css/scrollbar';
 
 type RecommendType = {
   title: string;
@@ -20,6 +26,7 @@ type ItemType = {
   member_nickname: string;
   shop_name: string;
 };
+
 function RecommendLayout({ title, data }: RecommendType) {
   return (
     <LayOut>
@@ -34,18 +41,33 @@ function RecommendLayout({ title, data }: RecommendType) {
           {title}
         </h1>
         <CardWrapper>
-          {data.map((item: ItemType) => (
-            <RecommendCard
-              key={item.item_id}
-              shopName={item.shop_name}
-              categoryTitle={title}
-              itemState={item.item_state}
-              id={item.item_id}
-              img={item.item_main_image}
-              itemTitle={item.item_name}
-              price={item.item_price}
-            />
-          ))}
+          <StyledSwiper
+            modules={[Navigation, Pagination, Scrollbar, Autoplay, EffectCoverflow]}
+            slidesPerView={3}
+            // slidesPerGroup={3}
+            navigation
+            centeredSlides
+            speed={1000}
+            effect="coverflow"
+            pagination={{ clickable: true, type: 'progressbar' }}
+            // scrollbar={{ draggable: true }}
+            autoplay={{ delay: 2000, disableOnInteraction: false }}
+            loop={true}
+          >
+            {data.map((item: ItemType, index) => (
+              <SwiperSlide key={index}>
+                <RecommendCard
+                  shopName={item.shop_name}
+                  categoryTitle={title}
+                  itemState={item.item_state}
+                  id={item.item_id}
+                  img={item.item_main_image}
+                  itemTitle={item.item_name}
+                  price={item.item_price}
+                />
+              </SwiperSlide>
+            ))}
+          </StyledSwiper>
         </CardWrapper>
       </Container>
     </LayOut>
@@ -55,24 +77,23 @@ function RecommendLayout({ title, data }: RecommendType) {
 export default RecommendLayout;
 
 const LayOut = styled.div`
-  position: relative;
   width: 80rem;
   height: 38.6875rem;
 `;
 const Container = styled.div`
-  width: 94.5rem;
+  width: 100vw;
   height: 38.6875rem;
 
   position: absolute;
-  left: -7.25rem;
+  left: 0rem;
   background-color: ${theme.pointColor};
-  z-index: -1;
 
   h1 {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 2.5rem;
+    gap: 0.5rem;
 
     color: white;
     font-size: 1.625rem;
@@ -86,8 +107,31 @@ const CardWrapper = styled.div`
   display: flex;
   align-items: center;
   width: 67.5rem;
-  gap: 0.94rem;
-  overflow: hidden;
+  margin: 1.25rem auto 3.12rem auto;
+`;
+const StyledSwiper = styled(Swiper)`
+  position: relative;
+  height: 32.6875rem;
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: ${theme.inputColor}; // 네비게이션 버튼 색상 변경
+  }
 
-  margin: 1.25rem 13.5rem 3.12rem 13.5rem;
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 3.125rem; // 네비게이션 화살표 크기 변경
+  }
+  .swiper-pagination {
+    bottom: 10px !important; // 하단에서 10px의 위치에 배치
+    top: auto !important; // 기본 상단 위치를 무시
+    width: 100%; // 너비를 100%로 설정하여 컨테이너를 가득 채움
+  }
+
+  .swiper-pagination-progressbar {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.5); // 프로그레스바 배경색
+    .swiper-pagination-progressbar-fill {
+      background: ${theme.navy}; // 프로그레스바 채우기 색상
+    }
+  }
 `;
