@@ -9,10 +9,10 @@ type ModalProps = {
   modalClose: () => void;
   modalConfirm?: () => void;
   onRatingChange?: (rating: number) => void;
-  shopId?: number;
+  itemId?: number;
 };
 
-export function ReviewInputModal({ modalConfirm, modalClose, onRatingChange, shopId }: ModalProps) {
+export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingChange, shopId, setModalState }: ModalProps) {
   const [rating, setRating] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [review, setReview, reviewHandleChange] = useInput('');
@@ -42,12 +42,13 @@ export function ReviewInputModal({ modalConfirm, modalClose, onRatingChange, sho
     } else {
       mutationReview.mutate({
         data: {
-          shop_id: shopId,
+          item_id: itemId,
           review_comment: review,
           review_rating: rating + 1,
         },
         token,
       });
+      setModalState(false);
     }
   };
 
@@ -97,9 +98,7 @@ export function ReviewInputModal({ modalConfirm, modalClose, onRatingChange, sho
   );
 }
 
-export function ReviewModal({ data, modalConfirm, modalClose, shopId }: ModalProps) {
-  console.log('data', data);
-
+export function ReviewModal({ reviewInfo, modalConfirm, modalClose }: ModalProps) {
   return (
     <>
       <Overlay>
@@ -113,24 +112,28 @@ export function ReviewModal({ data, modalConfirm, modalClose, shopId }: ModalPro
           <hr style={{ backgroundColor: '#E7E8EA', position: 'absolute', top: '4.56rem', left: '0rem', border: 'none', height: '1px', width: '100%' }} />
           <Layout>
             <ProfileContainer>
-              <img src="" alt="picture" />
-              <div>홍길동</div>
+              {reviewInfo?.member_image ? <img src={reviewInfo?.member_image} alt="picture" /> : <ProfileImg />}
+              <div>{reviewInfo?.member_nickname}</div>
             </ProfileContainer>
             <ItemContainer>
               <h3>상품 이미지</h3>
-              <ImgList>
-                <img src="" alt="pic" />
-                <img src="" alt="pic" />
-                <img src="" alt="pic" />
-              </ImgList>
+              {/* <ImgList>
+                {reviewInfo.item_image_list.map(img => {
+                  <img key={img} src={img} alt="pic" />;
+                })}
+              </ImgList> */}
             </ItemContainer>
             <StarContainer>
               <h3>별점</h3>
-              <StarList></StarList>
+              <StarList>
+                {[...Array(reviewInfo?.review_rating)].map((_, index) => (
+                  <Star key={index} filled={true} />
+                ))}
+              </StarList>
             </StarContainer>
             <ReviewContainer>
               <h3>거래 후기</h3>
-              <div>에서 물은 중요한 </div>
+              <div>{reviewInfo?.review_comment}</div>
             </ReviewContainer>
           </Layout>
         </Container>
@@ -168,6 +171,31 @@ const Star = ({ filled, onMouseEnter }) => {
   );
 };
 
+const ProfileImg = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <g clip-path="url(#clip0_1414_4833)">
+        <circle cx="20" cy="20" r="20" fill="#90B0FD" />
+        <path
+          d="M26.6667 15.5556C26.6667 19.2375 23.6819 22.2222 20 22.2222C16.3181 22.2222 13.3333 19.2375 13.3333 15.5556C13.3333 11.8737 16.3181 8.88889 20 8.88889C23.6819 8.88889 26.6667 11.8737 26.6667 15.5556Z"
+          fill="#0F172A"
+        />
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M4.71342 32.8972C8.38214 37.2412 13.8689 40 20 40C26.1311 40 31.6179 37.2412 35.2866 32.8972C30.7719 30.3453 25.556 28.8889 20 28.8889C14.444 28.8889 9.22815 30.3453 4.71342 32.8972ZM26.6667 15.5556C26.6667 19.2375 23.6819 22.2222 20 22.2222C16.3181 22.2222 13.3333 19.2375 13.3333 15.5556C13.3333 11.8737 16.3181 8.88889 20 8.88889C23.6819 8.88889 26.6667 11.8737 26.6667 15.5556Z"
+          fill="#0F172A"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1414_4833">
+          <rect width="40" height="40" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+};
+
 const CloseBtn = styled.button`
   position: absolute;
   top: 1.38rem;
@@ -181,9 +209,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    strokeWidth: 1.5;
+    strokeLinecap: round;
+    strokeLinejoin: round;
   }
 `;
 const Overlay = styled.div`
@@ -312,11 +340,11 @@ const ImgList = styled.div`
   display: flex;
   gap: 0.62rem;
   img {
-    width: 6.25rem;
-    height: 6.25rem;
+    width: 5.625rem;
+    height: 5.625rem;
     border-radius: 0.375rem;
     background: white;
-    border: 1px solid pink;
+    border: 1px solid #d9d9d9;
   }
 `;
 const StarContainer = styled.div`

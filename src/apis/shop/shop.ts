@@ -95,3 +95,29 @@ export const getReviews = async ({ itemId, token }: ShopType) => {
     console.log(error);
   }
 };
+
+//리뷰 수정
+export const ChangeReview = async ({ reviewId, token, data }: ShopType) => {
+  try {
+    const response = await baseInstance.put(`/api/reviews/${reviewId}`, data, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//리뷰 삭제
+export const DeleteReview = async ({ reviewId, token }: ShopType) => {
+  try {
+    const response = await baseInstance.delete(`/api/reviews/${reviewId}`, data, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

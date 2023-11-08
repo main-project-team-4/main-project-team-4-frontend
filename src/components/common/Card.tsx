@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { ReviewInputModal, ReviewModal } from '../mypage/ReviewModal';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { getReviews } from '../../apis/shop/shop';
 import { getCookie } from '../../utils/cookie';
+import { DeleteReview } from '../../apis/shop/shop';
+
 interface CardProps {
   id: number;
   img: string;
@@ -17,22 +19,20 @@ interface CardProps {
   dataName?: string;
   review?: boolean;
   shopId?: number;
+  reviewId?: number;
 }
 
-export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, shopId }: CardProps) {
+export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, shopId, reviewId }: CardProps) {
   const navigate = useNavigate();
-  console.log(review, 'review');
   const token = getCookie('token');
   const formattedPrice = Number(price).toLocaleString('ko-KR');
   // 모달 상태관리
-  const [modalState, setModalState] = useState(true);
-
+  const [modalState, setModalState] = useState(false);
+  useEffect(() => {}, [modalState]);
   const modalConfirm = () => {
     setModalState(false);
   };
   const modalOpen = () => {
-    console.log('왜이래');
-
     setModalState(true);
   };
   const modalClose = () => {
@@ -57,26 +57,48 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
 
   //리뷰 정보 가져오기
   const { data: reviewInfo, refetch } = useQuery('reviewData', () => getReviews({ itemId: id, token }), { enabled: false });
-  console.log('리뷰 가져오기', reviewInfo);
 
   const ReviewOnClick = () => {
+    event.stopPropagation();
     refetch();
-    setModalState(false);
+    setModalState(true);
   };
+
+  //리뷰 삭제
+  const deleteMutation = useMutation(DeleteReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['deleteReview', reviewId]);
+    },
+  });
+
+  const onClickDelete = () => {
+    console.log(reviewId, token);
+
+    if (reviewId && token) {
+      deleteMutation.mutate({ reviewId, token });
+    }
+  };
+
+  //리뷰 수정 버튼
+  const onClickReviewChange = () => {
+    event.stopPropagation();
+    refetch();
+    setModalState(true);
+  };
+
   return (
     <>
-      {/* {modalState && dataName === 'ordered' && <ReviewInputModal shopId={shopId} modalClose={modalClose} />} */}
-      {modalState && dataName === 'ordered' && <ReviewModal shopId={shopId} modalClose={modalClose} />}
-      {modalState && dataName === 'sales' && <ReviewModal modalClose={modalClose} />}
+      {modalState && dataName === 'ordered' && <ReviewInputModal setModalState={setModalState} itemId={id} shopId={shopId} modalClose={modalClose} />}
+      {modalState && dataName === 'sales' && <ReviewModal reviewInfo={reviewInfo} modalClose={modalClose} />}
       <Layout
         onClick={event => {
           event.stopPropagation();
-          // return;
+          return;
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
         displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
         storepath={storePath ? 1 : 0}
-        sales={dataName === 'sales' ? 1 : 2}
+        sales={dataName === 'sales' || dataName === 'ordered' ? 1 : 2}
       >
         <Image src={img} />
         <TextLayout>
@@ -91,11 +113,11 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
               <>
                 {review ? (
                   <BtnLayout>
-                    <Btn long={'short'} sales={dataName === 'sales' ? 1 : 2}>
-                      <Pencil /> 리뷰삭제
+                    <Btn onClick={onClickDelete} long={'short'} delete={'delete'} sales={dataName === 'sales' ? 1 : 2}>
+                      <Trash /> 리뷰삭제
                     </Btn>
-                    <Btn onClick={ReviewOnClick} long={'short'} sales={dataName === 'sales' ? 1 : 2}>
-                      <Pencil /> 리뷰보기
+                    <Btn onClick={onClickReviewChange} long={'short'} sales={dataName === 'sales' ? 1 : 2}>
+                      <Pencil /> 리뷰수정
                     </Btn>
                   </BtnLayout>
                 ) : (
@@ -118,7 +140,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                   </BtnLayout>
                 ) : (
                   <BtnLayout>
-                    <Btn review={review ? 1 : 0} sales={dataName === 'sales' ? 1 : 2} long={'long'} onClick={modalOpen}>
+                    <Btn review={review ? 1 : 0} sales={dataName === 'sales' ? 1 : 2} long={'long'}>
                       <Pencil /> 리뷰가 아직 없어요
                     </Btn>
                   </BtnLayout>
@@ -145,18 +167,27 @@ const Pencil = () => {
     </svg>
   );
 };
-const Layout = styled.div<{ displaybtn: number; storepath: number; sales: number }>`
-  ${props =>
-    !props.sales
-      ? `
-      width: ${props.storepath ? '18.125rem' : '19.0625rem'};
-      height: ${props.displaybtn ? '22.4375rem' : '20rem'};
-    `
-      : `
-      width: 19.0625rem;
-      height: 25.9375rem;
-    `};
 
+const Trash = () => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+      <path d="M2.5 5H4H16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M14.5 5V15.5C14.5 15.8978 14.342 16.2794 14.0607 16.5607C13.7794 16.842 13.3978 17 13 17H5.5C5.10218 17 4.72064 16.842 4.43934 16.5607C4.15804 16.2794 4 15.8978 4 15.5V5M6.25 5V3.5C6.25 3.10218 6.40804 2.72064 6.68934 2.43934C6.97064 2.15804 7.35218 2 7.75 2H10.75C11.1478 2 11.5294 2.15804 11.8107 2.43934C12.092 2.72064 12.25 3.10218 12.25 3.5V5"
+        stroke="white"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M7.75 8.75V13.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10.75 8.75V13.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
+const Layout = styled.div<{ displaybtn: number; storepath: number; sales?: number }>`
+  width: ${props => (props.sales === 1 ? '19.0625rem' : props.storepath ? '18.125rem' : '19.0625rem')};
+  height: ${props => (props.sales === 1 ? '25.9375rem' : props.displaybtn ? '22.4375rem' : '20rem')};
   border-radius: 0.5rem;
   cursor: pointer;
   border: 1px solid ${theme.outline};
@@ -227,9 +258,10 @@ const BtnLayout = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 0.62rem;
+  gap: 0.5rem;
 `;
 
-const Btn = styled.button<{ sales: number; long: string; review: number }>`
+const Btn = styled.button<{ sales: number; long: string; review: number; delete: string }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,7 +269,7 @@ const Btn = styled.button<{ sales: number; long: string; review: number }>`
   width: ${props => (props.long === 'long' ? '17.0625rem' : '8.28125rem')};
   height: 2.6875rem;
   border-radius: 0.5rem;
-  background: ${props => (props.sales === 1 ? (props.review ? theme.navy : 'gray') : theme.pointColor)};
+  background: ${props => (props.sales === 1 ? (props.review ? theme.navy : 'gray') : props.delete === 'delete' ? theme.cancelBtn : theme.pointColor)};
 
   padding: 0.75rem 1rem;
   box-sizing: border-box;

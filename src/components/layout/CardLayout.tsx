@@ -45,7 +45,7 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
   const storePath = path.includes('/store');
 
   const tabData = getTabData(dataName);
-  console.log('data', data);
+  console.log(data);
 
   const move = () => {
     navigate(`items/${title}`);
@@ -121,6 +121,7 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
                       dataName={dataName}
                       review={item.is_review_written}
                       shopId={item.shop_id}
+                      reviewId={item.review_id}
                     />
                   ))}
                 </>
