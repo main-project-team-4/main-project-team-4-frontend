@@ -27,7 +27,7 @@ export default function ReviewLayout({ reviewData }: ReviewData) {
         <>
           {reviewData.map((item: ItemType, index: number) => (
             <div key={index}>
-              <ReviewCard reviewRate={item.review_rating} img={item.item_main_image} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
+              <ReviewCard reviewRate={item.review_rating} img={item.item_image_list[0]} name={item.member_nickname} item={item.item_name} review={item.review_comment} />
               {/* {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />} */}
               <Divider />
             </div>

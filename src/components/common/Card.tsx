@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { theme } from '../../styles/theme';
 import { ReviewInputModal, ReviewModal } from '../mypage/ReviewModal';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getReviews } from '../../apis/shop/shop';
 import { getCookie } from '../../utils/cookie';
 import { DeleteReview } from '../../apis/shop/shop';
-
+import { Modal } from './Modal';
 interface CardProps {
   id: number;
   img: string;
@@ -25,6 +25,8 @@ interface CardProps {
 export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, shopId, reviewId }: CardProps) {
   const navigate = useNavigate();
   const token = getCookie('token');
+  const queryClient = useQueryClient();
+  const [modal, setModal] = useState(false);
   const formattedPrice = Number(price).toLocaleString('ko-KR');
   // 모달 상태관리
   const [modalState, setModalState] = useState(false);
@@ -32,11 +34,15 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   const modalConfirm = () => {
     setModalState(false);
   };
-  const modalOpen = () => {
+  const modalOpen = event => {
+    event.stopPropagation();
     setModalState(true);
   };
   const modalClose = () => {
     setModalState(false);
+  };
+  const close = () => {
+    setModal(false);
   };
   const [displayItemState, setDisplayItemState] = useState('');
   useEffect(() => {
@@ -58,7 +64,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   //리뷰 정보 가져오기
   const { data: reviewInfo, refetch } = useQuery('reviewData', () => getReviews({ itemId: id, token }), { enabled: false });
 
-  const ReviewOnClick = () => {
+  const ReviewOnClick = event => {
     event.stopPropagation();
     refetch();
     setModalState(true);
@@ -68,11 +74,12 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   const deleteMutation = useMutation(DeleteReview, {
     onSuccess: () => {
       queryClient.invalidateQueries(['deleteReview', reviewId]);
+      setModal(true);
     },
   });
 
-  const onClickDelete = () => {
-    console.log(reviewId, token);
+  const onClickDelete = event => {
+    event.stopPropagation();
 
     if (reviewId && token) {
       deleteMutation.mutate({ reviewId, token });
@@ -80,7 +87,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   };
 
   //리뷰 수정 버튼
-  const onClickReviewChange = () => {
+  const onClickReviewChange = event => {
     event.stopPropagation();
     refetch();
     setModalState(true);
@@ -88,12 +95,12 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
 
   return (
     <>
-      {modalState && dataName === 'ordered' && <ReviewInputModal setModalState={setModalState} itemId={id} shopId={shopId} modalClose={modalClose} />}
+      {modal && <Modal modalClose={close} modalInfo="삭제가 완료되었습니다"></Modal>}
+      {modalState && dataName === 'ordered' && <ReviewInputModal reviewId={reviewId} reviewInfo={reviewInfo} setModalState={setModalState} itemId={id} shopId={shopId} modalClose={modalClose} />}
       {modalState && dataName === 'sales' && <ReviewModal reviewInfo={reviewInfo} modalClose={modalClose} />}
       <Layout
         onClick={event => {
           event.stopPropagation();
-          return;
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
         displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
@@ -122,7 +129,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                   </BtnLayout>
                 ) : (
                   <BtnLayout>
-                    <Btn long={'long'} onClick={modalOpen}>
+                    <Btn long={'long'} onClick={event => modalOpen(event)}>
                       <Pencil /> 리뷰작성
                     </Btn>
                   </BtnLayout>
@@ -140,7 +147,14 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                   </BtnLayout>
                 ) : (
                   <BtnLayout>
-                    <Btn review={review ? 1 : 0} sales={dataName === 'sales' ? 1 : 2} long={'long'}>
+                    <Btn
+                      review={review ? 1 : 0}
+                      onClick={event => {
+                        event.stopPropagation();
+                      }}
+                      sales={dataName === 'sales' ? 1 : 2}
+                      long={'long'}
+                    >
                       <Pencil /> 리뷰가 아직 없어요
                     </Btn>
                   </BtnLayout>

@@ -112,7 +112,7 @@ export const ChangeReview = async ({ reviewId, token, data }: ShopType) => {
 //리뷰 삭제
 export const DeleteReview = async ({ reviewId, token }: ShopType) => {
   try {
-    const response = await baseInstance.delete(`/api/reviews/${reviewId}`, data, {
+    const response = await baseInstance.delete(`/api/reviews/${reviewId}`, {
       headers: { Authorization: token },
     });
 

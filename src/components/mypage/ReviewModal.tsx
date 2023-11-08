@@ -1,18 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { theme } from '../../styles/theme';
 import styled from 'styled-components';
 import { useInput } from '../../hooks/useInput';
 import { useMutation, useQueryClient } from 'react-query';
-import { ReviewRegistration } from '../../apis/shop/shop';
+import { ReviewRegistration, ChangeReview } from '../../apis/shop/shop';
 import { getCookie } from '../../utils/cookie';
 type ModalProps = {
   modalClose: () => void;
   modalConfirm?: () => void;
   onRatingChange?: (rating: number) => void;
   itemId?: number;
+  reviewId?: number;
 };
 
-export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingChange, shopId, setModalState }: ModalProps) {
+export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingChange, shopId, setModalState, reviewInfo, reviewId }: ModalProps) {
   const [rating, setRating] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [review, setReview, reviewHandleChange] = useInput('');
@@ -26,6 +27,16 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
       onRatingChange(newRating);
     }
   };
+
+  useEffect(() => {
+    if (reviewInfo) {
+      console.log('reviewInfo', reviewInfo);
+
+      setRating(reviewInfo.review_rating);
+      setReview(reviewInfo.review_comment);
+      setInputCount(reviewInfo.review_comment.length);
+    }
+  }, [reviewInfo]);
 
   // 리뷰 작성
   const textAreaHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,7 +55,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
         data: {
           item_id: itemId,
           review_comment: review,
-          review_rating: rating + 1,
+          review_rating: rating,
         },
         token,
       });
@@ -61,6 +72,29 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
     },
   });
 
+  //리뷰 수정
+  const mutaitionReviewChange = useMutation(ChangeReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('reviewchange');
+    },
+    onError: error => {
+      console.error(error);
+    },
+  });
+
+  const onClickChangeReview = () => {
+    mutaitionReviewChange.mutate({
+      reviewId,
+      data: {
+        item_id: itemId,
+        review_comment: review,
+        review_rating: rating,
+      },
+      token,
+    });
+    setModalState(false);
+  };
+
   return (
     <>
       <Overlay>
@@ -70,7 +104,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
           <h3>별점</h3>
           <StartList>
             {[...Array(5)].map((_, index) => (
-              <Star key={index} filled={rating >= 5 - (5 - index)} onMouseEnter={() => handleClick(5 - (5 - index))} />
+              <Star key={index} filled={rating >= index + 1} onMouseEnter={() => handleClick(index + 1)} />
             ))}
           </StartList>
           <AlertLayout>
@@ -88,7 +122,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
             <Btn type="back" onClick={modalClose}>
               취소
             </Btn>
-            <Btn type="check" onClick={reviewOnClick}>
+            <Btn type="check" onClick={reviewInfo ? onClickChangeReview : reviewOnClick}>
               확인
             </Btn>
           </BtnLayout>
@@ -209,9 +243,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    strokeWidth: 1.5;
-    strokeLinecap: round;
-    strokeLinejoin: round;
+    strokewidth: 1.5;
+    strokelinecap: round;
+    strokelinejoin: round;
   }
 `;
 const Overlay = styled.div`
