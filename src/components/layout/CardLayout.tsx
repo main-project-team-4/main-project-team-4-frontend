@@ -2,9 +2,6 @@ import styled from 'styled-components';
 import Card from '../common/Card';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TabLayout from './TabLayout';
-import { ReviewInputModal, ReviewModal } from '../mypage/ReviewModal';
-import React, { useEffect, useState } from 'react';
-
 
 interface TabData {
   icon: string;

@@ -70,6 +70,7 @@ export default function DetailPosting() {
   const mutationDelete = useMutation(deleteItem, {
     onSuccess: () => {
       queryClient.invalidateQueries('deleteitem');
+      queryClient.invalidateQueries(['shopItem', myData?.shop_id]);
     },
     onError: error => {
       console.log(error);

@@ -45,12 +45,10 @@ export default function Store() {
   const shopItem = queryResults[4].data;
 
   // 상점소개 상태관리
-  const [intro, setIntro] = useState(shopInfo?.shop_intro);
   const [introState, setIntroState] = useState(false);
   const introRef = useRef<HTMLTextAreaElement | null>(null);
-  const [inputCount, setInputCount] = useState(0);
-  const [explain, explainHandleChange] = useInput('');
-
+  const [explain, setExplain, explainHandleChange] = useInput('');
+  const [alert, setAlert] = useState(false);
   const introMutation = useMutation(changeIntro, {
     onSuccess: () => {
       queryClient.invalidateQueries('intro');
@@ -62,17 +60,22 @@ export default function Store() {
   });
 
   // 상점소개 수정
-  const introOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputCount(e.target.value.length);
-    const { value } = e.target;
-
-    explainHandleChange(value);
-  };
   const introOnClick = () => {
-    if (introState) {
+    const intro = explain.replace(/\s/g, '');
+
+    if (intro.length > 5 && introState) {
       introMutation.mutate({ token, explain });
+      setIntroState(false);
     }
-    setIntroState(!introState);
+    if (introState && intro.length < 5) {
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, [5000]);
+    }
+    if (!introState) {
+      setIntroState(true);
+    }
   };
 
   // 인풋 카운트
@@ -102,7 +105,7 @@ export default function Store() {
       setCheckMine(state === myData.shop_id);
     }
     setIsFollow(followCheck);
-    setIntro(shopInfo?.shop_intro);
+    setExplain(shopInfo?.shop_intro);
     if (introState) {
       introRef.current?.focus();
     }
@@ -154,14 +157,15 @@ export default function Store() {
               <Intro>
                 {introState ? (
                   <TextArea>
-                    <textarea maxLength={59} ref={introRef} defaultValue={intro} onChange={introOnChange} />
+                    <textarea maxLength={59} ref={introRef} defaultValue={explain} onChange={explainHandleChange} />
+                    {alert && <span style={{ color: 'red', position: 'absolute', left: '0', bottom: '0' }}>공백없이 최소 5자 이상 입력해주세요!</span>}
                     <div>
-                      <span>{inputCount}</span>
+                      <span>{explain.length}</span>
                       <span>/ 60자</span>
                     </div>
                   </TextArea>
-                ) : intro ? (
-                  <p>{intro}</p>
+                ) : explain ? (
+                  <p>{explain}</p>
                 ) : (
                   <h4>소개글이 없습니다.</h4>
                 )}
@@ -333,6 +337,7 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  position: relative;
 `;
 
 const Name = styled.div<{ starlength: number }>`
