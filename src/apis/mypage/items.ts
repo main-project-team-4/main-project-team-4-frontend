@@ -40,3 +40,5 @@ export const getWishList = async (token: string) => {
     console.log(error);
   }
 };
+
+// 리뷰 내역 조회

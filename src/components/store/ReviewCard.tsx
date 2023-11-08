@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import { theme } from '../../styles/theme';
 type ReviewType = {
   img: string;
   name: string;
@@ -70,6 +70,7 @@ const Profile = styled.div`
     height: 6.875rem;
     border-radius: 0.75rem;
     background: #ececec;
+    border: 0.8px solid ${theme.outline};
   }
 `;
 
@@ -88,6 +89,7 @@ const Info = styled.div`
     color: #000;
     font-size: 1.125rem;
     font-weight: 500;
+    text-align: left;
   }
   div {
     display: flex;
