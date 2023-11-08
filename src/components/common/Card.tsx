@@ -32,10 +32,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   const formattedPrice = Number(price).toLocaleString('ko-KR');
   // 모달 상태관리
   const [modalState, setModalState] = useState(false);
-  useEffect(() => {}, [modalState]);
-  const modalConfirm = () => {
-    setModalState(false);
-  };
+
   const modalOpen = event => {
     event.stopPropagation();
     setModalState(true);
@@ -76,6 +73,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   const deleteMutation = useMutation(DeleteReview, {
     onSuccess: () => {
       queryClient.invalidateQueries(['deleteReview', reviewId]);
+      queryClient.invalidateQueries('orders');
       setModal(true);
     },
   });
@@ -93,6 +91,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
     event.stopPropagation();
     refetch();
     setModalState(true);
+      queryClient.invalidateQueries('orders');
   };
 
   return (
