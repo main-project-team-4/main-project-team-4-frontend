@@ -3,13 +3,15 @@ import { DetailItem } from '../../apis/getItems/Item';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { putWishes, checkWishes, changeItemState } from '../../apis/posting/posting';
+import { putWishes, checkWishes, changeItemState, deleteItem } from '../../apis/posting/posting';
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
 import DropBar from '../common/DropBar';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../../Atoms';
 import { ChatRoom } from '../../apis/chat/chat';
+import LoginModal from '../login/LoginModal';
+import HeartSvg from '../../assets/svgs/HeartSvg';
 
 export default function DetailPosting() {
   const [mainImg, setMainImg] = useState('');
@@ -19,7 +21,16 @@ export default function DetailPosting() {
   const token = getCookie('token');
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<string>('');
+  const [modal, setModal] = useState(false);
 
+  // 모달 열기 함수
+  const openModal = () => {
+    setModal(true);
+  };
+  // 모달 닫기 함수
+  const closeModal = () => {
+    setModal(false);
+  };
   // 상품 조회
   const { data: detailItems, isSuccess: detailSuccess } = useQuery(['detailitem', id], () => {
     return DetailItem(id);
@@ -44,7 +55,7 @@ export default function DetailPosting() {
   });
 
   const ChangeState = () => {
-    if (selected !== '') {
+    if (selected !== '' && selected !== 'DELETE') {
       mutationItem.mutate({
         data: {
           item_state: selected,
@@ -56,11 +67,35 @@ export default function DetailPosting() {
     }
   };
 
+  // 상품 삭제
+  const mutationDelete = useMutation(deleteItem, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('deleteitem');
+      queryClient.invalidateQueries(['shopItem', myData?.shop_id]);
+    },
+    onError: error => {
+      console.log(error);
+    },
+  });
+
+  const ItelmDelete = () => {
+    if (selected !== '' && selected === 'DELETE') {
+      mutationDelete.mutate({
+        token: token,
+        itemId: detailItems.item_id,
+      });
+      navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
+    }
+  };
+
   //여기확인 필!!!!
   useEffect(() => {
     if (detailSuccess && !!myData) {
       if (myData.member_id === detailItems.member_id) {
         ChangeState();
+      }
+      if (token && selected === 'DELETE') {
+        ItelmDelete();
       }
     }
   }, [selected]);
@@ -83,7 +118,7 @@ export default function DetailPosting() {
     if (token) {
       mutation.mutate({ token, itemId: detailItems.item_id });
       setWishState(wishState);
-    }
+    } else openModal();
   };
 
   // 찜여부 확인
@@ -104,16 +139,7 @@ export default function DetailPosting() {
 
   const RenderHeartButton = ({ wishState, onClick }: HeartBtnType) => (
     <button onClick={onClick} className="Follow-Button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M4.31802 6.31802C2.56066 8.07538 2.56066 10.9246 4.31802 12.682L12.0001 20.364L19.682 12.682C21.4393 10.9246 21.4393 8.07538 19.682 6.31802C17.9246 4.56066 15.0754 4.56066 13.318 6.31802L12.0001 7.63609L10.682 6.31802C8.92462 4.56066 6.07538 4.56066 4.31802 6.31802Z"
-          stroke="#2667FF"
-          fill={wishState ? '#2667FF' : 'none'}
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <HeartSvg wishState={wishState} />
       찜하기
     </button>
   );
@@ -128,7 +154,9 @@ export default function DetailPosting() {
   });
 
   const goChatRoom = () => {
-    chatRoomMutation.mutate({ token, itemId: detailItems.item_id }); // FormData 전송
+    if (token) {
+      chatRoomMutation.mutate({ token, itemId: detailItems.item_id });
+    } else openModal();
   };
   return detailItems ? (
     <Container>
@@ -140,7 +168,7 @@ export default function DetailPosting() {
         <PostingBox>
           <div className="layout">
             <h1>{detailItems.item_name}</h1>
-            {myData?.member_id === detailItems?.member_id && <DropBar itemState={selected} setSelected={setSelected} />}
+            {myData?.member_id === detailItems?.member_id && <DropBar itemId={detailItems.item_id} itemState={selected} setSelected={setSelected} />}
           </div>
           <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
           <div className="content">{detailItems.item_comment}</div>
@@ -159,6 +187,7 @@ export default function DetailPosting() {
           )}
         </PriceBox>
       </PostingContainer>
+      {modal && <LoginModal closeModal={closeModal} />}
     </Container>
   ) : null;
 }

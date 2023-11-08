@@ -35,12 +35,13 @@ function InformationInput({ data }: DataInfo) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [modalState, setModalState] = useState(false);
   const [duplication, setDuplication] = useState(false);
+  const [validation, setValidation] = useState(false);
 
   const mutationNick = useMutation(changeNickName, {
     onSuccess: () => {
       setDuplication(false);
       setNickBtnState(true);
-      queryClient.invalidateQueries('myinfo');
+      queryClient.invalidateQueries('myInfo');
       queryClient.invalidateQueries('changeNick');
     },
     onError: () => {
@@ -65,7 +66,12 @@ function InformationInput({ data }: DataInfo) {
     }
   };
   const completeNick = () => {
+    if (nickName.length < 1 || nickName.length > 20) {
+      setValidation(true);
+      return;
+    }
     mutationNick.mutate({ token, nickName });
+    setValidation(false);
   };
 
   // 주소 변경
@@ -82,8 +88,6 @@ function InformationInput({ data }: DataInfo) {
     if (window.daum && window.daum.Postcode) {
       new window.daum.Postcode({
         oncomplete: function (data: any) {
-          console.log(data);
-
           setAddress(data.address);
           setLocBtnState(false);
         },
@@ -136,12 +140,14 @@ function InformationInput({ data }: DataInfo) {
               ref={inputRef}
               onChange={onChangeNick}
               placeholder="상점명"
+              value={nickName}
             />
             <button onClick={completeNick}>수정완료</button>
           </>
         )}
       </InputBox>
       {duplication && <span>중복된 상점명입니다.</span>}
+      {validation && <span>상점명은 최소 1자 이상이어야 하며, 최대 20자를 초과할 수 없습니다.</span>}
       <InputBox boxname="address" duplication={3}>
         <h3>주소</h3>
         {locBtnState ? (
@@ -163,7 +169,7 @@ function InformationInput({ data }: DataInfo) {
         </svg>
       </ButtonBox>
       <WithdrawalButton onClick={onClickDelete}>회원탈퇴</WithdrawalButton>
-      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 삭제 하시겠습니까?" />}
+      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo="정말로 탈퇴 하시겠습니까?" />}
     </Container>
   );
 }

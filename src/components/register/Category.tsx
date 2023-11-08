@@ -23,7 +23,7 @@ type CategoryProps = {
 };
 
 function Category({ setCategory, largeSelected, setlargeSelected, midSelected, setMidSelected, categoryID, setCategoryID }: CategoryProps) {
-  const { data, refetch } = useQuery('category', getCategory, { enabled: false });
+  const { data, refetch } = useQuery('category', getCategory, { enabled: false, staleTime: Infinity, cacheTime: Infinity });
 
   // 대분류 카테고리 상태관리
   const [largeIsOpen, setlargeIsOpen] = useState(false);

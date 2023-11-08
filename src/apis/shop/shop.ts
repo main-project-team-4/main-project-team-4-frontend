@@ -1,8 +1,15 @@
 import { baseInstance } from '../config';
 
 type ShopType = {
-  shopId: number | string;
+  shopId?: number | string;
   token?: string;
+  reviewId?: number;
+  itemId?: number;
+  data?: {
+    item_id: number | undefined;
+    review_comment: string;
+    review_rating: number;
+  };
 };
 export const Followers = async ({ shopId, token }: ShopType) => {
   try {
@@ -66,6 +73,57 @@ export const Reviews = async (shopId: ShopType) => {
   try {
     const response = await baseInstance.get(`/api/shop/${shopId}/reviews?page=0`);
     return response.data.content;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 리뷰 등록
+export const ReviewRegistration = async ({ token, data }: ShopType) => {
+  try {
+    const response = await baseInstance.post(`/api/reviews`, data, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//리뷰 가져오기
+export const getReviews = async ({ itemId, token }: ShopType) => {
+  try {
+    const response = await baseInstance.get(`/api/items/${itemId}/reviews`, {
+      headers: { Authorization: token },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//리뷰 수정
+export const ChangeReview = async ({ reviewId, token, data }: ShopType) => {
+  try {
+    const response = await baseInstance.put(`/api/reviews/${reviewId}`, data, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//리뷰 삭제
+export const DeleteReview = async ({ reviewId, token }: ShopType) => {
+  try {
+    const response = await baseInstance.delete(`/api/reviews/${reviewId}`, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
   } catch (error) {
     console.log(error);
   }

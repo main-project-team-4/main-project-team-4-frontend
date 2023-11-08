@@ -5,6 +5,8 @@ import { getCookie } from '../../utils/cookie';
 import { changeImages } from '../../apis/mypage/members';
 import { theme } from '../../styles/theme';
 import imageCompression from 'browser-image-compression';
+import ProfileSvg from '../../assets/svgs/ProfileSvg';
+import PencilSvg from '../../assets/svgs/PencilSvg';
 
 type DataInfo = {
   data: {
@@ -29,15 +31,17 @@ function Profilepicture({ data }: DataInfo) {
     if (event.currentTarget.files) {
       const file = event.currentTarget.files[0];
       const options = {
-        maxSizeMB: 0.2, // 이미지 최대 용량
-        maxWidthOrHeight: 840, // 최대 넓이
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 840,
         useWebWorker: true,
       };
       try {
         const compressedFile = await imageCompression(file, options);
         const result = await imageCompression.getDataUrlFromFile(compressedFile);
 
-        const newFile = new File([compressedFile], 'image.jpg');
+        const newFile = new File([compressedFile], 'image.jpeg', { type: 'image/jpeg' });
+        console.log(newFile);
+
         const newFormData = new FormData();
         newFormData.append('image', newFile);
 
@@ -72,41 +76,17 @@ function Profilepicture({ data }: DataInfo) {
   };
   return (
     <Container>
-      <ProfileImage>
-        {image !== '' ? (
-          <img src={image} />
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" fill="none">
-            <path
-              d="M0.605186 54.0187C8.85981 63.7926 21.205 70 35 70C48.795 70 61.1402 63.7926 69.3948 54.0187C59.2367 48.2769 47.501 45 35 45C22.499 45 10.7633 48.2769 0.605186 54.0187ZM50 15C50 23.2843 43.2843 30 35 30C26.7157 30 20 23.2843 20 15C20 6.71573 26.7157 0 35 0C43.2843 0 50 6.71573 50 15Z"
-              fill="white"
-            />
-          </svg>
-        )}
-      </ProfileImage>
-      <PencilImage>
+      <ProfileImage>{image !== '' ? <img src={image} /> : <ProfileSvg />}</ProfileImage>
+      <PencilImage back={confirm ? 0 : 1}>
         <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />
         {confirm ? (
-          <span onClick={confirmImage} className="material-symbols-outlined">
+          <span onClick={confirmImage} style={{ background: `${theme.pointColor}`, color: 'white' }} className="material-symbols-outlined">
             done
           </span>
         ) : (
-          <svg onClick={changeImage} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <g clipPath="url(#clip0_473_8532)">
-              <path
-                d="M11.332 2.00004C11.5071 1.82494 11.715 1.68605 11.9438 1.59129C12.1725 1.49653 12.4177 1.44775 12.6654 1.44775C12.913 1.44775 13.1582 1.49653 13.387 1.59129C13.6157 1.68605 13.8236 1.82494 13.9987 2.00004C14.1738 2.17513 14.3127 2.383 14.4074 2.61178C14.5022 2.84055 14.551 3.08575 14.551 3.33337C14.551 3.58099 14.5022 3.82619 14.4074 4.05497C14.3127 4.28374 14.1738 4.49161 13.9987 4.66671L4.9987 13.6667L1.33203 14.6667L2.33203 11L11.332 2.00004Z"
-                stroke="#272E3F"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </g>
-            <defs>
-              <clipPath id="clip0_473_8532">
-                <rect width="16" height="16" fill="white" />
-              </clipPath>
-            </defs>
-          </svg>
+          <div onClick={changeImage}>
+            <PencilSvg />
+          </div>
         )}
       </PencilImage>
       <h3>{data?.member_nickname}</h3>
@@ -162,11 +142,11 @@ const ProfileImage = styled.div`
   }
 `;
 
-const PencilImage = styled.div`
+const PencilImage = styled.div<{ back: number }>`
   width: 2.125rem;
   height: 2.125rem;
   flex-shrink: 0;
-  background-color: white;
+  background-color: ${props => (props.back ? 'white' : theme.pointColor)};
 
   cursor: pointer;
 

@@ -8,6 +8,7 @@ import { getCookie } from '../utils/cookie';
 import { SyncLoader } from 'react-spinners';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
+import RecommendLayout from '../components/layout/RecommendLayout';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -26,13 +27,15 @@ export default function Home() {
 
   const queryResults = useQueries([
     { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8, Selling: 'SELLING' }) },
-    { queryKey: 'topitems', queryFn: () => TopItems({ page: 0, pageSize: 4, Selling: 'SELLING' }) },
+    { queryKey: 'topitems', queryFn: () => TopItems({ page: 1, pageSize: 8, Selling: 'SELLING' }) },
+    { queryKey: 'recommenditems', queryFn: () => TopItems({ page: 0, pageSize: 9, Selling: 'SELLING' }) },
     ...(token ? [{ queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING' }) }] : []),
   ]);
 
   const itemsResult = queryResults[0];
   const topItemsResult = queryResults[1];
-  const nearByResult = queryResults[2];
+  const recommendResult = queryResults[2];
+  const nearByResult = queryResults[3];
 
   if (itemsResult.isLoading || topItemsResult.isLoading) {
     return (
@@ -42,12 +45,13 @@ export default function Home() {
     );
   }
 
-
   return (
     <>
       <Layout>
-        <CardLayout title={'인기 상품'} data={topItemsResult.data} />
+        <img src="https://ifh.cc/g/rawFpy.png" />
         <CardLayout title={'최신 상품'} data={itemsResult.data} />
+        <RecommendLayout title={'추천 상품'} data={recommendResult.data} />
+        <CardLayout title={'인기 상품'} data={topItemsResult.data} />
         {token && <CardLayout title={'내 주위 상품'} data={nearByResult.data} />}
       </Layout>
     </>

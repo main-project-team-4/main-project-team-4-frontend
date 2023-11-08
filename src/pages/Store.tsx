@@ -2,12 +2,12 @@ import styled from 'styled-components';
 import Tab from '../components/common/Tab';
 import ReviewLayout from '../components/layout/ReviewLayout';
 import FollowLayout from '../components/layout/FollowLayout';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { ShopInfo, FollowCheck, Reviews, Followers, Followings, Follow } from '../apis/shop/shop';
 import { ShopItem } from '../apis/getItems/Item';
 import { useQuery, useQueries, useMutation, useQueryClient } from 'react-query';
 import { getCookie } from '../utils/cookie';
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { changeIntro } from '../apis/mypage/members';
 import CardLayout from '../components/layout/CardLayout';
 import { theme } from '../styles/theme';
@@ -17,12 +17,16 @@ import { myDataState } from '../Atoms';
 import { SyncLoader } from 'react-spinners';
 
 export default function Store() {
+  const location = useLocation();
+  const [pathName, setPathName] = useState('123');
   const [checkMine, setCheckMine] = useState(false);
   const { state } = useLocation();
   const queryClient = useQueryClient();
   const token = getCookie('token');
-  const { storeId } = useParams();
-  useEffect(() => {}, [storeId]);
+
+  useEffect(() => {
+    setPathName(location.pathname);
+  }, [location.pathname, pathName]);
 
   const queryResults = useQueries([
     { queryKey: ['shopInfo', state], queryFn: () => ShopInfo(state) },
@@ -41,12 +45,10 @@ export default function Store() {
   const shopItem = queryResults[4].data;
 
   // 상점소개 상태관리
-  const [intro, setIntro] = useState(shopInfo?.shop_intro);
   const [introState, setIntroState] = useState(false);
   const introRef = useRef<HTMLTextAreaElement | null>(null);
-  const [inputCount, setInputCount] = useState(0);
-  const [explain, explainHandleChange] = useInput('');
-
+  const [explain, setExplain, explainHandleChange] = useInput('');
+  const [alert, setAlert] = useState(false);
   const introMutation = useMutation(changeIntro, {
     onSuccess: () => {
       queryClient.invalidateQueries('intro');
@@ -58,17 +60,22 @@ export default function Store() {
   });
 
   // 상점소개 수정
-  const introOnChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInputCount(e.target.value.length);
-    const { value } = e.target;
-
-    explainHandleChange(value);
-  };
   const introOnClick = () => {
-    if (introState) {
+    const intro = explain.replace(/\s/g, '');
+
+    if (intro.length >= 5 && introState) {
       introMutation.mutate({ token, explain });
+      setIntroState(false);
     }
-    setIntroState(!introState);
+    if (introState && intro.length < 5) {
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 5000);
+    }
+    if (!introState) {
+      setIntroState(true);
+    }
   };
 
   // 인풋 카운트
@@ -98,7 +105,7 @@ export default function Store() {
       setCheckMine(state === myData.shop_id);
     }
     setIsFollow(followCheck);
-    setIntro(shopInfo?.shop_intro);
+    setExplain(shopInfo?.shop_intro);
     if (introState) {
       introRef.current?.focus();
     }
@@ -150,14 +157,15 @@ export default function Store() {
               <Intro>
                 {introState ? (
                   <TextArea>
-                    <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
+                    <textarea maxLength={59} ref={introRef} defaultValue={explain} onChange={explainHandleChange} />
+                    {alert && <span style={{ color: 'red', position: 'absolute', left: '0', bottom: '0' }}>공백없이 최소 5자 이상 입력해주세요!</span>}
                     <div>
-                      <span>{inputCount}</span>
+                      <span>{explain.length}</span>
                       <span>/ 60자</span>
-                    </div>{' '}
+                    </div>
                   </TextArea>
-                ) : intro ? (
-                  <p>{intro}</p>
+                ) : explain ? (
+                  <p>{explain}</p>
                 ) : (
                   <h4>소개글이 없습니다.</h4>
                 )}
@@ -185,7 +193,9 @@ export default function Store() {
                     handleFollow();
                   }}
                 >
-                  <img src="https://ifh.cc/g/2hzdJS.png" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+                    <path d="M3.5 13.2L8.64286 18L21.5 6" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                   팔로잉
                 </Button>
               ) : (
@@ -195,7 +205,10 @@ export default function Store() {
                     handleFollow();
                   }}
                 >
-                  <img src="https://ifh.cc/g/7qsV5L.png" /> 팔로우
+                  <svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none">
+                    <path d="M10.5 1V19M19.5 10L1.5 10" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  팔로우
                 </Button>
               ))}
           </FollowBox>
@@ -324,6 +337,7 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  position: relative;
 `;
 
 const Name = styled.div<{ starlength: number }>`

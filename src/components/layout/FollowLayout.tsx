@@ -14,6 +14,7 @@ type ItemType = {
   member_nickname: string;
   member_image: string;
   is_following: boolean;
+  shop_name: string;
 };
 export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
@@ -31,7 +32,7 @@ export default function FollowLayout({ data, checkMine, follow }: FollowType) {
       ) : (
         data.map((item: ItemType, index: number) => (
           <React.Fragment key={item.member_id}>
-            <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.member_nickname} checkMine={checkMine} follow={follow} />
+            <FollowerCard isFollowing={item.is_following} shop={item} img={item.member_image} name={item.shop_name} checkMine={checkMine} follow={follow} />
             {(index + 1) % 5 === 0 && <Divider />}
           </React.Fragment>
         ))

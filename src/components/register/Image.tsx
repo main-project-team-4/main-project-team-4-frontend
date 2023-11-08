@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Draggable, DropResult, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { useMutation, useQueryClient } from 'react-query';
 import { changeImage } from '../../apis/posting/posting';
+import imageCompression from 'browser-image-compression';
 
 interface ImageProps {
   setViewImages: React.Dispatch<React.SetStateAction<string[]>>;
@@ -43,7 +44,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
     setSelectedPicture(viewImages[index]);
   };
 
-  const handleRemoveImage = (e: any, index: number) => {
+  const handleRemoveImage = (e: React.MouseEvent<HTMLElement> | { stopPropagation: () => void }, index: number) => {
     e.stopPropagation();
 
     const newImages = images.filter((_, i) => i !== index);
@@ -64,11 +65,21 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
     }
   };
 
-  const uploadFiles = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const uploadFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.currentTarget.files;
 
     if (files && files.length > 0) {
-      const fileArray = Array.from(files);
+      const fileArrays = Array.from(files);
+
+      const option = {
+        maxSizeMB: 0.3,
+        maxWidthOrHeight: 720,
+        useWebWorker: true,
+      };
+      // 이미지 최적화
+      const newFileArray = fileArrays.map(file => imageCompression(file, option));
+      const compressedFiles = await Promise.all(newFileArray);
+      const fileArray = compressedFiles.map(file => new File([file], `image-${file}`, { type: 'image/jpeg' }));
 
       if (fileArray.length + images.length <= 5) {
         const imageArray = fileArray.map(file => URL.createObjectURL(file));
@@ -76,10 +87,12 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
           setImages(prevImages => [...prevImages, ...fileArray]);
           setViewImages(prevImages => [...prevImages, ...imageArray]);
           setSelectedPicture(imageArray[0]);
-          setMainImg(fileArray[0]); // File 객체를 직접 설정
-          setSubImg(fileArray.slice(1)); // File 객체 배열을 직접 설정
+          setMainImg(fileArray[0]);
+          setSubImg(fileArray.slice(1));
 
-          event.currentTarget.value = '';
+          if (event.currentTarget) {
+            event.currentTarget.value = '';
+          }
         } else {
           // 파일을 이미지 url로 변환
           const dataFormData = new FormData();
@@ -92,7 +105,9 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
           }
           mutation.mutate({ data: dataFormData, itemId: detailItemId });
 
-          event.currentTarget.value = '';
+          if (event.currentTarget) {
+            event.currentTarget.value = '';
+          }
         }
       } else {
         setViewAlert(true);
@@ -115,7 +130,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
     }
   }, [viewAlert]);
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const { source, destination } = result;
@@ -148,7 +163,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
             <input ref={fileRef} type="file" multiple accept="image/*" onChange={uploadFiles} />
             <Explain>
               <span className="material-symbols-outlined">imagesmode</span>
-              <h2>사진을 드래그하여 업로드 하세요</h2>
+              <h2>사진을 업로드 하세요</h2>
               <p>(0/5)</p>
               <FileBtn onClick={handleClick}>파일 열기</FileBtn>
             </Explain>

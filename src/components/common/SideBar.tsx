@@ -3,12 +3,10 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import { getCategory } from '../../apis/sidebar/category';
 import { useNavigate } from 'react-router-dom';
-import { removeCookie } from '../../utils/cookie';
 import { getCookie } from '../../utils/cookie';
-import LoginModal from '../login/LoginModal';
-import { getMyInfo } from '../../apis/mypage/members';
-import { useRecoilState } from 'recoil';
-import { myDataState } from '../../Atoms';
+import { theme } from '../../styles/theme';
+import ChatSvg from '../../assets/svgs/ChatSvg';
+import UploadSvg from '../../assets/svgs/UploadSvg';
 
 type ItemType = {
   category_l_id: number;
@@ -23,33 +21,13 @@ type ItemChildType = {
 };
 
 function SideBar() {
-  const [modal, setModal] = useState(false);
   const [layer, setLayer] = useState(1);
-  const [visibleMypage, setVisibleMypage] = useState(false);
 
   const navigate = useNavigate();
   const token = getCookie('token');
 
-  // 모달 열기 함수
-  const openModal = () => {
-    setModal(true);
-  };
-  // 모달 닫기 함수
-  const closeModal = () => {
-    setModal(false);
-  };
-
   // 카테고리 전체 가져오기
-  const { data: category } = useQuery('category', getCategory);
-
-  // 유저 정보 가져오기
-  const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
-    enabled: !!token,
-  });
-  const [myData, setMyData] = useRecoilState(myDataState);
-  useEffect(() => {
-    setMyData(userData);
-  }, [userData, setMyData]);
+  const { data: category } = useQuery('category', getCategory, { staleTime: Infinity, cacheTime: Infinity });
 
   // 클릭시 대분류 페이지로 이동
   const [largeId, setLargeID] = useState(0);
@@ -84,218 +62,140 @@ function SideBar() {
     }
   }, [midId, midName, midState]);
 
-  // 프로필 밑에 있는 마이페이지 토글
-  const toggleMypage = () => {
-    setVisibleMypage(!visibleMypage);
-  };
-
   return (
-    <>
-      <Container>
-        <ProfileContainer>
-          <ProfileBox>
-            {token ? (
-              <div onClick={toggleMypage}>
-                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
-                <h3>{myData?.member_nickname}</h3>
-                <button>
-                  <span className="expand-icon material-symbols-outlined">expand_more</span>
-                </button>
-              </div>
-            ) : (
-              <div onClick={openModal}>
-                <img src="https://ifh.cc/g/kXNjcT.jpg" />
-                <h3>로그인이 필요합니다</h3>
-              </div>
-            )}
-          </ProfileBox>
-          <MypageMenu className={token && visibleMypage ? 'visible' : ''}>
-            <li
+    <Container>
+      <CategoryContainer>
+        {category?.data.map((item: ItemType) => {
+          return (
+            <div key={item.category_l_id}>
+              <h3 onClick={() => onClickLarge(item.category_l_name, item.category_l_id)}>{item.category_l_name}</h3>
+              <ul>
+                {item.children.map((item: ItemChildType) => (
+                  <li key={item.category_m_id} onClick={() => onClickMid(item.category_l_name, item.category_m_name, item.category_m_id)}>
+                    <span>{item.category_m_name}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+      </CategoryContainer>
+      {token && (
+        <BtnLayout>
+          <>
+            <Btn
               onClick={() => {
-                navigate('/mypage');
+                navigate('/chat');
               }}
             >
-              마이페이지
-            </li>
-            <li
+              <ChatSvg />
+              채팅
+            </Btn>
+            <Btn
               onClick={() => {
-                navigate(`/store/${myData?.shop_id}`, { state: myData?.shop_id });
+                navigate('/register', { state: '' });
               }}
             >
-              내 상점
-            </li>
-            <li
-              onClick={() => {
-                removeCookie('token');
-                navigate('/');
-              }}
-            >
-              로그아웃
-            </li>
-          </MypageMenu>
-        </ProfileContainer>
-        <CategoryContainer>
-          {category?.data.map((item: ItemType) => {
-            return (
-              <div key={item.category_l_id}>
-                <ul>
-                  <h3 onClick={() => onClickLarge(item.category_l_name, item.category_l_id)}>{item.category_l_name}</h3>
-                  {item.children.map((item: ItemChildType) => (
-                    <li key={item.category_m_id} onClick={() => onClickMid(item.category_l_name, item.category_m_name, item.category_m_id)}>
-                      {item.category_m_name}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </CategoryContainer>
-      </Container>
-
-      {modal && <LoginModal closeModal={closeModal} />}
-    </>
+              <UploadSvg />
+              상품등록
+            </Btn>
+          </>
+        </BtnLayout>
+      )}
+    </Container>
   );
 }
 
 export default SideBar;
 
 const Container = styled.div`
-  width: 15.625rem;
-  /* gap: 0.62rem; */
+  width: 78.125rem;
+  height: 3.9375rem;
 
   display: flex;
-  flex-direction: column;
   align-items: center;
-
-  margin: 3.13rem 6.25rem 3.13rem 10rem;
-
-  ul {
-    list-style-type: none;
-  }
-`;
-
-const ProfileContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 0.62rem;
-`;
-
-const ProfileBox = styled.div`
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 15.625rem;
-  height: 3.125rem;
-
-  div {
-    display: flex;
-    align-items: center;
-  }
-
-  h3 {
-    font-size: 1.25rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 1.25rem;
-
-    margin-left: 0.94rem;
-  }
-
-  button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.125rem;
-    line-height: 1;
-  }
-  img {
-    width: 1.875rem;
-    height: 1.875rem;
-    border-radius: 100%;
-    color: #c1c7cd;
-    background-color: white;
-  }
-`;
-
-const MypageMenu = styled.ul`
-  width: 15.625rem;
-
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 1.25rem;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-  gap: 0.62rem;
-
-  &.visible {
-    max-height: 14rem;
-  }
-
-  li {
-    cursor: pointer;
-    height: 2.25rem;
-    padding: 0.5rem 0rem 0.5rem 0rem;
-    font-style: normal;
-    font-weight: 500;
-    line-height: 1.25rem;
-    letter-spacing: 0.00625rem;
-  }
 `;
 
 const CategoryContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  gap: 0.62rem;
-
+  margin-left: 24.8rem;
+  margin-right: auto;
   div {
-    background-color: white;
-    width: 15.625rem;
-    padding: 0.75rem 1.5rem;
-    box-sizing: border-box;
-    border-radius: 0.75rem;
-  }
+    max-height: 1.1875rem;
+    z-index: 1;
 
-  ul {
-    padding: 0;
+    &:hover ul {
+      max-height: 20rem;
+      transition: max-height 0.5s ease-in-out;
+      border: 1px solid ${theme.pointColor};
+    }
+  }
+  h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.75rem 1.5rem 0.75rem 1.5rem;
-    box-sizing: border-box;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
 
-    h3 {
-      margin: 0;
+    padding-bottom: 1rem;
+
+    &:hover {
+      color: ${theme.pointColor};
+    }
+  }
+  ul {
+    width: 7.5rem;
+    overflow: hidden;
+    max-height: 0;
+
+    background-color: white;
+    border-radius: 0.375rem;
+  }
+
+  li {
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
       font-size: 1rem;
-      font-style: normal;
-      font-weight: 700;
-      line-height: normal;
-      letter-spacing: 0.00625rem;
-      padding: 0.875rem 0.75rem;
-
-      cursor: pointer;
+      color: ${theme.pointColor};
     }
-
-    li {
-      padding: 0.75rem 1.5rem 0.75rem 1rem;
-      font-style: normal;
-      font-weight: 500;
-      line-height: normal;
-
-      cursor: pointer;
+    span {
+      display: flex;
+      justify-content: center;
+      padding: 0.62rem 0rem;
     }
+  }
+`;
+
+const BtnLayout = styled.div`
+  display: flex;
+  gap: 0.625rem;
+  margin-left: auto;
+`;
+
+const Btn = styled.button`
+  all: unset;
+  cursor: pointer;
+  width: 6.1875rem;
+  height: 2.5rem;
+  border-radius: 0.375rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 0.375rem;
+  color: white;
+  background-color: ${props => props.theme.pointColor};
+
+  transition: transform 0.3s ease-in-out; /* 부드러운 변환을 위해 transition 추가 */
+
+  &:hover {
+    transform: scale(1.05); /* 호버 시에 크기를 1.2배로 증가 */
   }
 `;

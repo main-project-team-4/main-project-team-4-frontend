@@ -37,7 +37,8 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {  
-  max-width: 120rem;
+  /* max-width: 80rem; */
+  width:100vw;
   margin-left: auto;
   margin-right: auto;
   line-height: 1;
@@ -45,6 +46,7 @@ body {
   font-family: 'Pretendard-Regular', 'Source Sans Pro', sans-serif;
   line-height: 1.2;
   background-color: ${props => props.theme.bgColor};
+  overflow-x: hidden;
 }
 menu, ol, ul {
   list-style: none;
