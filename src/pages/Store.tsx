@@ -265,6 +265,7 @@ const Profile = styled.img`
   height: 9.375rem;
   background-color: white;
   border-radius: 100%;
+  border: 1px solid #abababb8;
 
   display: flex;
   flex-direction: column;

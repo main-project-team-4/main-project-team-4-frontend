@@ -118,6 +118,7 @@ const Container = styled.div`
 const ProfileImage = styled.div`
   width: 5.625rem;
   height: 5.625rem;
+  border: 1px solid #abababb8;
 
   border-radius: 100%;
 

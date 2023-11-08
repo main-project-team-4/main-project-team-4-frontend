@@ -25,6 +25,7 @@ type ItemType = {
   member_id: number;
   member_nickname: string;
   shop_name: string;
+  member_image: string;
 };
 
 function RecommendLayout({ title, data }: RecommendType) {
@@ -57,6 +58,7 @@ function RecommendLayout({ title, data }: RecommendType) {
                   img={item.item_main_image}
                   itemTitle={item.item_name}
                   price={item.item_price}
+                  memberImg={item.member_image}
                 />
               </SwiperSlide>
             ))}

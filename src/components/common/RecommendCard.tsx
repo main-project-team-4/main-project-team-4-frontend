@@ -11,9 +11,10 @@ interface CardProps {
   itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
   storePath?: boolean;
   shopName: string;
+  memberImg: string;
 }
 
-export default function RecommendCard({ shopName, id, img, itemTitle, price }: CardProps) {
+export default function RecommendCard({ shopName, id, img, itemTitle, price, memberImg }: CardProps) {
   const navigate = useNavigate();
   const formattedPrice = Number(price).toLocaleString('ko-KR');
 
@@ -25,6 +26,7 @@ export default function RecommendCard({ shopName, id, img, itemTitle, price }: C
         }}
       >
         <Profile>
+          <img src={memberImg ? memberImg : 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic" />
           <p>{shopName}</p>
         </Profile>
         <Image src={img} />
@@ -51,9 +53,17 @@ const Layout = styled.div`
 `;
 
 const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.62rem;
   margin: 1rem auto 0.62rem 0.62rem;
   height: 3.125rem;
-
+  img {
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 3.125rem;
+    border: 1px solid ${theme.outline};
+  }
   p {
     font-size: 1.25rem;
     font-style: normal;
@@ -66,7 +76,7 @@ const Image = styled.img`
   height: 18.75rem;
   margin-bottom: 1rem;
   border-radius: 0.5rem 0.5rem 0rem 0rem;
-  border-bottom: 1px solid #e7e8ea7e;
+  border: 1px solid #abababb8;
 `;
 
 const TextLayout = styled.div`
