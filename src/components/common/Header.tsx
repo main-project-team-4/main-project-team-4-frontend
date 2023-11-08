@@ -66,6 +66,7 @@ export default function Header() {
     cacheTime: Infinity,
   });
   const [myData, setMyData] = useRecoilState(myDataState);
+  
   useEffect(() => {
     setMyData(userData);
   }, [userData, setMyData]);

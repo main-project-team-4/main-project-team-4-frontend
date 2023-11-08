@@ -154,7 +154,7 @@ export default function Store() {
               <Intro>
                 {introState ? (
                   <TextArea>
-                    <textarea maxLength={60} ref={introRef} defaultValue={intro} onChange={introOnChange} />
+                    <textarea maxLength={59} ref={introRef} defaultValue={intro} onChange={introOnChange} />
                     <div>
                       <span>{inputCount}</span>
                       <span>/ 60자</span>

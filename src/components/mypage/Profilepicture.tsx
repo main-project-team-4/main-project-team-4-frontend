@@ -86,10 +86,10 @@ function Profilepicture({ data }: DataInfo) {
           </svg>
         )}
       </ProfileImage>
-      <PencilImage>
+      <PencilImage back={confirm ? 0 : 1}>
         <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />
         {confirm ? (
-          <span onClick={confirmImage} className="material-symbols-outlined">
+          <span onClick={confirmImage} style={{ background: `${theme.pointColor}`, color: 'white' }} className="material-symbols-outlined">
             done
           </span>
         ) : (
@@ -164,11 +164,11 @@ const ProfileImage = styled.div`
   }
 `;
 
-const PencilImage = styled.div`
+const PencilImage = styled.div<{ back: number }>`
   width: 2.125rem;
   height: 2.125rem;
   flex-shrink: 0;
-  background-color: white;
+  background-color: ${props => (props.back ? 'white' : theme.pointColor)};
 
   cursor: pointer;
 
