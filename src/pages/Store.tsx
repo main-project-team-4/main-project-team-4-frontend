@@ -63,7 +63,7 @@ export default function Store() {
   const introOnClick = () => {
     const intro = explain.replace(/\s/g, '');
 
-    if (intro.length > 5 && introState) {
+    if (intro.length >= 5 && introState) {
       introMutation.mutate({ token, explain });
       setIntroState(false);
     }
