@@ -1,4 +1,6 @@
-function StoreSvg() {
+import React from 'react';
+
+const StoreSvg = React.memo(function StoreSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
       <path d="M4.375 14.584V27.709C4.375 29.3199 5.68084 30.6257 7.29167 30.6257H27.7083C29.3192 30.6257 30.625 29.3199 30.625 27.709V14.584" stroke="#0F172A" strokeWidth="2" />
@@ -25,6 +27,6 @@ function StoreSvg() {
       />
     </svg>
   );
-}
+});
 
 export default StoreSvg;

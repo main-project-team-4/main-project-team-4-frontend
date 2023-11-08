@@ -1,4 +1,6 @@
-function StarSvg() {
+import React from 'react';
+
+const StarSvg = React.memo(function StarSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
       <g clipPath="url(#clip0_812_2714)">
@@ -11,6 +13,6 @@ function StarSvg() {
       </g>
     </svg>
   );
-}
+});
 
 export default StarSvg;

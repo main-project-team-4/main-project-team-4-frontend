@@ -1,8 +1,10 @@
+import React from 'react';
+
 type WishType = {
   wishState: boolean;
 };
 
-function HeartSvg({ wishState }: WishType) {
+const HeartSvg = React.memo(function HeartSvg({ wishState }: WishType) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
@@ -15,6 +17,6 @@ function HeartSvg({ wishState }: WishType) {
       />
     </svg>
   );
-}
+});
 
 export default HeartSvg;

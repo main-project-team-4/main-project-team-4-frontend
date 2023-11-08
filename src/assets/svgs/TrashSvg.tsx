@@ -1,4 +1,6 @@
-function TrashSvg() {
+import React from 'react';
+
+const TrashSvg = React.memo(function TrashSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
       <path d="M2.5 5H4H16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -13,6 +15,6 @@ function TrashSvg() {
       <path d="M10.75 8.75V13.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
-}
+});
 
 export default TrashSvg;

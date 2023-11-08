@@ -1,4 +1,6 @@
-function ProfileSvg() {
+import React from 'react';
+
+const ProfileSvg = React.memo(function ProfileSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70 70" fill="none">
       <path
@@ -7,6 +9,6 @@ function ProfileSvg() {
       />
     </svg>
   );
-}
+});
 
 export default ProfileSvg;

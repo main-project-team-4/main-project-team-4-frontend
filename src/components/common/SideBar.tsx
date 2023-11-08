@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
 import ChatSvg from '../../assets/svgs/ChatSvg';
+import UploadSvg from '../../assets/svgs/UploadSvg';
 
 type ItemType = {
   category_l_id: number;
@@ -95,9 +96,7 @@ function SideBar() {
                 navigate('/register', { state: '' });
               }}
             >
-              <span style={{ color: 'white' }} className="material-symbols-outlined">
-                upload
-              </span>
+              <UploadSvg />
               상품등록
             </Btn>
           </>

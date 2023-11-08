@@ -1,4 +1,6 @@
-function LoginDoorSvg() {
+import React from 'react';
+
+const LoginDoorSvg = React.memo(function LoginDoorSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
       <g clipPath="url(#clip0_1414_3712)">
@@ -18,6 +20,6 @@ function LoginDoorSvg() {
       </defs>
     </svg>
   );
-}
+});
 
 export default LoginDoorSvg;

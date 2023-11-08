@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
+import React from 'react';
 
-function MovementLogoSvg() {
+const MovementLogoSvg = React.memo(function MovementLogoSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 97 30" fill="none">
       <g clipPath="url(#clip0_1063_3202)">
@@ -84,6 +85,6 @@ function MovementLogoSvg() {
       </defs>
     </svg>
   );
-}
+});
 
 export default MovementLogoSvg;

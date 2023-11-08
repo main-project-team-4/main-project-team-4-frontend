@@ -1,4 +1,6 @@
-function ChatSvg() {
+import React from 'react';
+
+const ChatSvg = React.memo(function ChatSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
       <path
@@ -10,6 +12,6 @@ function ChatSvg() {
       />
     </svg>
   );
-}
+});
 
 export default ChatSvg;

@@ -1,4 +1,6 @@
-function SearchSvg() {
+import React from 'react';
+
+const SearchSvg = React.memo(function SearchSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 25 24" fill="none">
       <path
@@ -12,6 +14,6 @@ function SearchSvg() {
       <path d="M21.4987 21.0026L17.1484 16.6523" stroke="#0F172A" strokeWidth="1.50001" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
-}
+});
 
 export default SearchSvg;

@@ -1,4 +1,6 @@
-function LogoSvg() {
+import React from 'react';
+
+const LogoSvg = React.memo(function LogoSvg() {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="97" height="30" viewBox="0 0 97 30" fill="none">
       <g clipPath="url(#clip0_1063_3202)">
@@ -34,6 +36,6 @@ function LogoSvg() {
       </defs>
     </svg>
   );
-}
+});
 
 export default LogoSvg;
