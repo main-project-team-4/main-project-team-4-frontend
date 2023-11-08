@@ -5,6 +5,7 @@ import { kakaoLogin } from '../apis/login/kakao';
 import { useEffect } from 'react';
 import { SyncLoader } from 'react-spinners';
 import styled from 'styled-components';
+import NotFound from './NotFound';
 
 export default function Kakao() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ export default function Kakao() {
   }
 
   if (isError) {
-    return <div>에러 발생</div>;
+    return <NotFound />;
   }
 }
 
