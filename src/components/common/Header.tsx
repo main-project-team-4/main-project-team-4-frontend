@@ -62,6 +62,8 @@ export default function Header() {
 
   const { data: userData } = useQuery('myInfo', () => getMyInfo(token), {
     enabled: !!token,
+    staleTime: Infinity,
+    cacheTime: Infinity,
   });
   const [myData, setMyData] = useRecoilState(myDataState);
   useEffect(() => {

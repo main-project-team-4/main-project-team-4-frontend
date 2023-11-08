@@ -41,7 +41,7 @@ function InformationInput({ data }: DataInfo) {
     onSuccess: () => {
       setDuplication(false);
       setNickBtnState(true);
-      queryClient.invalidateQueries('myinfo');
+      queryClient.invalidateQueries('myInfo');
       queryClient.invalidateQueries('changeNick');
     },
     onError: () => {

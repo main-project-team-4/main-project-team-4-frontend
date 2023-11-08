@@ -25,7 +25,7 @@ function SideBar() {
   const token = getCookie('token');
 
   // 카테고리 전체 가져오기
-  const { data: category } = useQuery('category', getCategory);
+  const { data: category } = useQuery('category', getCategory, { staleTime: Infinity, cacheTime: Infinity });
 
   // 클릭시 대분류 페이지로 이동
   const [largeId, setLargeID] = useState(0);
