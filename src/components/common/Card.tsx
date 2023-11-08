@@ -8,6 +8,8 @@ import { getReviews } from '../../apis/shop/shop';
 import { getCookie } from '../../utils/cookie';
 import { DeleteReview } from '../../apis/shop/shop';
 import { Modal } from './Modal';
+import CardPencilSvg from '../../assets/svgs/CardPencilSvg';
+import TrashSvg from '../../assets/svgs/TrashSvg';
 interface CardProps {
   id: number;
   img: string;
@@ -121,16 +123,16 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                 {review ? (
                   <BtnLayout>
                     <Btn onClick={onClickDelete} long={'short'} delete={'delete'} sales={dataName === 'sales' ? 1 : 2}>
-                      <Trash /> 리뷰삭제
+                      <TrashSvg /> 리뷰삭제
                     </Btn>
                     <Btn onClick={onClickReviewChange} long={'short'} sales={dataName === 'sales' ? 1 : 2}>
-                      <Pencil /> 리뷰수정
+                      <CardPencilSvg /> 리뷰수정
                     </Btn>
                   </BtnLayout>
                 ) : (
                   <BtnLayout>
                     <Btn long={'long'} onClick={event => modalOpen(event)}>
-                      <Pencil /> 리뷰작성
+                      <CardPencilSvg /> 리뷰작성
                     </Btn>
                   </BtnLayout>
                 )}
@@ -142,7 +144,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                 {review ? (
                   <BtnLayout>
                     <Btn review={review ? 1 : 0} onClick={ReviewOnClick} long={'long'} sales={dataName === 'sales' ? 1 : 2}>
-                      <Pencil /> 리뷰보기
+                      <CardPencilSvg /> 리뷰보기
                     </Btn>
                   </BtnLayout>
                 ) : (
@@ -155,7 +157,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
                       sales={dataName === 'sales' ? 1 : 2}
                       long={'long'}
                     >
-                      <Pencil /> 리뷰가 아직 없어요
+                      <CardPencilSvg /> 리뷰가 아직 없어요
                     </Btn>
                   </BtnLayout>
                 )}
@@ -167,37 +169,6 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
     </>
   );
 }
-const Pencil = () => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-      <path d="M9.5 15.5H16.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path
-        d="M12.875 3.12493C13.1734 2.82656 13.578 2.65894 14 2.65894C14.2089 2.65894 14.4158 2.70009 14.6088 2.78004C14.8019 2.86 14.9773 2.97719 15.125 3.12493C15.2727 3.27266 15.3899 3.44805 15.4699 3.64108C15.5498 3.83411 15.591 4.04099 15.591 4.24993C15.591 4.45886 15.5498 4.66574 15.4699 4.85877C15.3899 5.0518 15.2727 5.22719 15.125 5.37493L5.75 14.7499L2.75 15.4999L3.5 12.4999L12.875 3.12493Z"
-        stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-};
-
-const Trash = () => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-      <path d="M2.5 5H4H16" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path
-        d="M14.5 5V15.5C14.5 15.8978 14.342 16.2794 14.0607 16.5607C13.7794 16.842 13.3978 17 13 17H5.5C5.10218 17 4.72064 16.842 4.43934 16.5607C4.15804 16.2794 4 15.8978 4 15.5V5M6.25 5V3.5C6.25 3.10218 6.40804 2.72064 6.68934 2.43934C6.97064 2.15804 7.35218 2 7.75 2H10.75C11.1478 2 11.5294 2.15804 11.8107 2.43934C12.092 2.72064 12.25 3.10218 12.25 3.5V5"
-        stroke="white"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path d="M7.75 8.75V13.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M10.75 8.75V13.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-};
 
 const Layout = styled.div<{ displaybtn: number; storepath: number; sales?: number }>`
   width: ${props => (props.sales === 1 ? '19.0625rem' : props.storepath ? '18.125rem' : '19.0625rem')};

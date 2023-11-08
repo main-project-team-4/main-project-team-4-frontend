@@ -11,7 +11,6 @@ const ViewItems = lazy(() => import('./pages/ViewItems'));
 const Kakao = lazy(() => import('./pages/Redirect'));
 const Chat = lazy(() => import('./pages/Chat'));
 const Register = lazy(() => import('./pages/Register'));
-const Info = lazy(() => import('./pages/Info'));
 const Root = lazy(() => import('./pages/Root'));
 const Welcome = lazy(() => import('./pages/Welcome'));
 const NotFound = lazy(() => import('./pages/NotFound.tsx'));
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
       </Suspense>
     ),
     children: [
-      {
-        path: 'info',
-        element: <Info />,
-      },
       {
         path: 'welcome',
         element: <Welcome />,
