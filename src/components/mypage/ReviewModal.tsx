@@ -66,6 +66,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
   const mutationReview = useMutation(ReviewRegistration, {
     onSuccess: () => {
       queryClient.invalidateQueries('reviewregister');
+      queryClient.invalidateQueries('orders');
     },
     onError: error => {
       console.error(error);
