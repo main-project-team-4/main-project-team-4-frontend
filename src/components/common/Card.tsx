@@ -24,7 +24,7 @@ interface CardProps {
   reviewId?: number;
 }
 
-export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, shopId, reviewId }: CardProps) {
+export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, reviewId }: CardProps) {
   const navigate = useNavigate();
   const token = getCookie('token');
   const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   // 모달 상태관리
   const [modalState, setModalState] = useState(false);
 
-  const modalOpen = event => {
+  const modalOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setModalState(true);
   };
@@ -63,7 +63,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   //리뷰 정보 가져오기
   const { data: reviewInfo, refetch } = useQuery('reviewData', () => getReviews({ itemId: id, token }), { enabled: false });
 
-  const ReviewOnClick = event => {
+  const ReviewOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     refetch();
     setModalState(true);
@@ -78,7 +78,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
     },
   });
 
-  const onClickDelete = event => {
+  const onClickDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
     if (reviewId && token) {
@@ -87,17 +87,17 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   };
 
   //리뷰 수정 버튼
-  const onClickReviewChange = event => {
+  const onClickReviewChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     refetch();
     setModalState(true);
-      queryClient.invalidateQueries('orders');
+    queryClient.invalidateQueries('orders');
   };
 
   return (
     <>
       {modal && <Modal modalClose={close} modalInfo="삭제가 완료되었습니다"></Modal>}
-      {modalState && dataName === 'ordered' && <ReviewInputModal reviewId={reviewId} reviewInfo={reviewInfo} setModalState={setModalState} itemId={id} shopId={shopId} modalClose={modalClose} />}
+      {modalState && dataName === 'ordered' && <ReviewInputModal reviewId={reviewId} reviewInfo={reviewInfo} setModalState={setModalState} itemId={id} modalClose={modalClose} />}
       {modalState && dataName === 'sales' && <ReviewModal reviewInfo={reviewInfo} modalClose={modalClose} />}
       <Layout
         onClick={event => {
@@ -115,16 +115,16 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
           <Price>{formattedPrice}원</Price>
         </TextLayout>
 
-        {['sales', 'ordered'].includes(dataName) && (
+        {['sales', 'ordered'].includes(dataName as string) && (
           <>
             {dataName === 'ordered' && (
               <>
                 {review ? (
                   <BtnLayout>
-                    <Btn onClick={onClickDelete} long={'short'} delete={'delete'} sales={dataName === 'sales' ? 1 : 2}>
+                    <Btn onClick={onClickDelete} long={'short'} delete={'delete'} sales={dataName !== 'ordered' ? 1 : 2}>
                       <TrashSvg /> 리뷰삭제
                     </Btn>
-                    <Btn onClick={onClickReviewChange} long={'short'} sales={dataName === 'sales' ? 1 : 2}>
+                    <Btn onClick={onClickReviewChange} long={'short'} sales={dataName !== 'ordered' ? 1 : 2}>
                       <CardPencilSvg /> 리뷰수정
                     </Btn>
                   </BtnLayout>
@@ -245,7 +245,7 @@ const BtnLayout = styled.div`
   gap: 0.5rem;
 `;
 
-const Btn = styled.button<{ sales: number; long: string; review: number; delete: string }>`
+const Btn = styled.button<{ sales?: number; long: string; review?: number; delete?: string }>`
   display: flex;
   justify-content: center;
   align-items: center;

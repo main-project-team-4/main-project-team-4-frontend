@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import TabLayout from './TabLayout';
 import StoreSvg from '../../assets/svgs/StoreSvg';
 
-
 interface TabData {
   icon: string;
   text: string;
@@ -136,6 +135,9 @@ type ItemType = {
   item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
   member_id: number;
   member_nickname: string;
+  is_review_written: boolean;
+  shop_id: number;
+  review_id: number;
 };
 const Layout = styled.div<{ title: string }>`
   display: flex;

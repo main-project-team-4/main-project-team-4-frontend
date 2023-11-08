@@ -5,15 +5,17 @@ import { useInput } from '../../hooks/useInput';
 import { useMutation, useQueryClient } from 'react-query';
 import { ReviewRegistration, ChangeReview } from '../../apis/shop/shop';
 import { getCookie } from '../../utils/cookie';
+
 type ModalProps = {
-  modalClose: () => void;
-  modalConfirm?: () => void;
+  modalClose?: () => void;
   onRatingChange?: (rating: number) => void;
   itemId?: number;
   reviewId?: number;
+  reviewInfo: any;
+  setModalState?: any;
 };
 
-export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingChange, shopId, setModalState, reviewInfo, reviewId }: ModalProps) {
+export function ReviewInputModal({ itemId, modalClose, onRatingChange, setModalState, reviewInfo, reviewId }: ModalProps) {
   const [rating, setRating] = useState(0);
   const [inputCount, setInputCount] = useState(0);
   const [review, setReview, reviewHandleChange] = useInput('');
@@ -21,7 +23,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
   const token = getCookie('token');
   const queryClient = useQueryClient();
 
-  const handleClick = newRating => {
+  const handleClick = (newRating: number) => {
     setRating(newRating);
     if (onRatingChange) {
       onRatingChange(newRating);
@@ -30,8 +32,6 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
 
   useEffect(() => {
     if (reviewInfo) {
-      console.log('reviewInfo', reviewInfo);
-
       setRating(reviewInfo.review_rating);
       setReview(reviewInfo.review_comment);
       setInputCount(reviewInfo.review_comment.length);
@@ -48,7 +48,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, [3000]);
+      }, 3000);
       return;
     } else {
       mutationReview.mutate({
@@ -133,7 +133,7 @@ export function ReviewInputModal({ itemId, modalConfirm, modalClose, onRatingCha
   );
 }
 
-export function ReviewModal({ reviewInfo, modalConfirm, modalClose }: ModalProps) {
+export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
   return (
     <>
       <Overlay>
@@ -152,11 +152,11 @@ export function ReviewModal({ reviewInfo, modalConfirm, modalClose }: ModalProps
             </ProfileContainer>
             <ItemContainer>
               <h3>상품 이미지</h3>
-              {/* <ImgList>
-                {reviewInfo.item_image_list.map(img => {
-                  <img key={img} src={img} alt="pic" />;
-                })}
-              </ImgList> */}
+              <ImgList>
+                {reviewInfo.item_image_list.map((img: string) => (
+                  <img key={img} src={img} alt="pic" />
+                ))}
+              </ImgList>
             </ItemContainer>
             <StarContainer>
               <h3>별점</h3>
@@ -176,8 +176,11 @@ export function ReviewModal({ reviewInfo, modalConfirm, modalClose }: ModalProps
     </>
   );
 }
-
-const Star = ({ filled, onMouseEnter }) => {
+type StarType = {
+  filled: boolean;
+  onMouseEnter?: any;
+};
+const Star = ({ filled, onMouseEnter }: StarType) => {
   return (
     <svg
       onMouseEnter={onMouseEnter}
@@ -244,9 +247,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    strokewidth: 1.5;
-    strokelinecap: round;
-    strokelinejoin: round;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 `;
 const Overlay = styled.div`
@@ -267,7 +270,6 @@ const Overlay = styled.div`
 const Container = styled.div`
   width: 33.75rem;
   position: relative;
-  /* height: 25.5725rem; */
   box-sizing: border-box;
   background-color: white;
   border: 1px solid ${theme.outline};

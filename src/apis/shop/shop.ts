@@ -1,8 +1,15 @@
 import { baseInstance } from '../config';
 
 type ShopType = {
-  shopId: number | string;
+  shopId?: number | string;
   token?: string;
+  reviewId?: number;
+  itemId?: number;
+  data?: {
+    item_id: number | undefined;
+    review_comment: string;
+    review_rating: number;
+  };
 };
 export const Followers = async ({ shopId, token }: ShopType) => {
   try {

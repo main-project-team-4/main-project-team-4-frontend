@@ -15,6 +15,7 @@ type ItemType = {
   review_created_at: string;
   review_id: number;
   review_rating: number;
+  item_image_list: string[];
 };
 export default function ReviewLayout({ reviewData }: ReviewData) {
   return (

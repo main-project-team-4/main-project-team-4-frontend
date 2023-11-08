@@ -7,7 +7,7 @@ import { ShopInfo, FollowCheck, Reviews, Followers, Followings, Follow } from '.
 import { ShopItem } from '../apis/getItems/Item';
 import { useQuery, useQueries, useMutation, useQueryClient } from 'react-query';
 import { getCookie } from '../utils/cookie';
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { changeIntro } from '../apis/mypage/members';
 import CardLayout from '../components/layout/CardLayout';
 import { theme } from '../styles/theme';
@@ -71,7 +71,7 @@ export default function Store() {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, [5000]);
+      }, 5000);
     }
     if (!introState) {
       setIntroState(true);
