@@ -26,10 +26,10 @@ export default function Home() {
   }, [data]);
 
   const queryResults = useQueries([
-    { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8, Selling: 'SELLING' }) },
-    { queryKey: 'topitems', queryFn: () => TopItems({ page: 1, pageSize: 8, Selling: 'SELLING' }) },
+    { queryKey: 'items', queryFn: () => AllItems({ page: 0, pageSize: 8, Selling: 'SELLING', Reserve: '' }) },
+    { queryKey: 'topitems', queryFn: () => TopItems({ page: 1, pageSize: 8, Selling: 'SELLING', Reserve: '' }) },
     { queryKey: 'recommenditems', queryFn: () => TopItems({ page: 0, pageSize: 9, Selling: 'SELLING' }) },
-    ...(token ? [{ queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING' }) }] : []),
+    ...(token ? [{ queryKey: 'nearBy', queryFn: () => nearByItem({ token, page: 0, pageSize: 8, Selling: 'SELLING', Reserve: 'RESERVED' }) }] : []),
   ]);
 
   const itemsResult = queryResults[0];

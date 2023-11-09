@@ -27,11 +27,11 @@ export default function ViewItems() {
 
   const fetchItems = ({ pageParam = 0 }) => {
     if (params.items === '최신 상품') {
-      return AllItems({ page: pageParam, pageSize, Selling: 'SELLING' });
+      return AllItems({ page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
     } else if (params.items === '인기 상품') {
-      return TopItems({ page: pageParam, pageSize, Selling: 'SELLING' });
+      return TopItems({ page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
     } else if (params.items === '내 주위 상품') {
-      return nearByItem({ token, page: pageParam, pageSize });
+      return nearByItem({ token, page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
     } else if (params.items === 'category') {
       return CategoryItem(location.state?.id, location.state?.layer, pageParam);
     } else {

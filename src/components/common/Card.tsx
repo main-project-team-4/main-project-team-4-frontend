@@ -104,13 +104,13 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
           event.stopPropagation();
           navigate(`/posting/${itemTitle}`, { state: { id } });
         }}
-        displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' ? 1 : 0}
+        displaybtn={categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && categoryTitle !== '내 주위 상품' ? 1 : 0}
         storepath={storePath ? 1 : 0}
         sales={dataName === 'sales' || dataName === 'ordered' ? 1 : 2}
       >
         <Image src={img} />
         <TextLayout>
-          {categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && <Sale>{displayItemState}</Sale>}
+          {categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && categoryTitle !== '내 주위 상품' && <Sale>{displayItemState}</Sale>}
           <h1>{itemTitle}</h1>
           <Price>{formattedPrice}원</Price>
         </TextLayout>

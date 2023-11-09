@@ -161,7 +161,7 @@ export default function Store() {
                     </TextLength>
                   </TextArea>
                 ) : explain ? (
-                  <Text>{explain}</Text>
+                  <Text mine={myData?.shop_id === shopInfo?.shop_id ? 1 : 0}>{explain}</Text>
                 ) : (
                   <h4>소개글이 없습니다.</h4>
                 )}
@@ -328,13 +328,13 @@ const ModifyBtn = styled.button`
 
   cursor: pointer;
 `;
-const Text = styled.div`
+const Text = styled.div<{ mine: number }>`
   padding: 0.88rem;
   box-sizing: border-box;
   width: 41.8125rem;
   height: 4.6rem;
   border: none;
-  background-color: transparent;
+  background-color: ${props => (props.mine === 1 ? theme.inputColor : 'transparent')};
   border-radius: 0.75rem;
   margin-bottom: 0.4rem;
   font-size: 1.125rem;
