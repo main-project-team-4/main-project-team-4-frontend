@@ -6,11 +6,10 @@ type ItemsType = {
   pageSize: number;
   token?: string;
   Selling?: string;
-  Reserve?: string;
 };
-export const AllItems = async ({ page, pageSize, Selling, Reserve }: ItemsType) => {
+export const AllItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/items?state=${Selling}&state=${Reserve}&page=${page}&size=${pageSize}&sort=createdAt,desc`);
+    const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}&sort=createdAt,desc`);
 
     return response.data.content;
   } catch (error) {
@@ -19,9 +18,9 @@ export const AllItems = async ({ page, pageSize, Selling, Reserve }: ItemsType) 
 };
 
 // 인기 상품 모두 조회
-export const TopItems = async ({ page, pageSize, Selling, Reserve }: ItemsType) => {
+export const TopItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/top-items?state=${Selling}&${Reserve}&page=${page}&size=${pageSize}`);
+    const response = await baseInstance.get(`/api/top-items?state=${Selling}&page=${page}&size=${pageSize}`);
 
     return response.data.content;
   } catch (error) {
@@ -66,9 +65,9 @@ export const ShopItem = async ({ shopId, size }: ShopItemType) => {
 };
 
 // 내 주위 상품 조회
-export const nearByItem = async ({ token, page, pageSize, Selling, Reserve }: ItemsType) => {
+export const nearByItem = async ({ token, page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/nearby-items?stateList=${Selling}&stateList=${Reserve}&page=${page}&size=${pageSize}`, {
+    const response = await baseInstance.get(`/api/nearby-items?stateList=${Selling}&page=${page}&size=${pageSize}`, {
       headers: {
         Authorization: token,
       },
