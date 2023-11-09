@@ -57,7 +57,6 @@ export default function ViewItems() {
     const handleScroll = () => {
       const { scrollTop, offsetHeight } = document.documentElement;
       if (window.innerHeight + scrollTop >= offsetHeight) {
-        // console.log('scroll');
         fetchNextPage();
       }
     };

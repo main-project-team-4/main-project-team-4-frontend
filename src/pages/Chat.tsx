@@ -11,7 +11,8 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useInput } from '../hooks/useInput';
 import { ModalWithClose } from '../components/common/Modal';
-
+import { useRecoilValue } from 'recoil';
+import { myDataState } from '../Atoms';
 interface UserProps {
   selected?: boolean;
 }
@@ -38,6 +39,8 @@ export default function Chat() {
   const { state: chatData } = useLocation();
   const queryClient = useQueryClient();
 
+  const myInfo = useRecoilValue(myDataState);
+
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [chatRoom, setChatRoom] = useState<number | null>(null);
@@ -57,7 +60,7 @@ export default function Chat() {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
-    setSender(sender || null);
+    setSender(sender);
     setMessages(MessageData);
     setItemName(itemName);
     setSellerImage(sellerImage);
@@ -71,7 +74,7 @@ export default function Chat() {
       chatRoomHandler({
         roomId: chatData.chatroom_id,
         roomName: chatData.chatroom_name,
-        sender: chatData.chatroom_sender,
+        sender: myInfo.member_nickname,
         itemName: chatData.item_name,
         sellerImage: chatData.chatroom_seller_image,
         consumerImage: chatData.chatroom_consumer_image,
@@ -83,16 +86,6 @@ export default function Chat() {
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
   }, [chatRoom]);
-
-  // //채팅 정보 설정하는 부분
-  // useEffect(() => {
-  //   if (!token) navigate('/');
-  //   if (chatData) {
-  //     setChatRoom(chatData.roomId);
-  //     setRoomName(chatData.roomName);
-  //     setSender(chatData.sender);
-  //   }
-  // }, []);
 
   //스크롤 부분
   useEffect(() => {
@@ -127,11 +120,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (!token) navigate('/');
-    // if (chatData) {
-    //   setChatRoom(chatData.roomId);
-    //   setRoomName(chatData.roomName);
-    //   setSender(chatData.sender);
-    // }
 
     // WebSocket 연결 설정
     const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
@@ -174,6 +162,9 @@ export default function Chat() {
     };
   }, [ChatUserList]);
 
+  enum QuitType {
+    QUIT,
+  }
   const sendMessage = () => {
     const data = {
       chat_type: 'TALK',
@@ -224,6 +215,20 @@ export default function Chat() {
     setModalState(true);
   };
   const modalConfirm = () => {
+    const data = {
+      chat_type: QuitType.QUIT,
+      chatroom_sender: sender,
+      chatroom_id: chatRoom,
+      chat_message: `${sender}님이 채팅방을 나가셨습니다`,
+      chatroom_name: roomName,
+    };
+
+    if (stompClientRef.current && stompClientRef.current.connected) {
+      stompClientRef.current.publish({
+        destination: `/pub/chat/message`,
+        body: JSON.stringify(data),
+      });
+    }
     GoOutChatMutation.mutate({ token, roomId: chatRoom });
     setModalState(false);
     setSelectedUser(null);
@@ -247,7 +252,7 @@ export default function Chat() {
                   chatRoomHandler({
                     roomId: user.chatroom_id,
                     roomName: user.chatroom_name,
-                    sender: user.chatroom_sender,
+                    sender: myInfo.member_nickname,
                     itemName: user.item_name,
                     sellerImage: user.chatroom_seller_image,
                     consumerImage: user.chatroom_consumer_image,
@@ -259,7 +264,7 @@ export default function Chat() {
                 <Profile>
                   <img
                     className="member"
-                    src={getImage({ sender: user.chatroom_sender, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
+                    src={getImage({ sender: myInfo.member_nickname, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
                     alt={user.sellerName}
                   />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
