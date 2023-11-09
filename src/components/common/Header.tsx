@@ -247,7 +247,7 @@ const ProfileBox = styled.div`
   h3 {
     font-size: 1rem;
     font-weight: 700;
-    margin-left: 0.6267rem; 
+    margin-left: 0.6267rem;
   }
 
   button {
@@ -271,7 +271,7 @@ const MypageMenu = styled.ul`
   position: absolute;
   top: 2rem;
   width: 7rem;
-
+  z-index: 200;
   display: flex;
   flex-direction: column;
   align-items: center;
