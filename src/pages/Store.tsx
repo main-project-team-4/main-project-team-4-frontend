@@ -70,7 +70,7 @@ export default function Store() {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
-      }, 1000000);
+      }, 5000);
     }
     if (!introState) {
       setIntroState(true);
@@ -270,7 +270,6 @@ const Profile = styled.img`
 `;
 const Intro = styled.div`
   width: 45.3125rem;
-  /* height: 7.5rem; */
   display: flex;
 
   gap: 0.62rem;
@@ -329,6 +328,8 @@ const ModifyBtn = styled.button`
   text-decoration-line: underline;
   /* margin-left: auto; */
   text-underline-offset: 5px;
+
+  cursor: pointer;
 `;
 const Text = styled.div`
   padding: 0.88rem;
@@ -353,7 +354,7 @@ const AlertInfo = styled.span`
   color: red;
   position: absolute;
   left: 0;
-  bottom: 0;
+  bottom: -1.25rem;
 `;
 const TextLength = styled.div`
   position: absolute;
