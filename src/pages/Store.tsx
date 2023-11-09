@@ -61,13 +61,11 @@ export default function Store() {
 
   // 상점소개 수정
   const introOnClick = () => {
-    const intro = explain.replace(/\s/g, '');
-
-    if (intro.length >= 5 && introState) {
+    if (explain.replace(/\s/g, '').length >= 5 && introState) {
       introMutation.mutate({ token, explain });
       setIntroState(false);
     }
-    if (introState && intro.length < 5) {
+    if (introState && explain.replace(/\s/g, '').length < 5) {
       setAlert(true);
       setTimeout(() => {
         setAlert(false);
@@ -77,8 +75,6 @@ export default function Store() {
       setIntroState(true);
     }
   };
-
-  // 인풋 카운트
 
   // 팔로우 상태 관리
   const { data: followCheck, refetch: followCheckRefetch } = useQuery(['followCheck', state], () => FollowCheck(state, token), { enabled: !!token });
@@ -105,7 +101,7 @@ export default function Store() {
       setCheckMine(state === myData.shop_id);
     }
     setIsFollow(followCheck);
-    setExplain(shopInfo?.shop_intro);
+    setExplain(shopInfo?.shop_intro ? shopInfo?.shop_intro : '소개글이 없습니다.');
     if (introState) {
       introRef.current?.focus();
     }
@@ -154,24 +150,24 @@ export default function Store() {
                   </div>
                 )}
               </h3>
+
               <Intro>
                 {introState ? (
                   <TextArea>
-                    <textarea maxLength={59} ref={introRef} defaultValue={explain} onChange={explainHandleChange} />
-                    {alert && <span style={{ color: 'red', position: 'absolute', left: '0', bottom: '0' }}>공백없이 최소 5자 이상 입력해주세요!</span>}
-                    <div>
-                      <span>{explain.length}</span>
-                      <span>/ 60자</span>
-                    </div>
+                    <textarea maxLength={60} ref={introRef} defaultValue={explain} onChange={explainHandleChange} />
+                    {alert && <AlertInfo>공백없이 최소 5자 이상 입력해주세요!</AlertInfo>}
+                    <TextLength>
+                      {explain.length}
+                      /60자
+                    </TextLength>
                   </TextArea>
                 ) : explain ? (
-                  <p>{explain}</p>
+                  <Text>{explain}</Text>
                 ) : (
                   <h4>소개글이 없습니다.</h4>
                 )}
-
-                {myData?.shop_id === shopInfo?.shop_id && <img onClick={introOnClick} src="https://ifh.cc/g/aDSaVR.png" />}
               </Intro>
+              {introState ? <ModifyBtn onClick={introOnClick}>수정 완료</ModifyBtn> : <ModifyBtn onClick={introOnClick}>상점 소개 수정</ModifyBtn>}
             </Name>
           </ProfileBox>
           <FollowBox>
@@ -256,16 +252,16 @@ const ProfileBox = styled.div`
   justify-content: center;
   padding-right: 3.12rem;
   box-sizing: border-box;
-
   gap: 3.12rem;
 `;
 
 const Profile = styled.img`
-  width: 9.375rem;
-  height: 9.375rem;
+  width: 7.5rem;
+  height: 7.5rem;
   background-color: white;
   border-radius: 100%;
-
+  border: 1px solid #abababb8;
+  flex-direction: column;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -273,9 +269,8 @@ const Profile = styled.img`
 `;
 const Intro = styled.div`
   width: 45.3125rem;
-  height: 7.5rem;
-
   display: flex;
+
   gap: 0.62rem;
 
   h3 {
@@ -292,7 +287,10 @@ const Intro = styled.div`
   }
 
   textarea {
-    padding: 0.88rem;
+    display: flex;
+    padding: 0.875rem;
+    gap: 0.625rem;
+
     box-sizing: border-box;
     width: 41.8125rem;
     height: 4.6rem;
@@ -301,12 +299,9 @@ const Intro = styled.div`
     border-radius: 0.75rem;
     margin-bottom: 0.4rem;
 
-    font-style: normal;
     font-size: 1.125rem;
     font-weight: 500;
     letter-spacing: 0.04rem;
-    line-height: normal;
-    resize: none;
 
     &:focus {
       border: 1px solid ${theme.outline};
@@ -315,34 +310,59 @@ const Intro = styled.div`
     }
   }
 
-  p {
-    padding: 0.88rem;
-    box-sizing: border-box;
-    width: 41.8125rem;
-    height: 2.75rem;
-    font-style: normal;
-    font-size: 1.125rem;
-    font-weight: 500;
-    letter-spacing: 0.04rem;
-    line-height: normal;
-    overflow-wrap: break-word;
-  }
   img {
     width: 1.125rem;
     height: 1.125rem;
     cursor: pointer;
   }
 `;
+const ModifyBtn = styled.button`
+  all: unset;
+  display: flex;
+  justify-content: flex-end;
+  width: 41.8125rem;
+  color: ${theme.pointColor};
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration-line: underline;
+  /* margin-left: auto; */
+  text-underline-offset: 5px;
+
+  cursor: pointer;
+`;
+const Text = styled.div`
+  padding: 0.88rem;
+  box-sizing: border-box;
+  width: 41.8125rem;
+  height: 4.6rem;
+  border: none;
+  background-color: ${theme.inputColor};
+  border-radius: 0.75rem;
+  margin-bottom: 0.4rem;
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: 0.04rem;
+  line-height: normal;
+  resize: none;
+`;
 const TextArea = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
   position: relative;
 `;
-
+const AlertInfo = styled.span`
+  color: red;
+  position: absolute;
+  left: 0;
+  bottom: -1.25rem;
+`;
+const TextLength = styled.div`
+  position: absolute;
+  bottom: 8px;
+  right: 9px;
+  color: gray;
+`;
 const Name = styled.div<{ starlength: number }>`
-  /* width: 45.3125rem; */
-  height: 4.875rem;
+  /* height: 9.375rem; */
   display: flex;
   flex-direction: column;
   gap: 0.31rem;

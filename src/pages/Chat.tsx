@@ -3,13 +3,14 @@ import styled from 'styled-components';
 import { theme } from '../styles/theme';
 import ChatBox from '../components/chat/ChatBox';
 import FirstChat from '../components/chat/FirstChat';
-import { getChatList, getMessages } from '../apis/chat/chat';
-import { useQueries } from 'react-query';
+import { GoOutChatRoom, getChatList, getMessages } from '../apis/chat/chat';
+import { useMutation, useQueries, useQueryClient } from 'react-query';
 import { getCookie } from '../utils/cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useInput } from '../hooks/useInput';
+import { ModalWithClose } from '../components/common/Modal';
 
 interface UserProps {
   selected?: boolean;
@@ -34,7 +35,9 @@ type ChatRoomType = {
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
-  // const { state: chatData } = useLocation();
+  const { state: chatData } = useLocation();
+  const queryClient = useQueryClient();
+
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [chatRoom, setChatRoom] = useState<number | null>(null);
@@ -48,6 +51,7 @@ export default function Chat() {
   const [sellerImage, setSellerImage] = useState<string | null | undefined>('');
   const [consumerImage, setConsumerImage] = useState<string | null | undefined>('');
   const [sellerName, setSellerName] = useState<string | undefined>('');
+  const [modalState, setModalState] = useState(false);
 
   const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName }: ChatRoomType) => {
     setSelectedUser(roomId);
@@ -60,6 +64,21 @@ export default function Chat() {
     setConsumerImage(consumerImage);
     setSellerName(sellerName);
   };
+
+  // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
+  useEffect(() => {
+    if (chatData) {
+      chatRoomHandler({
+        roomId: chatData.chatroom_id,
+        roomName: chatData.chatroom_name,
+        sender: chatData.chatroom_sender,
+        itemName: chatData.item_name,
+        sellerImage: chatData.chatroom_seller_image,
+        consumerImage: chatData.chatroom_consumer_image,
+        sellerName: chatData.chatroom_seller_name,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -183,7 +202,6 @@ export default function Chat() {
     }
   };
   //이미지 처리
-
   const DEFAULT_IMAGE: string = 'https://ifh.cc/g/kXNjcT.jpg';
 
   const getImage = ({ sender, seller, sellerImage, consumerImage }: { sender: string; seller: string; sellerImage: string | null | undefined; consumerImage: string | undefined | null }) => {
@@ -195,13 +213,34 @@ export default function Chat() {
     return DEFAULT_IMAGE;
   };
 
+  // 채팅방 나가기
+  const GoOutChatMutation = useMutation(GoOutChatRoom, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('GoOutChatRoom');
+      queryClient.invalidateQueries('chatList');
+    },
+  });
+  const onClickGoOutChat = () => {
+    setModalState(true);
+  };
+  const modalConfirm = () => {
+    GoOutChatMutation.mutate({ token, roomId: chatRoom });
+    setModalState(false);
+    setSelectedUser(null);
+    setItemName(null);
+  };
+  const modalClose = () => {
+    setModalState(false);
+  };
+
   return (
     <Layout>
       <ChatList>
         <h3>채팅 목록</h3>
         <UserList>
+          {ChatUserList && ChatUserList.length === 0 && <span>채팅목록이 없습니다.</span>}
           {ChatUserList &&
-            ChatUserList.map((user: UserType) => (
+            [...ChatUserList].reverse().map((user: UserType) => (
               <User
                 key={user.chatroom_id}
                 onClick={() =>
@@ -230,21 +269,26 @@ export default function Chat() {
             ))}
         </UserList>
       </ChatList>
+      {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo={'채팅방을 나가시겠습니까?'} />}
       <ChatContainer>
-        <Name>{itemName}</Name>
+        <Name>
+          {itemName} {itemName && <button onClick={onClickGoOutChat}>채팅방 나가기</button>}
+        </Name>
         <MessageLayout ref={messageLayoutRef}>
           {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
         </MessageLayout>
         <ChatInputLayout>
-          <ChatInput>
-            <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
-            <button onClick={sendMessage} disabled={!message.trim()}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </ChatInput>
+          {selectedUser && (
+            <ChatInput>
+              <input type="text" placeholder=" 채팅을 입력해주세요" value={message} onChange={messageHandler} onKeyDown={activeEnter} />
+              <button onClick={sendMessage} disabled={!message.trim()}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M22 2L11 13" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </ChatInput>
+          )}
         </ChatInputLayout>
       </ChatContainer>
     </Layout>
@@ -289,9 +333,16 @@ const ChatList = styled.div`
 
 const UserList = styled.div`
   display: flex;
+  max-height: 46.437rem;
+  overflow: auto;
   flex-direction: column;
   align-items: center;
   gap: 0.63rem;
+
+  span {
+    margin-top: 21rem;
+    color: ${theme.cancelBtn};
+  }
 `;
 
 const User = styled.div<UserProps>`
@@ -340,6 +391,28 @@ const Name = styled.div`
   background: #fff;
   font-size: 1.5rem;
   font-weight: 600;
+
+  display: flex;
+  justify-content: space-between;
+
+  button {
+    margin-right: 1.25rem;
+    height: 1.0625rem;
+
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+    border: none;
+    background-color: transparent;
+    color: ${theme.cancelBtn};
+
+    cursor: pointer;
+    &:hover {
+      color: ${theme.pointColor};
+    }
+  }
 `;
 
 const MessageLayout = styled.div`
@@ -354,8 +427,8 @@ const MessageLayout = styled.div`
 const ChatInputLayout = styled.div`
   display: flex;
   align-items: center;
+  height: 3.8rem;
   padding: 0.9375rem 1.25rem;
-  align-items: flex-start;
   background-color: white;
   border-radius: 0rem 0rem 0.75rem 0.75rem;
   gap: 0.62rem;

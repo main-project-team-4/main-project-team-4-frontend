@@ -103,7 +103,7 @@ export default function Header() {
           <ProfileBox>
             {token ? (
               <div onClick={toggleMypage}>
-                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/9qGZ1j.png'} />
+                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
                 <h3>{myData?.member_nickname}</h3>
                 <button>
                   {token && visibleMypage ? (
@@ -245,9 +245,9 @@ const ProfileBox = styled.div`
   }
 
   h3 {
-    font-size: 1rem; /* 폰트 사이즈는 1rem로 설정 */
+    font-size: 1rem;
     font-weight: 700;
-    margin-left: 0.6267rem; /* 0.94rem * 2/3 */
+    margin-left: 0.6267rem;
   }
 
   button {
@@ -256,9 +256,10 @@ const ProfileBox = styled.div`
     cursor: pointer;
   }
   img {
-    width: 1.25rem; /* 1.875rem * 2/3 */
-    height: 1.25rem; /* 1.875rem * 2/3 */
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 100%;
+    border: 1px solid #dbdbdbb8;
   }
 `;
 
@@ -270,7 +271,7 @@ const MypageMenu = styled.ul`
   position: absolute;
   top: 2rem;
   width: 7rem;
-
+  z-index: 200;
   display: flex;
   flex-direction: column;
   align-items: center;

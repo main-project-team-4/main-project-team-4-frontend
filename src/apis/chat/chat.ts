@@ -54,3 +54,17 @@ export const getMessages = async ({ token, roomId }: ChatListType) => {
     console.log(error);
   }
 };
+
+// 채팅방 나가기
+export const GoOutChatRoom = async ({ token, roomId }: ChatListType) => {
+  try {
+    const response = await baseInstance.delete(`chat/room/${roomId}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};

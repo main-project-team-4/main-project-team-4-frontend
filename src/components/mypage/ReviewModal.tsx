@@ -247,9 +247,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    strokeWidth: 1.5;
+    strokeLinecap: round;
+    strokeLinejoin: round;
   }
 `;
 const Overlay = styled.div`
@@ -360,6 +360,7 @@ const ProfileContainer = styled.div`
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 100%;
+    border: 1px solid #abababb8;
   }
   div {
     font-size: 1.25rem;

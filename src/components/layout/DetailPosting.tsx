@@ -174,11 +174,12 @@ export default function DetailPosting() {
           <div className="content">{detailItems.item_comment}</div>
         </PostingBox>
         <PriceBox>
+          <DeliveryFee> {detailItems.item_with_delivery_fee ? '배송비 포함' : '배송비 미포함'}</DeliveryFee>
           <h1>{Number(detailItems.item_price).toLocaleString()} 원</h1>
           {myData?.member_id === detailItems?.member_id ? (
             <ChangeItemBtn onClick={goRegister}>수정하기</ChangeItemBtn>
           ) : (
-            <div>
+            <div className="first">
               <RenderHeartButton wishState={wishState} onClick={onClickHeart} />
               <button className="Chat-Button" onClick={goChatRoom}>
                 채팅하기
@@ -285,14 +286,15 @@ const PostingBox = styled.div`
 
 const PriceBox = styled.div`
   height: 8.5rem;
+  /* height: 6.8125rem; */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
 
-  div {
+  .first {
     display: flex;
     gap: 0.75rem;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   h1 {
@@ -344,6 +346,22 @@ const PriceBox = styled.div`
     &:hover {
     }
   }
+`;
+
+const DeliveryFee = styled.div`
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 27px;
+  width: 85px;
+  border: 1px solid #2667ff;
+  border-radius: 4px;
+  color: #2667ff;
+  margin-left: auto;
+  padding: 0 3px;
+  box-sizing: border-box;
+  margin-bottom: 4px;
 `;
 
 const ChangeItemBtn = styled.button`
