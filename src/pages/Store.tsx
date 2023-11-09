@@ -150,7 +150,6 @@ export default function Store() {
                   </div>
                 )}
               </h3>
-
               <Intro>
                 {introState ? (
                   <TextArea>
@@ -167,7 +166,7 @@ export default function Store() {
                   <h4>소개글이 없습니다.</h4>
                 )}
               </Intro>
-              {introState ? <ModifyBtn onClick={introOnClick}>수정 완료</ModifyBtn> : <ModifyBtn onClick={introOnClick}>상점 소개 수정</ModifyBtn>}
+              {myData?.shop_id === shopInfo?.shop_id && (introState ? <ModifyBtn onClick={introOnClick}>수정 완료</ModifyBtn> : <ModifyBtn onClick={introOnClick}>상점 소개 수정</ModifyBtn>)}
             </Name>
           </ProfileBox>
           <FollowBox>
@@ -236,7 +235,6 @@ const Container = styled.div`
 
 const ProfileContainer = styled.div`
   width: 78.125rem;
-  /* height: 9.375rem; */
   margin-bottom: 6.25rem;
 
   display: flex;
@@ -336,7 +334,7 @@ const Text = styled.div`
   width: 41.8125rem;
   height: 4.6rem;
   border: none;
-  background-color: ${theme.inputColor};
+  background-color: transparent;
   border-radius: 0.75rem;
   margin-bottom: 0.4rem;
   font-size: 1.125rem;
