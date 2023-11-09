@@ -6,7 +6,7 @@ import FirstChat from '../components/chat/FirstChat';
 import { getChatList, getMessages } from '../apis/chat/chat';
 import { useQueries } from 'react-query';
 import { getCookie } from '../utils/cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useInput } from '../hooks/useInput';
@@ -34,7 +34,8 @@ type ChatRoomType = {
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
-  // const { state: chatData } = useLocation();
+  const { state: chatData } = useLocation();
+
   const messageLayoutRef = useRef<HTMLDivElement | null>(null);
   const [selectedUser, setSelectedUser] = useState<number | null>(null);
   const [chatRoom, setChatRoom] = useState<number | null>(null);
@@ -60,6 +61,21 @@ export default function Chat() {
     setConsumerImage(consumerImage);
     setSellerName(sellerName);
   };
+
+  // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
+  useEffect(() => {
+    if (chatData) {
+      chatRoomHandler({
+        roomId: chatData.chatroom_id,
+        roomName: chatData.chatroom_name,
+        sender: chatData.chatroom_sender,
+        itemName: chatData.item_name,
+        sellerImage: chatData.chatroom_seller_image,
+        consumerImage: chatData.chatroom_consumer_image,
+        sellerName: chatData.chatroom_seller_name,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -201,7 +217,7 @@ export default function Chat() {
         <h3>채팅 목록</h3>
         <UserList>
           {ChatUserList &&
-            ChatUserList.map((user: UserType) => (
+            [...ChatUserList].reverse().map((user: UserType) => (
               <User
                 key={user.chatroom_id}
                 onClick={() =>
@@ -289,6 +305,8 @@ const ChatList = styled.div`
 
 const UserList = styled.div`
   display: flex;
+  max-height: 46.437rem;
+  overflow: auto;
   flex-direction: column;
   align-items: center;
   gap: 0.63rem;

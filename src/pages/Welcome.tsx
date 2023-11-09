@@ -63,8 +63,7 @@ function Welcome() {
       setIsNickName(true);
       return;
     }
-    if (nickName.length < 1 || nickName.length > 20) {
-      setValidation(false);
+    if (!/^\S.{0,19}$/.test(nickName)) {
       setValidation(true);
       setIsNickName(false);
       return;
@@ -109,14 +108,14 @@ function Welcome() {
             <button onClick={nickOnClick}>중복확인</button>
           </div>
           {nickDuplicated && <span>중복된 상점명입니다.</span>}
-          {isNickname && <span>닉네임을 입력해주세요.</span>}
-          {validation && <span>상점명은 최소 1자 이상이어야 하며, 최대 20자를 초과할 수 없습니다.</span>}
+          {isNickname && <span>상점명을 입력해주세요.</span>}
+          {validation && <span>상점명은 첫 문자에 공백이 올 수 없으며, 최대 20자를 초과할 수 없습니다.</span>}
         </InputBox>
 
         <InputBox>
           <p>주소</p>
           <div>
-            <input value={address} placeholder="주소를 입력하세요" readOnly />
+            <input onClick={handleAddressClick} value={address} placeholder="주소를 입력하세요" readOnly />
             <button onClick={handleAddressClick}>주소보기</button>
           </div>
         </InputBox>
