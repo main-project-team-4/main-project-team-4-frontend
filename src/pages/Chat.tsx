@@ -32,6 +32,8 @@ type ChatRoomType = {
   sellerImage?: string | null;
   consumerImage?: string | null;
   sellerName?: string;
+  mainImg?: string;
+  consumerName?: string;
 };
 export default function Chat() {
   const token = getCookie('token');
@@ -47,7 +49,7 @@ export default function Chat() {
   const [roomName, setRoomName] = useState<string | null>(null);
   const [message, setMessage, messageHandler] = useInput('');
   const [sender, setSender] = useState<string | null>(null);
-  const stompClientRef = useRef<Client | null>(null); // <-- useRef를 사용하여 stompClient를 관리
+  const stompClientRef = useRef<Client | null>(null);
   const [messages, setMessages] = useState<Array<any>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
   const [itemName, setItemName] = useState<string | null | undefined>('');
@@ -55,8 +57,11 @@ export default function Chat() {
   const [consumerImage, setConsumerImage] = useState<string | null | undefined>('');
   const [sellerName, setSellerName] = useState<string | undefined>('');
   const [modalState, setModalState] = useState(false);
+  const [consumerName, setConsumerName] = useState<string | null>(null);
+  const [price, setPrice] = useState('');
+  const [img, setImg] = useState('');
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
@@ -66,11 +71,16 @@ export default function Chat() {
     setSellerImage(sellerImage);
     setConsumerImage(consumerImage);
     setSellerName(sellerName);
+    setConsumerName(consumerName);
+    setImg(mainImg);
+    setPrice(itemPrice);
   };
 
   // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
   useEffect(() => {
     if (chatData) {
+      console.log('chatData', chatData);
+
       chatRoomHandler({
         roomId: chatData.chatroom_id,
         roomName: chatData.chatroom_name,
@@ -79,6 +89,9 @@ export default function Chat() {
         sellerImage: chatData.chatroom_seller_image,
         consumerImage: chatData.chatroom_consumer_image,
         sellerName: chatData.chatroom_seller_name,
+        mainImg: chatData.item_main_image,
+        itemPrice: chatData.item_price,
+        consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.chatroom_seller_name : chatData.chatroom_consumer_name,
       });
     }
   }, []);
@@ -111,6 +124,7 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
+  console.log('ChatUserList', ChatUserList);
 
   useEffect(() => {
     if (MessageData) {
@@ -257,6 +271,9 @@ export default function Chat() {
                     sellerImage: user.chatroom_seller_image,
                     consumerImage: user.chatroom_consumer_image,
                     sellerName: user.chatroom_seller_name,
+                    mainImg: user.item_main_image,
+                    consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name,
+                    itemPrice: user.item_price,
                   })
                 }
                 selected={selectedUser === user.chatroom_id}
@@ -264,7 +281,7 @@ export default function Chat() {
                 <Profile>
                   <img
                     className="member"
-                    src={getImage({ sender: myInfo.member_nickname, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
+                    src={getImage({ sender: myInfo?.member_nickname, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
                     alt={user.sellerName}
                   />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
@@ -277,9 +294,21 @@ export default function Chat() {
       {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo={'채팅방을 나가시겠습니까?'} />}
       <ChatContainer>
         <Name>
-          {itemName} {itemName && <button onClick={onClickGoOutChat}>채팅방 나가기</button>}
+          {consumerName} {itemName && <button onClick={onClickGoOutChat}>채팅방 나가기</button>}
         </Name>
         <MessageLayout ref={messageLayoutRef}>
+          {selectedUser && (
+            <ItemInfo>
+              <Round>
+                <div>
+                  <img src={img} alt="" />
+                  <p>{itemName}</p>
+                </div>
+                <Price>{price.toLocaleString()}원</Price>
+              </Round>
+            </ItemInfo>
+          )}
+
           {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
         </MessageLayout>
         <ChatInputLayout>
@@ -325,6 +354,7 @@ const Layout = styled.div`
 const ChatList = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   width: 25.5rem;
   height: 100%;
   background-color: white;
@@ -386,6 +416,7 @@ const ChatContainer = styled.div`
   height: 100%;
   box-sizing: border-box;
   border-radius: 0.75rem;
+  position: relative;
 `;
 
 const Name = styled.div`
@@ -421,14 +452,66 @@ const Name = styled.div`
 `;
 
 const MessageLayout = styled.div`
-  padding-top: 2.5rem;
+  padding-top: 4.12rem;
+  box-sizing: border-box;
   padding-bottom: 1rem;
   box-sizing: border-box;
   height: 44rem;
   overflow-y: auto;
   background-color: ${theme.blueBackground};
 `;
-
+const ItemInfo = styled.div`
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 5.5rem;
+  height: 3.5rem;
+  width: 49.0625rem;
+  background-color: ${theme.blueBackground};
+  z-index: 10;
+  padding-top: 0.62rem;
+  /* border: 1px solid red; */
+  div {
+    display: flex;
+    gap: 0.62rem;
+    align-items: center;
+  }
+  img {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.375rem;
+  }
+  p {
+    width: 15rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+`;
+const Price = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 5.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 0.875rem;
+  font-weight: 600;
+`;
+const Round = styled.div`
+  width: 27.5625rem;
+  height: 3.5rem;
+  padding: 0.5rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  gap: 3.125rem;
+  border-radius: 6.25rem;
+  border: 1px solid ${theme.pointColor};
+  background: #fff;
+  justify-content: space-between;
+`;
 const ChatInputLayout = styled.div`
   display: flex;
   align-items: center;
