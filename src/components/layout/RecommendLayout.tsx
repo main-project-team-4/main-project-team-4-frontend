@@ -48,20 +48,21 @@ function RecommendLayout({ title, data }: RecommendType) {
             autoplay={{ delay: 2000, disableOnInteraction: false }}
             loop={true}
           >
-            {data.map((item: ItemType, index) => (
-              <SwiperSlide key={index}>
-                <RecommendCard
-                  shopName={item.shop_name}
-                  categoryTitle={title}
-                  itemState={item.item_state}
-                  id={item.item_id}
-                  img={item.item_main_image}
-                  itemTitle={item.item_name}
-                  price={item.item_price}
-                  memberImg={item.member_image}
-                />
-              </SwiperSlide>
-            ))}
+            {data &&
+              data.map((item: ItemType, index) => (
+                <SwiperSlide key={index}>
+                  <RecommendCard
+                    shopName={item.shop_name}
+                    categoryTitle={title}
+                    itemState={item.item_state}
+                    id={item.item_id}
+                    img={item.item_main_image}
+                    itemTitle={item.item_name}
+                    price={item.item_price}
+                    memberImg={item.member_image}
+                  />
+                </SwiperSlide>
+              ))}
           </StyledSwiper>
         </CardWrapper>
       </Container>
