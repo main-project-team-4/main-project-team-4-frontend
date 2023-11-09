@@ -77,19 +77,22 @@ function Profilepicture({ data }: DataInfo) {
   return (
     <Container>
       <ProfileImage>{image !== '' ? <img src={image} /> : <ProfileSvg />}</ProfileImage>
-      <PencilImage back={confirm ? 0 : 1}>
-        <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />
-        {confirm ? (
-          <span onClick={confirmImage} style={{ background: `${theme.pointColor}`, color: 'white' }} className="material-symbols-outlined">
-            done
-          </span>
-        ) : (
-          <div onClick={changeImage}>
-            <PencilSvg />
-          </div>
-        )}
-      </PencilImage>
+
       <h3>{data?.member_nickname}</h3>
+
+      {confirm ? (
+        <ImgChangeBtn onClick={confirmImage} confirm={confirm ? 1 : 0}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M2 11.2L6.57143 16L18 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>{' '}
+          사진 저장
+        </ImgChangeBtn>
+      ) : (
+        <ImgChangeBtn onClick={changeImage} confirm={confirm ? 1 : 0}>
+          <input ref={inputRef} type="file" accept="image/*" onChange={saveImgFile} />
+          <PencilSvg /> 사진 변경
+        </ImgChangeBtn>
+      )}
     </Container>
   );
 }
@@ -98,7 +101,6 @@ export default Profilepicture;
 
 const Container = styled.div`
   width: 6rem;
-  height: 9.0625rem;
 
   display: inline-flex;
   flex-direction: column;
@@ -143,23 +145,21 @@ const ProfileImage = styled.div`
   }
 `;
 
-const PencilImage = styled.div<{ back: number }>`
-  width: 2.125rem;
-  height: 2.125rem;
-  flex-shrink: 0;
-  background-color: ${props => (props.back ? 'white' : theme.pointColor)};
-
-  cursor: pointer;
-
-  border-radius: 100%;
-
-  position: absolute;
-  top: 3.5rem;
-  right: -0.2rem;
-
+const ImgChangeBtn = styled.button<{ confirm: number }>`
+  all: unset;
   display: flex;
-  align-items: center;
+  width: 7.875rem;
+  height: 2.5rem;
+  padding: 0.625rem 1.2rem;
   justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.375rem;
+  /* background-color: ${props => (props.confirm ? theme.pointColor : '#0f172a')}; */
+  background-color: #0f172a;
+  color: white;
+  box-sizing: border-box;
+  cursor: pointer;
 
   input {
     display: none;

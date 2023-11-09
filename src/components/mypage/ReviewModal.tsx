@@ -247,9 +247,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+    strokeWidth: 1.5;
+    strokeLinecap: round;
+    strokeLinejoin: round;
   }
 `;
 const Overlay = styled.div`
