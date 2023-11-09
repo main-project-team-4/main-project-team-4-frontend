@@ -17,6 +17,19 @@ export default function ViewItems() {
   const [keyword, setKeyword] = useState('');
   const key = location.search.split('=')[1];
   const decodedString = decodeURIComponent(key);
+  const [buttonState, setButtonState] = useState(false);
+  const [sellingState, setSellingState] = useState('');
+
+  const onClickAllItemState = () => {
+    setButtonState(false);
+    setSellingState('');
+    refetch();
+  };
+  const onClickSellItemState = () => {
+    setButtonState(true);
+    setSellingState('SELLING');
+    refetch();
+  };
 
   useEffect(() => {
     setKeyword(decodedString);
@@ -27,11 +40,11 @@ export default function ViewItems() {
 
   const fetchItems = ({ pageParam = 0 }) => {
     if (params.items === '최신 상품') {
-      return AllItems({ page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
+      return AllItems({ page: pageParam, pageSize, Selling: sellingState });
     } else if (params.items === '인기 상품') {
-      return TopItems({ page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
+      return TopItems({ page: pageParam, pageSize, Selling: sellingState });
     } else if (params.items === '내 주위 상품') {
-      return nearByItem({ token, page: pageParam, pageSize, Selling: 'SELLING', Reserve: 'RESERVED' });
+      return nearByItem({ token, page: pageParam, pageSize, Selling: sellingState });
     } else if (params.items === 'category') {
       return CategoryItem(location.state?.id, location.state?.layer, pageParam);
     } else {
@@ -43,7 +56,7 @@ export default function ViewItems() {
     fetchNextPage,
     refetch,
     isSuccess,
-  } = useInfiniteQuery(['items', params.items, path], fetchItems, {
+  } = useInfiniteQuery(['items', params.items, path, sellingState], fetchItems, {
     getNextPageParam: (_, pages) => {
       return pages.length;
     },
@@ -57,7 +70,6 @@ export default function ViewItems() {
     const handleScroll = () => {
       const { scrollTop, offsetHeight } = document.documentElement;
       if (window.innerHeight + scrollTop >= offsetHeight) {
-        // console.log('scroll');
         fetchNextPage();
       }
     };
@@ -82,7 +94,21 @@ export default function ViewItems() {
           </h4>
         ) : (
           <>
-            {params.items == 'category' ? '' : params.items}
+            {params.items == 'category' ? (
+              ''
+            ) : (
+              <>
+                {params.items}
+                <div>
+                  <Allbutton buttonstate={buttonState ? 1 : 0} onClick={onClickAllItemState}>
+                    전체 상품 보기
+                  </Allbutton>
+                  <Sellbutton buttonstate={buttonState ? 1 : 0} onClick={onClickSellItemState}>
+                    구매가능 상품 보기
+                  </Sellbutton>
+                </div>
+              </>
+            )}
 
             {params.LargeCategory}
             {params.midCategoryId && ` - ${params.midCategoryId}`}
@@ -143,12 +169,36 @@ const Title = styled.div`
   font-size: 28px;
   font-weight: 600;
   line-height: 33px;
+  width: 100%;
+  display: flex;
+  align-items: center;
   align-self: flex-start;
+  justify-content: space-between;
 
   span {
     font-size: 2rem;
     color: ${theme.pointColor};
   }
+  div {
+    display: flex;
+    gap: 1rem;
+  }
+`;
+const Allbutton = styled.button<{ buttonstate: number }>`
+  width: 7.2rem;
+  height: 1.75rem;
+  border-radius: 0.28125rem;
+  border: ${props => (props.buttonstate === 1 ? '1px solid #2667ff' : 'none')};
+  background: ${props => (props.buttonstate === 1 ? '#fff' : '#2667ff')};
+  color: ${props => (props.buttonstate === 1 ? '#2667ff' : '#fff')};
+`;
+const Sellbutton = styled.button<{ buttonstate: number }>`
+  width: 7.2rem;
+  height: 1.75rem;
+  border-radius: 0.28125rem;
+  border: ${props => (props.buttonstate === 0 ? '1px solid #2667ff' : 'none')};
+  background: ${props => (props.buttonstate === 0 ? '#fff' : '#2667ff')};
+  color: ${props => (props.buttonstate === 0 ? '#2667ff' : '#fff')};
 `;
 
 const NotExits = styled.div`
