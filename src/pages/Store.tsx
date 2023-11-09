@@ -15,7 +15,6 @@ import { useInput } from '../hooks/useInput';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
 import { SyncLoader } from 'react-spinners';
-import Posting from './Posting';
 
 export default function Store() {
   const location = useLocation();
