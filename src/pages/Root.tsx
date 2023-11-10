@@ -3,10 +3,43 @@ import Header from '../components/common/Header';
 import SideBar from '../components/common/SideBar';
 import styled from 'styled-components';
 import { theme } from '../styles/theme';
+import { useEffect } from 'react';
+import { getCookie } from '../utils/cookie';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { StyledToastContainer } from '../components/common/Alert';
+import { toast } from 'react-toastify';
 
 export default function Root() {
+  const token = getCookie('token');
+  useEffect(() => {
+    const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
+      headers: {
+        Authorization: token,
+      },
+      withCredentials: true,
+    });
+
+    console.log(eventSource);
+    eventSource.onopen = () => {
+      console.log('open');
+    };
+    eventSource.addEventListener('sse', function (e) {
+      console.log(e.data);
+      toast(e.data, { position: 'top-right', draggable: 'true' });
+    });
+    eventSource.onerror = error => {
+      console.log(error);
+    };
+
+    // 컴포넌트 언마운트 시 이벤트 소스 닫기
+    return () => {
+      eventSource.close();
+    };
+  }, []);
+
   return (
     <>
+      <StyledToastContainer />
       <Fixed>
         <Header />
         <SideBar />
