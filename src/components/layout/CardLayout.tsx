@@ -53,7 +53,6 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
       <Layout title={title}>
         {data && (
           <>
-            {/* {title === '인기 상품' && <PointBox></PointBox>} */}
             <Title
               title={title}
               onClick={() => {

@@ -3,7 +3,7 @@ import { theme } from '../../styles/theme';
 
 type ChatBoxType = {
   messages: MessageType[];
-  sender: string | null;
+  sender: string | undefined;
   sellerName?: string;
   sellerImage?: string | null;
   consumerImage?: string | null;
@@ -12,6 +12,7 @@ type MessageType = {
   chatroom_sender: string;
   chat_message: string;
   chat_created_at: string;
+  chat_type: string;
 };
 export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
   // 시간 포맷 함수
@@ -27,7 +28,9 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
     <>
       {messages?.map((message, index) => {
         const formattedTime = formatTime(message.chat_created_at);
-        return message.chatroom_sender === sender ? (
+        return message.chat_type === 'ENTER' ? (
+          <Server key={index}>{message.chat_message}</Server>
+        ) : message.chatroom_sender === sender ? (
           <MyMessageContainer key={index}>
             <MyMessage>{message.chat_message}</MyMessage>
             <MyTime>{formattedTime}</MyTime>
@@ -35,7 +38,6 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
         ) : (
           <YourMessageContainer key={index}>
             <img src={sender === sellerName ? consumerImage || 'https://ifh.cc/g/kXNjcT.jpg' : sellerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
-
             {/* <img src={message.member_image ? message.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" /> */}
             <Name>{message.chatroom_sender}</Name>
             <YourMessage>{message.chat_message}</YourMessage>
@@ -46,7 +48,18 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
     </>
   );
 }
-
+const Server = styled.div`
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  padding: 0.5rem 1.5rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6.25rem;
+  /* border: 1px solid white; */
+  background: #c3d4f7;
+`;
 const YourMessageContainer = styled.div`
   display: flex;
   flex-direction: column;

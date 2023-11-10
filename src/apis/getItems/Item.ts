@@ -65,9 +65,9 @@ export const ShopItem = async ({ shopId, size }: ShopItemType) => {
 };
 
 // 내 주위 상품 조회
-export const nearByItem = async ({ token, page, pageSize }: ItemsType) => {
+export const nearByItem = async ({ token, page, pageSize, Selling }: ItemsType) => {
   try {
-    const response = await baseInstance.get(`/api/nearby-items?page=${page}&size=${pageSize}`, {
+    const response = await baseInstance.get(`/api/nearby-items?stateList=${Selling}&page=${page}&size=${pageSize}`, {
       headers: {
         Authorization: token,
       },

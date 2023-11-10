@@ -108,6 +108,9 @@ const CardWrapper = styled.div`
 const StyledSwiper = styled(Swiper)`
   position: relative;
   height: 32.6875rem;
+  .swiper-slide {
+    margin-top: 1rem;
+  }
   .swiper-button-next,
   .swiper-button-prev {
     color: ${theme.inputColor};
