@@ -3,7 +3,7 @@ import { theme } from '../../styles/theme';
 
 type ChatBoxType = {
   messages: MessageType[];
-  sender: string | null;
+  sender: string | undefined;
   sellerName?: string;
   sellerImage?: string | null;
   consumerImage?: string | null;
@@ -12,6 +12,7 @@ type MessageType = {
   chatroom_sender: string;
   chat_message: string;
   chat_created_at: string;
+  chat_type: string;
 };
 export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
   // 시간 포맷 함수

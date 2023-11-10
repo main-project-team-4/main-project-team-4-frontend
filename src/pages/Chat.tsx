@@ -16,14 +16,7 @@ import { myDataState } from '../Atoms';
 interface UserProps {
   selected?: boolean;
 }
-// type ChatRoomType = {
-//   roomId: number;
-//   roomName: string;
-//   sender: string;
-//   itemName: string;
-//   sellerImage?: string | null;
-//   consumerImage?: string | null;
-// };
+
 type ChatRoomType = {
   roomId: number;
   roomName: string;
@@ -34,6 +27,7 @@ type ChatRoomType = {
   sellerName?: string;
   mainImg?: string;
   consumerName?: string;
+  itemPrice: number;
 };
 export default function Chat() {
   const token = getCookie('token');
@@ -48,7 +42,7 @@ export default function Chat() {
   const [chatRoom, setChatRoom] = useState<number | null>(null);
   const [roomName, setRoomName] = useState<string | null>(null);
   const [message, setMessage, messageHandler] = useInput('');
-  const [sender, setSender] = useState<string | null>(null);
+  const [sender, setSender] = useState<string | undefined>('');
   const stompClientRef = useRef<Client | null>(null);
   const [messages, setMessages] = useState<Array<any>>([]);
   const [subscribedRooms, setSubscribedRooms] = useState<number[]>([]); // 이미 구독한 방 리스트
@@ -57,9 +51,9 @@ export default function Chat() {
   const [consumerImage, setConsumerImage] = useState<string | null | undefined>('');
   const [sellerName, setSellerName] = useState<string | undefined>('');
   const [modalState, setModalState] = useState(false);
-  const [consumerName, setConsumerName] = useState<string | null>(null);
-  const [price, setPrice] = useState('');
-  const [img, setImg] = useState('');
+  const [consumerName, setConsumerName] = useState<string | undefined>('');
+  const [price, setPrice] = useState(0);
+  const [img, setImg] = useState<string | undefined>('');
 
   const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice }: ChatRoomType) => {
     setSelectedUser(roomId);
@@ -136,8 +130,8 @@ export default function Chat() {
     if (!token) navigate('/');
 
     // WebSocket 연결 설정
-    const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
-    // const sock = new SockJS('https://api.re-use.store/ws-stomp'); // 웹소켓 서버 주소
+    // const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
+    const sock = new SockJS('https://api.re-use.store/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
       webSocketFactory: () => sock,
       reconnectDelay: 200,
@@ -342,6 +336,7 @@ type UserType = {
   consumerImage: string;
   chatroom_seller_image?: string;
   chatroom_consumer_image?: string;
+  item_price: number;
 };
 
 const Layout = styled.div`
