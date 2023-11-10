@@ -37,6 +37,6 @@
 
 | Name | 박정훈 | 강찬영 | 김경윤 | 정재익 | 김용빈 | 이지은 | 정예원 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| Profile | | |  | |  | |
-| Role | Team Leader</br>Backend</br>DevOps| Backend | Backend | Backend | Vice Leader</br>Frontend| Frontend | Design |
-| GitHub | [박정훈](https://github.com/iksadNorth) | [강찬영](https://github.com/CHANYOUNGKANG) | [김경윤](https://github.com/gukjan9) | [정재익](https://github.com/JeongJaeIk1207) | [김용빈](https://github.com/rladydqls99) | [이지은](https://github.com/egg-silver) |-|
+| Profile | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/90740546-dd12-46c0-b997-f706aaa91c6c) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/a2481260-483a-4d80-a81b-9fe72f8c4298) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/ac00e265-012f-4b47-9d48-68c9e164ef88) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/3d4eec0f-aaaa-426c-8b71-a018cd3aa051) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/9d84cb40-9bc5-4be7-a71d-0f2fdd44695e) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/71379413-a4ee-4e5b-928a-1db7ca30ec3b) | ![image](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/18aac8ed-191d-4872-843d-be75c2f59dda) |
+| Role | Team Leader<br/>Backend<br/>DevOps | Backend | Backend | Backend | Vice Leader<br/>Frontend | Frontend | Design |
+| GitHub | [박정훈](https://github.com/iksadNorth) | [강찬영](https://github.com/CHANYOUNGKANG) | [김경윤](https://github.com/gukjan9) | [정재익](https://github.com/JeongJaeIk1207) | [김용빈](https://github.com/rladydqls99) | [이지은](https://github.com/egg-silver) | - |
