@@ -6,7 +6,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import LoginModal from '../login/LoginModal';
 import { getCookie } from '../../utils/cookie';
 import { theme } from '../../styles/theme';
-
 import { removeCookie } from '../../utils/cookie';
 import { getMyInfo } from '../../apis/mypage/members';
 import { useRecoilState } from 'recoil';
@@ -157,6 +156,7 @@ export default function Header() {
   );
 }
 
+// 스타일
 const Layout = styled.div`
   display: flex;
   align-items: center;

@@ -3,25 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useQuery } from 'react-query';
 import { getCategory } from '../../apis/sidebar/category';
 
-type LargeOptionType = {
-  category_l_id: number;
-  category_l_name: string;
-};
-
-type MidOptionType = {
-  category_m_id: number;
-  category_m_name: string;
-};
-type CategoryProps = {
-  setCategory: (categoryId: number) => void;
-  largeSelected: string;
-  setlargeSelected: (selected: string) => void;
-  midSelected: string;
-  setMidSelected: (selected: string) => void;
-  categoryID: number;
-  setCategoryID: (id: number) => void;
-};
-
 function Category({ setCategory, largeSelected, setlargeSelected, midSelected, setMidSelected, categoryID, setCategoryID }: CategoryProps) {
   const { data, refetch } = useQuery('category', getCategory, { enabled: false, staleTime: Infinity, cacheTime: Infinity });
 
@@ -62,13 +43,14 @@ function Category({ setCategory, largeSelected, setlargeSelected, midSelected, s
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
       // 대분류 드롭다운 외부 클릭 검사
-      if (largeDropdownRef.current && !largeDropdownRef.current.contains(event.target as any)) {
+      if (largeDropdownRef.current && !largeDropdownRef.current.contains(target)) {
         setlargeIsOpen(false);
       }
 
       // 중분류 드롭다운 외부 클릭 검사
-      if (midDropdownRef.current && !midDropdownRef.current.contains(event.target as any)) {
+      if (midDropdownRef.current && !midDropdownRef.current.contains(target)) {
         setMidIsOpen(false);
       }
     };
@@ -113,12 +95,29 @@ function Category({ setCategory, largeSelected, setlargeSelected, midSelected, s
     </Container>
   );
 }
-// type OptionType = {
-//   category_m_id:number
-//   category_m_name
-// }
 export default Category;
 
+// 타입
+type LargeOptionType = {
+  category_l_id: number;
+  category_l_name: string;
+};
+
+type MidOptionType = {
+  category_m_id: number;
+  category_m_name: string;
+};
+type CategoryProps = {
+  setCategory: (categoryId: number) => void;
+  largeSelected: string;
+  setlargeSelected: (selected: string) => void;
+  midSelected: string;
+  setMidSelected: (selected: string) => void;
+  categoryID: number;
+  setCategoryID: (id: number) => void;
+};
+
+// 스타일
 const Container = styled.div`
   margin-bottom: 1.25rem;
   display: flex;

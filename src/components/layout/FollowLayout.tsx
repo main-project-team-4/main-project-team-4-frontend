@@ -3,19 +3,6 @@ import FollowerCard from '../store/FollowerCard';
 import React from 'react';
 import TabLayout from './TabLayout';
 
-type FollowType = {
-  data: ItemType[];
-  checkMine: boolean;
-  follow: string;
-};
-type ItemType = {
-  member_id: number;
-  shop_id: number;
-  member_nickname: string;
-  member_image: string;
-  is_following: boolean;
-  shop_name: string;
-};
 export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   return (
     <Container>
@@ -41,6 +28,22 @@ export default function FollowLayout({ data, checkMine, follow }: FollowType) {
   );
 }
 
+// 타입
+type FollowType = {
+  data: ItemType[];
+  checkMine: boolean;
+  follow: string;
+};
+type ItemType = {
+  member_id: number;
+  shop_id: number;
+  member_nickname: string;
+  member_image: string;
+  is_following: boolean;
+  shop_name: string;
+};
+
+// 스타일
 const Container = styled.div`
   display: flex;
   width: 73.75rem;

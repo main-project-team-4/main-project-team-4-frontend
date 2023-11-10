@@ -1,12 +1,13 @@
 import { baseInstance } from '../config';
 
-// 최신 상품을 모두 가져오는 API
 type ItemsType = {
   page: number;
   pageSize: number;
   token?: string;
-  Selling?: string;
+  Selling: string;
 };
+
+// 최신 상품을 모두 가져오는 API
 export const AllItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
     const response = await baseInstance.get(`/api/items?state=${Selling}&page=${page}&size=${pageSize}&sort=createdAt,desc`);
@@ -22,6 +23,20 @@ export const TopItems = async ({ page, pageSize, Selling }: ItemsType) => {
   try {
     const response = await baseInstance.get(`/api/top-items?state=${Selling}&page=${page}&size=${pageSize}`);
 
+    return response.data.content;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// 내 주위 상품 조회
+export const nearByItem = async ({ token, page, pageSize, Selling }: ItemsType) => {
+  try {
+    const response = await baseInstance.get(`/api/nearby-items?stateList=${Selling}&page=${page}&size=${pageSize}`, {
+      headers: {
+        Authorization: token,
+      },
+    });
     return response.data.content;
   } catch (error) {
     console.log(error);
@@ -49,11 +64,11 @@ export const DetailItem = async (id: number) => {
   }
 };
 
-// 상점별 아이템 조회
 type ShopItemType = {
   shopId: number | string;
   size: number;
 };
+// 상점별 아이템 조회
 export const ShopItem = async ({ shopId, size }: ShopItemType) => {
   try {
     const response = await baseInstance.get(`/api/shops/${shopId}/items?page=0&size=${size}`);
@@ -61,19 +76,5 @@ export const ShopItem = async ({ shopId, size }: ShopItemType) => {
   } catch (error) {
     console.error(error);
     throw error;
-  }
-};
-
-// 내 주위 상품 조회
-export const nearByItem = async ({ token, page, pageSize, Selling }: ItemsType) => {
-  try {
-    const response = await baseInstance.get(`/api/nearby-items?stateList=${Selling}&page=${page}&size=${pageSize}`, {
-      headers: {
-        Authorization: token,
-      },
-    });
-    return response.data.content;
-  } catch (error) {
-    console.log(error);
   }
 };

@@ -218,9 +218,7 @@ export default function Store() {
             ]}
           ></Tab>
         </TabBox>
-        {/* <FollowerCard /> */}
       </Container>
-      {/* )} */}
     </>
   );
 }

@@ -10,13 +10,7 @@ const data = [
   { state_name: '삭제', item_state: 'DELETE' },
 ];
 
-interface DropBarProps {
-  setSelected: (state: string) => void;
-  itemState: string;
-  itemId: number;
-}
-
-export default function DropBar({ setSelected, itemState, itemId }: DropBarProps) {
+export default function DropBar({ setSelected, itemState, itemId }: DropBarPropsType) {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     switch (itemState) {
@@ -87,6 +81,14 @@ export default function DropBar({ setSelected, itemState, itemId }: DropBarProps
   );
 }
 
+// 타입
+type DropBarPropsType = {
+  setSelected: (state: string) => void;
+  itemState: string;
+  itemId: number;
+};
+
+// 스타일
 const Container = styled.div`
   position: absolute;
   left: 29.5rem;

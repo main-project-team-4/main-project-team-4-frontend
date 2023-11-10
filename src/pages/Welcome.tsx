@@ -10,10 +10,6 @@ import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
 import MovementLogoSvg from '../assets/svgs/MovementLogoSvg';
 
-type AddressType = {
-  roadAddress: string;
-};
-
 function Welcome() {
   const queryClient = useQueryClient();
   const token = getCookie('token');
@@ -137,6 +133,12 @@ function Welcome() {
 
 export default Welcome;
 
+// 타입
+type AddressType = {
+  roadAddress: string;
+};
+
+// 스타일
 const Layout = styled.div`
   height: 100vh;
   display: flex;

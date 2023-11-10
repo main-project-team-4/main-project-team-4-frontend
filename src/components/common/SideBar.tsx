@@ -8,18 +8,6 @@ import { theme } from '../../styles/theme';
 import ChatSvg from '../../assets/svgs/ChatSvg';
 import UploadSvg from '../../assets/svgs/UploadSvg';
 
-type ItemType = {
-  category_l_id: number;
-  category_l_name: string;
-  children: ItemChildType[];
-};
-type ItemChildType = {
-  category_m_id: number;
-  category_m_name: string;
-  category_l_id: number;
-  category_l_name: string;
-};
-
 function SideBar() {
   const [layer, setLayer] = useState(1);
 
@@ -108,6 +96,20 @@ function SideBar() {
 
 export default SideBar;
 
+// 타입
+type ItemType = {
+  category_l_id: number;
+  category_l_name: string;
+  children: ItemChildType[];
+};
+type ItemChildType = {
+  category_m_id: number;
+  category_m_name: string;
+  category_l_id: number;
+  category_l_name: string;
+};
+
+// 스타일
 const Container = styled.div`
   width: 78.125rem;
   height: 3.9375rem;

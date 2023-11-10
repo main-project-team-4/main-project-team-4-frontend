@@ -11,7 +11,13 @@ type ModalProps = {
   onRatingChange?: (rating: number) => void;
   itemId?: number;
   reviewId?: number;
-  reviewInfo: any;
+  reviewInfo: {
+    member_image: string;
+    item_image_list: string[];
+    review_rating: number;
+    review_comment: string;
+    member_nickname: string;
+  };
   setModalState?: any;
 };
 
@@ -172,6 +178,7 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
     </>
   );
 }
+
 type StarType = {
   filled: boolean;
   onMouseEnter?: any;
@@ -243,9 +250,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    strokewidth: 1.5;
-    strokelinecap: round;
-    strokelinejoin: round;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 `;
 const Overlay = styled.div`

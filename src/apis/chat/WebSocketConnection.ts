@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs';
+import { Client, IFrame } from '@stomp/stompjs';
 
 export default function WebSocketConnection() {
   useEffect(() => {
@@ -12,7 +12,7 @@ export default function WebSocketConnection() {
       // console.log('웹소켓 연결 성공:', frame);
     };
 
-    client.onStompError = function (error: any) {
+    client.onStompError = function (error: IFrame) {
       console.error('웹소켓 연결 에러:', error.headers.message);
     };
 

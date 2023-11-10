@@ -88,7 +88,6 @@ export default function DetailPosting() {
     }
   };
 
-  //여기확인 필!!!!
   useEffect(() => {
     if (detailSuccess && !!myData) {
       if (myData.member_id === detailItems.member_id) {
@@ -158,6 +157,7 @@ export default function DetailPosting() {
       chatRoomMutation.mutate({ token, itemId: detailItems.item_id });
     } else openModal();
   };
+
   return detailItems ? (
     <Container>
       <ImageComtainer>
@@ -193,10 +193,13 @@ export default function DetailPosting() {
   ) : null;
 }
 
+// 타입
 type HeartBtnType = {
   wishState: boolean;
   onClick: () => void;
 };
+
+// 스타일
 const Container = styled.div`
   height: 40.1875rem;
   width: 78.125rem;

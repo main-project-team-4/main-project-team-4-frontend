@@ -10,26 +10,14 @@ import { DeleteReview } from '../../apis/shop/shop';
 import { Modal } from './Modal';
 import CardPencilSvg from '../../assets/svgs/CardPencilSvg';
 import TrashSvg from '../../assets/svgs/TrashSvg';
-interface CardProps {
-  id: number;
-  img: string;
-  itemTitle: string;
-  price: string;
-  categoryTitle: string;
-  itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
-  storePath?: boolean;
-  dataName?: string;
-  review?: boolean;
-  shopId?: number;
-  reviewId?: number;
-}
 
-export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, reviewId }: CardProps) {
+export default function Card({ id, img, itemTitle, price, itemState, categoryTitle, storePath, dataName, review, reviewId }: CardPropsType) {
   const navigate = useNavigate();
   const token = getCookie('token');
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
   const formattedPrice = Number(price).toLocaleString('ko-KR');
+
   // 모달 상태관리
   const [modalState, setModalState] = useState(false);
 
@@ -77,7 +65,6 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
       setModal(true);
     },
   });
-
   const onClickDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
@@ -169,6 +156,22 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
   );
 }
 
+// 타입
+type CardPropsType = {
+  id: number;
+  img: string;
+  itemTitle: string;
+  price: string;
+  categoryTitle: string;
+  itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  storePath?: boolean;
+  dataName?: string;
+  review?: boolean;
+  shopId?: number;
+  reviewId?: number;
+};
+
+// 스타일
 const Layout = styled.div<{ displaybtn: number; storepath: number; sales?: number }>`
   width: ${props => (props.sales === 1 ? '19.0625rem' : props.storepath ? '18.125rem' : '19.0625rem')};
   height: ${props => (props.sales === 1 ? '25.9375rem' : props.displaybtn ? '22.4375rem' : '20rem')};

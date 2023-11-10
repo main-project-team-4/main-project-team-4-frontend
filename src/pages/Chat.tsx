@@ -13,22 +13,7 @@ import { useInput } from '../hooks/useInput';
 import { ModalWithClose } from '../components/common/Modal';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
-interface UserProps {
-  selected?: boolean;
-}
 
-type ChatRoomType = {
-  roomId: number;
-  roomName: string;
-  sender?: string;
-  itemName?: string;
-  sellerImage?: string | null;
-  consumerImage?: string | null;
-  sellerName?: string;
-  mainImg?: string;
-  consumerName?: string;
-  itemPrice: number;
-};
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
@@ -134,7 +119,7 @@ export default function Chat() {
       reconnectDelay: 200,
       onConnect: () => {
         if (ChatUserList) {
-          ChatUserList?.forEach((room: any) => {
+          ChatUserList?.forEach((room: RoomType) => {
             if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
@@ -319,6 +304,21 @@ export default function Chat() {
     </Layout>
   );
 }
+
+// 타입
+type ChatRoomType = {
+  roomId: number;
+  roomName: string;
+  sender?: string;
+  itemName?: string;
+  sellerImage?: string | null;
+  consumerImage?: string | null;
+  sellerName?: string;
+  mainImg?: string;
+  consumerName?: string;
+  itemPrice: number;
+};
+
 type UserType = {
   chatroom_id: number;
   chatroom_name: string;
@@ -333,6 +333,19 @@ type UserType = {
   consumerImage: string;
   chatroom_seller_image?: string;
   chatroom_consumer_image?: string;
+  item_price: number;
+};
+type RoomType = {
+  chatroom_consumer_image: string | null;
+  chatroom_consumer_name: string;
+  chatroom_id: number;
+  chatroom_name: string;
+  chatroom_seller_image: string | null;
+  chatroom_seller_name: string;
+  chatroom_sender: string;
+  item_id: string | null;
+  item_main_image: string;
+  item_name: string;
   item_price: number;
 };
 
@@ -372,7 +385,7 @@ const UserList = styled.div`
   }
 `;
 
-const User = styled.div<UserProps>`
+const User = styled.div<{ selected: boolean }>`
   display: flex;
   width: 21.75rem;
   height: 4.25rem;

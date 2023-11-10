@@ -34,6 +34,7 @@
     "swiper": "^11.0.3"
   },
   "devDependencies": {
+    "@types/daum-postcode": "^2.0.3",
     "@types/react": "^18.2.15",
     "@types/react-beautiful-dnd": "^13.1.5",
     "@types/react-dom": "^18.2.7",

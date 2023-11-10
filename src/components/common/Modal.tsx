@@ -1,12 +1,7 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-type ModalProps = {
-  modalClose: () => void;
-  modalConfirm?: () => void;
-  modalInfo: string;
-};
-
+// 확인만 있는 모달
 export function Modal({ modalClose, modalInfo }: ModalProps) {
   return (
     <>
@@ -22,6 +17,7 @@ export function Modal({ modalClose, modalInfo }: ModalProps) {
   );
 }
 
+// 확인, 취소가 있는 모달
 export function ModalWithClose({ modalConfirm, modalClose, modalInfo }: ModalProps) {
   return (
     <>
@@ -42,6 +38,14 @@ export function ModalWithClose({ modalConfirm, modalClose, modalInfo }: ModalPro
   );
 }
 
+// 타입
+type ModalProps = {
+  modalClose: () => void;
+  modalConfirm?: () => void;
+  modalInfo: string;
+};
+
+// 스타일
 const Overlay = styled.div`
   z-index: 19;
   position: fixed;

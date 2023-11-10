@@ -2,19 +2,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { theme } from '../../styles/theme';
 
-interface CardProps {
-  id: number;
-  img: string;
-  itemTitle: string;
-  price: string;
-  categoryTitle: string;
-  itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
-  storePath?: boolean;
-  shopName: string;
-  memberImg: string;
-}
-
-export default function RecommendCard({ shopName, id, img, itemTitle, price, memberImg }: CardProps) {
+export default function RecommendCard({ shopName, id, img, itemTitle, price, memberImg }: CardPropsType) {
   const navigate = useNavigate();
   const formattedPrice = Number(price).toLocaleString('ko-KR');
 
@@ -39,6 +27,20 @@ export default function RecommendCard({ shopName, id, img, itemTitle, price, mem
   );
 }
 
+// 타입
+type CardPropsType = {
+  id: number;
+  img: string;
+  itemTitle: string;
+  price: string;
+  categoryTitle: string;
+  itemState: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  storePath?: boolean;
+  shopName: string;
+  memberImg: string;
+};
+
+// 스타일
 const Layout = styled.div`
   width: 21.875rem;
   height: 29.875rem;

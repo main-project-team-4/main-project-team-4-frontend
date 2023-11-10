@@ -7,23 +7,7 @@ import React from 'react';
 import { theme } from '../../styles/theme';
 import { ShopItem } from '../../apis/getItems/Item';
 
-interface FollowerCardProps {
-  img?: string;
-  name: string;
-  shop: ItemType;
-  checkMine: boolean;
-  follow: string;
-  isFollowing: boolean;
-}
-type ItemType = {
-  member_id: number;
-  shop_id: number;
-  member_nickname: string;
-  member_image: string;
-  is_following: boolean;
-};
-
-function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: FollowerCardProps) {
+function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: FollowerCardPropsType) {
   const token = getCookie('token');
   const queryClient = useQueryClient();
 
@@ -80,6 +64,24 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
 
 export default FollowerCard;
 
+// 타입
+type FollowerCardPropsType = {
+  img?: string;
+  name: string;
+  shop: ItemType;
+  checkMine: boolean;
+  follow: string;
+  isFollowing: boolean;
+};
+type ItemType = {
+  member_id: number;
+  shop_id: number;
+  member_nickname: string;
+  member_image: string;
+  is_following: boolean;
+};
+
+// 스타일
 const FollowerBox = styled.div`
   width: 12.5rem;
   padding: 2.25rem 0;

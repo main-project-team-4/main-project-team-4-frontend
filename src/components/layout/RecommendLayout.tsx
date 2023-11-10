@@ -8,26 +8,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import CrownSvg from '../../assets/svgs/CrownSvg';
 
-type RecommendType = {
-  title: string;
-  data: ItemType[];
-};
-
-type ItemType = {
-  category_m_id: number;
-  category_m_name: string;
-  item_created_at: string;
-  item_id: number;
-  item_main_image: string;
-  item_name: string;
-  item_price: string;
-  item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
-  member_id: number;
-  member_nickname: string;
-  shop_name: string;
-  member_image: string;
-};
-
 function RecommendLayout({ title, data }: RecommendType) {
   return (
     <LayOut>
@@ -69,9 +49,30 @@ function RecommendLayout({ title, data }: RecommendType) {
     </LayOut>
   );
 }
-
 export default RecommendLayout;
 
+// 타입
+type RecommendType = {
+  title: string;
+  data: ItemType[];
+};
+
+type ItemType = {
+  category_m_id: number;
+  category_m_name: string;
+  item_created_at: string;
+  item_id: number;
+  item_main_image: string;
+  item_name: string;
+  item_price: string;
+  item_state: 'SELLING' | 'RESERVED' | 'SOLDOUT';
+  member_id: number;
+  member_nickname: string;
+  shop_name: string;
+  member_image: string;
+};
+
+// 스타일
 const LayOut = styled.div`
   width: 80rem;
   height: 38.6875rem;

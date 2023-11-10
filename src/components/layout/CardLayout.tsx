@@ -4,20 +4,20 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import TabLayout from './TabLayout';
 import StoreSvg from '../../assets/svgs/StoreSvg';
 
-interface TabData {
+type TabDataType = {
   icon: string;
   text: string;
-}
+};
 
 type TabDataName = 'ordered' | 'sales' | 'wishlist';
 
-const defaultTabData: TabData = {
+const defaultTabData: TabDataType = {
   icon: 'production_quantity_limits',
   text: '구매 완료한 상품이 없습니다.',
 };
 
-const getTabData = (dataName?: TabDataName): TabData => {
-  const NameMatch: Record<TabDataName, TabData> = {
+const getTabData = (dataName?: TabDataName): TabDataType => {
+  const NameMatch: Record<TabDataName, TabDataType> = {
     ordered: {
       icon: 'production_quantity_limits',
       text: '구매 완료한 상품이 없습니다.',
@@ -35,7 +35,7 @@ const getTabData = (dataName?: TabDataName): TabData => {
   return dataName ? NameMatch[dataName] : defaultTabData;
 };
 
-export default function CardLayout({ storeState, title, data, shop_Id, dataName }: ParamsType) {
+export default function CardLayout({ storeState, title, data, shop_Id, dataName }: ParamsTypeType) {
   const navigate = useNavigate();
   const location = useLocation();
   const path = location.pathname;
@@ -116,13 +116,15 @@ export default function CardLayout({ storeState, title, data, shop_Id, dataName 
     </>
   );
 }
-interface ParamsType {
+
+// 타입
+type ParamsTypeType = {
   data: ItemType[];
   title: string;
   shop_Id?: string;
   storeState?: boolean;
-  dataName?: TabDataName; // 'ordered', 'sales', 'wishlist' 중 하나거나, undefined일 수 있음
-}
+  dataName?: TabDataName;
+};
 type ItemType = {
   category_m_id: 2;
   category_m_name: string;
@@ -138,6 +140,8 @@ type ItemType = {
   shop_id: number;
   review_id: number;
 };
+
+// 스타일
 const Layout = styled.div<{ title: string }>`
   display: flex;
   flex-direction: column;
