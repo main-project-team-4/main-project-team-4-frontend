@@ -63,7 +63,6 @@ type LocationType = {
   location: string;
 };
 export const changeLocation = async ({ token, location }: LocationType) => {
-  console.log('location', location);
 
   try {
     const response = await baseInstance.put(

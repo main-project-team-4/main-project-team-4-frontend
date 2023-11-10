@@ -73,8 +73,6 @@ export default function Chat() {
   // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
   useEffect(() => {
     if (chatData) {
-      console.log('chatData', chatData);
-
       chatRoomHandler({
         roomId: chatData.chatroom_id,
         roomName: chatData.chatroom_name,
@@ -118,7 +116,6 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
-  console.log('ChatUserList', ChatUserList);
 
   useEffect(() => {
     if (MessageData) {
