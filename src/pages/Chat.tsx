@@ -303,7 +303,7 @@ export default function Chat() {
             </ItemInfo>
           )}
 
-          {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
+          {selectedUser ? <ChatBox consumerName={consumerName} messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
         </MessageLayout>
         <ChatInputLayout>
           {selectedUser && (

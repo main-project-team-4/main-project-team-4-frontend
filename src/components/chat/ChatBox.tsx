@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
+export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage, consumerName }: ChatBoxType) {
   // 시간 포맷 함수
   const formatTime = (dateTimeString?: string) => {
     if (!dateTimeString) {
@@ -29,7 +29,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
           <YourMessageContainer key={index}>
             <img src={sender === sellerName ? consumerImage || 'https://ifh.cc/g/kXNjcT.jpg' : sellerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
             {/* <img src={message.member_image ? message.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" /> */}
-            <Name>{sender === sellerName ? message.consumer_shop_name : message.seller_shop_name}</Name>
+            <Name>{consumerName}</Name>
             <YourMessage>{message.chat_message}</YourMessage>
             <YourTime>{formattedTime}</YourTime>
           </YourMessageContainer>
@@ -46,14 +46,13 @@ type ChatBoxType = {
   sellerName?: string;
   sellerImage?: string | null;
   consumerImage?: string | null;
+  consumerName?: string | null;
 };
 type MessageType = {
   chatroom_sender: string;
   chat_message: string;
   chat_created_at: string;
   chat_type: string;
-  consumer_shop_name: string;
-  seller_shop_name: string;
 };
 
 // 스타일
