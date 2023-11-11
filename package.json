@@ -12,6 +12,7 @@
   "dependencies": {
     "@stomp/stompjs": "^7.0.0",
     "@types/event-source-polyfill": "^1.0.4",
+    "@types/eventsource": "^1.1.15",
     "@types/sockjs-client": "^1.5.3",
     "@types/stompjs": "^2.3.7",
     "axios": "^1.5.1",
