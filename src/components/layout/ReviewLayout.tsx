@@ -4,7 +4,7 @@ import TabLayout from './TabLayout';
 
 export default function ReviewLayout({ reviewData }: ReviewData) {
   console.log('reviewData', reviewData);
-  
+
   return (
     <Container reviewwidth={reviewData.length === 0 ? 1 : 0}>
       {reviewData.length === 0 ? (
@@ -41,6 +41,7 @@ type ItemType = {
   review_id: number;
   review_rating: number;
   item_image_list: string[];
+  consumer_shop_name: string;
 };
 
 // 스타일

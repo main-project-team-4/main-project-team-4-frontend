@@ -17,6 +17,7 @@ type ModalProps = {
     review_rating: number;
     review_comment: string;
     member_nickname: string;
+    consumer_shop_name: string;
   };
   setModalState?: any;
 };
@@ -206,31 +207,6 @@ const Star = ({ filled, onMouseEnter }: StarType) => {
       <defs>
         <clipPath id="clip0_1063_5028">
           <rect width="24" height="24" fill="white" />
-        </clipPath>
-      </defs>
-    </svg>
-  );
-};
-
-const ProfileImg = () => {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <g clip-path="url(#clip0_1414_4833)">
-        <circle cx="20" cy="20" r="20" fill="#90B0FD" />
-        <path
-          d="M26.6667 15.5556C26.6667 19.2375 23.6819 22.2222 20 22.2222C16.3181 22.2222 13.3333 19.2375 13.3333 15.5556C13.3333 11.8737 16.3181 8.88889 20 8.88889C23.6819 8.88889 26.6667 11.8737 26.6667 15.5556Z"
-          fill="#0F172A"
-        />
-        <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M4.71342 32.8972C8.38214 37.2412 13.8689 40 20 40C26.1311 40 31.6179 37.2412 35.2866 32.8972C30.7719 30.3453 25.556 28.8889 20 28.8889C14.444 28.8889 9.22815 30.3453 4.71342 32.8972ZM26.6667 15.5556C26.6667 19.2375 23.6819 22.2222 20 22.2222C16.3181 22.2222 13.3333 19.2375 13.3333 15.5556C13.3333 11.8737 16.3181 8.88889 20 8.88889C23.6819 8.88889 26.6667 11.8737 26.6667 15.5556Z"
-          fill="#0F172A"
-        />
-      </g>
-      <defs>
-        <clipPath id="clip0_1414_4833">
-          <rect width="40" height="40" fill="white" />
         </clipPath>
       </defs>
     </svg>

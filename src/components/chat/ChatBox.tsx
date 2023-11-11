@@ -52,6 +52,8 @@ type MessageType = {
   chat_message: string;
   chat_created_at: string;
   chat_type: string;
+  consumer_shop_name: string;
+  seller_shop_name: string;
 };
 
 // 스타일

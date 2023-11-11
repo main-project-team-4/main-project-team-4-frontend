@@ -357,6 +357,8 @@ type UserType = {
   consumer_shop_id: number;
   seller_shop_id: number;
   item_id: number;
+  seller_shop_name: string;
+  consumer_shop_name: string;
 };
 type RoomType = {
   chatroom_consumer_image: string | null;
