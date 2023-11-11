@@ -13,7 +13,7 @@ export default function Root() {
   const token = getCookie('token');
   useEffect(() => {
     if (token) {
-      const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
+      const eventSource = new EventSourcePolyfill('https://api.re-use.store/api/subscribe', {
         headers: {
           Authorization: token,
         },
@@ -44,8 +44,7 @@ export default function Root() {
         const parts = inputStr.split('|||');
         toast(
           <Layout>
-            {/* <img src="https://ifh.cc/g/kXNjcT.jpg"></img> */}
-            <img src={parts[1] ? parts[1] : 'https://ifh.cc/g/kXNjcT.jpg'}></img>
+            <img src={parts[1] !== 'null' ? parts[1] : 'https://ifh.cc/g/kXNjcT.jpg'}></img>
             <TextLayout>
               <Name>{parts[0]}</Name>
               <Message>{parts[2]}</Message>
