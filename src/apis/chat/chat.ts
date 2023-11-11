@@ -1,13 +1,11 @@
 import { baseInstance } from '../config';
 
-// 채팅방 목록 조회
-
 type ChatListType = {
   token: string;
   itemId?: string;
   roomId?: number | null;
 };
-
+// 채팅방 목록 조회
 export const getChatList = async (token: string) => {
   try {
     const response = await baseInstance.get(`/chat/rooms`, {

@@ -160,10 +160,10 @@ function RegistrationItem() {
       item_main_image: mainImg,
       item_sub_image: modifyArr,
     };
-    // requestDto의 데이터를 FormData에 추가
+
     const blobData = new Blob([JSON.stringify(data)], { type: 'application/json' });
     dataFormData.append('requestDto', blobData);
-    modifyMutation.mutate({ token, data: dataFormData, itemId }); // FormData 전송
+    modifyMutation.mutate({ token, data: dataFormData, itemId });
   };
 
   return (

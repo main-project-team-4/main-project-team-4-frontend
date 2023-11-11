@@ -6,13 +6,6 @@ import { getCookie } from '../../utils/cookie';
 import { useState } from 'react';
 import { Modal } from '../common/Modal';
 
-type SelectType = {
-  setSelectedView: React.Dispatch<React.SetStateAction<string>>;
-  setSelected: (state: string) => void;
-  setSelectBuyer: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  itemId: number;
-};
 function SelectbuyerModal({ setSelectedView, setSelected, setSelectBuyer, setIsOpen, itemId }: SelectType) {
   const token = getCookie('token');
   const [buyerId, setBuyerId] = useState(0);
@@ -45,12 +38,6 @@ function SelectbuyerModal({ setSelectedView, setSelected, setSelectBuyer, setIsO
   const onClickConfirmBuyer = () => {
     mutation.mutate({ token, itemId, memberId: buyerId });
   };
-
-  // useEffect(() => {
-  //   if (modalState) {
-
-  //   }
-  // }, [modalState]);
 
   const modalClose = () => {
     setModalState(false);
@@ -91,12 +78,23 @@ function SelectbuyerModal({ setSelectedView, setSelected, setSelectBuyer, setIsO
 
 export default SelectbuyerModal;
 
+// 타입
+type SelectType = {
+  setSelectedView: React.Dispatch<React.SetStateAction<string>>;
+  setSelected: (state: string) => void;
+  setSelectBuyer: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  itemId: number;
+};
+
 type BuyerType = {
   chatroom_id: number;
   member_id: number;
   member_image: null | string;
   member_nickname: string;
 };
+
+// 스타일
 const Overlay = styled.div`
   z-index: 19;
   position: fixed;

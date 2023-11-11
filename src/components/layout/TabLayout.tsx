@@ -1,10 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 
-type TabType = {
-  icon: string;
-  text: string;
-};
-
 export default function TabLayout({ icon, text }: TabType) {
   return (
     <Layout>
@@ -32,7 +27,13 @@ const bounceAnimation = keyframes`
   }
 `;
 
-// Icon 컴포넌트에 애니메이션 스타일 적용
+// 타입
+type TabType = {
+  icon: string;
+  text: string;
+};
+
+// Icon 컴포넌트 애니메이션 스타일
 const Icon = styled.span`
   display: inline-block;
   font-size: 8rem;

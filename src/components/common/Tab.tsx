@@ -1,13 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-type TabType = {
-  name: string;
-  content: JSX.Element;
-};
-
-type PropsType = {
-  tabs: TabType[];
-};
 
 export default function Tab({ tabs = [] }: PropsType) {
   const [currentTab, setCurrentTab] = useState(0);
@@ -30,6 +22,17 @@ export default function Tab({ tabs = [] }: PropsType) {
   );
 }
 
+// 타입
+type TabType = {
+  name: string;
+  content: JSX.Element;
+};
+
+type PropsType = {
+  tabs: TabType[];
+};
+
+// 스타일
 const TabLayout = styled.div`
   width: 78.125rem;
   height: auto;

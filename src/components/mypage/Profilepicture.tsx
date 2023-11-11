@@ -8,16 +8,6 @@ import imageCompression from 'browser-image-compression';
 import ProfileSvg from '../../assets/svgs/ProfileSvg';
 import PencilSvg from '../../assets/svgs/PencilSvg';
 
-type DataInfo = {
-  data: {
-    location_name: string;
-    member_id: number;
-    member_image: string;
-    member_nickname: string;
-    shop_id: number;
-  };
-};
-
 function Profilepicture({ data }: DataInfo) {
   const [image, setImage] = useState('https://ifh.cc/g/kXNjcT.jpg');
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -98,6 +88,18 @@ function Profilepicture({ data }: DataInfo) {
 
 export default Profilepicture;
 
+// 타입
+type DataInfo = {
+  data: {
+    location_name: string;
+    member_id: number;
+    member_image: string;
+    member_nickname: string;
+    shop_id: number;
+  };
+};
+
+// 스타일
 const Container = styled.div`
   width: 6rem;
 

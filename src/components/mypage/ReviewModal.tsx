@@ -11,7 +11,13 @@ type ModalProps = {
   onRatingChange?: (rating: number) => void;
   itemId?: number;
   reviewId?: number;
-  reviewInfo: any;
+  reviewInfo: {
+    member_image: string;
+    item_image_list: string[];
+    review_rating: number;
+    review_comment: string;
+    member_nickname: string;
+  };
   setModalState?: any;
 };
 
@@ -152,11 +158,8 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
             </ProfileContainer>
             <ItemContainer>
               <h3>상품 이미지</h3>
-              <ImgList>
-                {reviewInfo?.item_image_list?.map((img: string) => (
-                  <img key={img} src={img} alt="pic" />
-                ))}
-              </ImgList>
+              <ImgList>{reviewInfo?.item_image_list?.map((img: string) => <img key={img} src={img} alt="pic" />)}</ImgList>
+
             </ItemContainer>
             <StarContainer>
               <h3>별점</h3>
@@ -176,6 +179,7 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
     </>
   );
 }
+
 type StarType = {
   filled: boolean;
   onMouseEnter?: any;
@@ -247,9 +251,9 @@ const CloseBtn = styled.button`
 
   svg {
     stroke: #0f172a;
-    strokeWidth: 1.5;
-    strokeLinecap: round;
-    strokeLinejoin: round;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 `;
 const Overlay = styled.div`

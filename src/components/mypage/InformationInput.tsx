@@ -8,16 +8,6 @@ import { theme } from '../../styles/theme';
 import { removeCookie } from '../../utils/cookie';
 import { ModalWithClose } from '../common/Modal';
 
-type DataInfo = {
-  data: {
-    location_name: string;
-    member_id: number;
-    member_image: string;
-    member_nickname: string;
-    shop_id: number;
-    shop_name: string;
-  };
-};
 declare global {
   interface Window {
     daum: any;
@@ -173,9 +163,21 @@ function InformationInput({ data }: DataInfo) {
     </Container>
   );
 }
-
 export default InformationInput;
 
+// 타입
+type DataInfo = {
+  data: {
+    location_name: string;
+    member_id: number;
+    member_image: string;
+    member_nickname: string;
+    shop_id: number;
+    shop_name: string;
+  };
+};
+
+// 스타일
 const Container = styled.div`
   width: 78.125rem;
   height: 23.8rem;

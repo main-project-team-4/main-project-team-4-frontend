@@ -35,9 +35,7 @@ export const changeImages = async ({ token, formData }: ImagesType) => {
 // 회원정보 변경
 type NickNameType = {
   token: string;
-  nickName?: string;
-  intro?: string;
-  explain?: string;
+  nickName: string;
 };
 
 export const changeNickName = async ({ token, nickName }: NickNameType) => {
@@ -63,8 +61,6 @@ type LocationType = {
   location: string;
 };
 export const changeLocation = async ({ token, location }: LocationType) => {
-  console.log('location', location);
-
   try {
     const response = await baseInstance.put(
       `/api/auth/members/me`,
@@ -84,7 +80,11 @@ export const changeLocation = async ({ token, location }: LocationType) => {
 };
 
 // 인트로 변경
-export const changeIntro = async ({ token, explain }: NickNameType) => {
+type IntroType = {
+  token: string;
+  explain: string;
+};
+export const changeIntro = async ({ token, explain }: IntroType) => {
   try {
     const response = await baseInstance.put(
       `/api/auth/members/me`,

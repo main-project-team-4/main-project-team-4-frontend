@@ -1,13 +1,6 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import StarSvg from '../../assets/svgs/StarSvg';
-type ReviewType = {
-  img: string;
-  name: string;
-  item: string;
-  review: string;
-  reviewRate: number;
-};
 
 export default function ReviewCard({ img, name, item, review, reviewRate }: ReviewType) {
   // 별점관리
@@ -39,6 +32,16 @@ export default function ReviewCard({ img, name, item, review, reviewRate }: Revi
   );
 }
 
+// 타입
+type ReviewType = {
+  img: string;
+  name: string;
+  item: string;
+  review: string;
+  reviewRate: number;
+};
+
+// 스타일
 const Layout = styled.div`
   display: flex;
   max-width: 37.5rem;

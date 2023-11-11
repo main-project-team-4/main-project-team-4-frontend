@@ -13,22 +13,7 @@ import { useInput } from '../hooks/useInput';
 import { ModalWithClose } from '../components/common/Modal';
 import { useRecoilValue } from 'recoil';
 import { myDataState } from '../Atoms';
-interface UserProps {
-  selected?: boolean;
-}
 
-type ChatRoomType = {
-  roomId: number;
-  roomName: string;
-  sender?: string;
-  itemName?: string;
-  sellerImage?: string | null;
-  consumerImage?: string | null;
-  sellerName?: string;
-  mainImg?: string;
-  consumerName?: string;
-  itemPrice: number;
-};
 export default function Chat() {
   const token = getCookie('token');
   const navigate = useNavigate();
@@ -54,8 +39,10 @@ export default function Chat() {
   const [consumerName, setConsumerName] = useState<string | undefined>('');
   const [price, setPrice] = useState(0);
   const [img, setImg] = useState<string | undefined>('');
+  const [shopId, setShopId] = useState<number | null>(null);
+  const [id, setId] = useState<number | null>(null);
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice, shopId, itemId }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
@@ -68,13 +55,13 @@ export default function Chat() {
     setConsumerName(consumerName);
     setImg(mainImg);
     setPrice(itemPrice);
+    setShopId(shopId);
+    setId(itemId);
   };
 
   // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
   useEffect(() => {
     if (chatData) {
-      console.log('chatData', chatData);
-
       chatRoomHandler({
         roomId: chatData.chatroom_id,
         roomName: chatData.chatroom_name,
@@ -86,9 +73,12 @@ export default function Chat() {
         mainImg: chatData.item_main_image,
         itemPrice: chatData.item_price,
         consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.chatroom_seller_name : chatData.chatroom_consumer_name,
+        shopId: chatData.shop_id,
+        itemId: chatData.item_id,
       });
     }
   }, []);
+  console.log('chatData', chatData);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -118,7 +108,6 @@ export default function Chat() {
 
   const ChatUserList = queryResults[0].data;
   const MessageData = queryResults[1].data;
-  console.log('ChatUserList', ChatUserList);
 
   useEffect(() => {
     if (MessageData) {
@@ -137,7 +126,7 @@ export default function Chat() {
       reconnectDelay: 200,
       onConnect: () => {
         if (ChatUserList) {
-          ChatUserList?.forEach((room: any) => {
+          ChatUserList?.forEach((room: RoomType) => {
             if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
 
             stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
@@ -193,6 +182,7 @@ export default function Chat() {
       }
     }
   };
+  console.log('ChatUserList', ChatUserList);
 
   const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
@@ -219,7 +209,8 @@ export default function Chat() {
       queryClient.invalidateQueries('chatList');
     },
   });
-  const onClickGoOutChat = () => {
+  const onClickGoOutChat = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setModalState(true);
   };
   const modalConfirm = () => {
@@ -268,6 +259,8 @@ export default function Chat() {
                     mainImg: user.item_main_image,
                     consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name,
                     itemPrice: user.item_price,
+                    shopId: user.shop_id,
+                    itemId: user.item_id,
                   })
                 }
                 selected={selectedUser === user.chatroom_id}
@@ -287,13 +280,19 @@ export default function Chat() {
       </ChatList>
       {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo={'채팅방을 나가시겠습니까?'} />}
       <ChatContainer>
-        <Name>
+        <Name
+          onClick={() => {
+            if (shopId) {
+              navigate(`/store/${shopId}`, { state: shopId });
+            }
+          }}
+        >
           {consumerName} {itemName && <button onClick={onClickGoOutChat}>채팅방 나가기</button>}
         </Name>
         <MessageLayout ref={messageLayoutRef}>
           {selectedUser && (
             <ItemInfo>
-              <Round>
+              <Round onClick={() => navigate(`/posting/${itemName}`, { state: { id } })}>
                 <div>
                   <img src={img} alt="" />
                   <p>{itemName}</p>
@@ -322,6 +321,23 @@ export default function Chat() {
     </Layout>
   );
 }
+
+// 타입
+type ChatRoomType = {
+  roomId: number;
+  roomName: string;
+  sender?: string;
+  itemName?: string;
+  sellerImage?: string | null;
+  consumerImage?: string | null;
+  sellerName?: string;
+  mainImg?: string;
+  consumerName?: string;
+  itemPrice: number;
+  shopId: number;
+  itemId: number;
+};
+
 type UserType = {
   chatroom_id: number;
   chatroom_name: string;
@@ -336,6 +352,21 @@ type UserType = {
   consumerImage: string;
   chatroom_seller_image?: string;
   chatroom_consumer_image?: string;
+  item_price: number;
+  shop_id: number;
+  item_id: number;
+};
+type RoomType = {
+  chatroom_consumer_image: string | null;
+  chatroom_consumer_name: string;
+  chatroom_id: number;
+  chatroom_name: string;
+  chatroom_seller_image: string | null;
+  chatroom_seller_name: string;
+  chatroom_sender: string;
+  item_id: string | null;
+  item_main_image: string;
+  item_name: string;
   item_price: number;
 };
 
@@ -375,7 +406,7 @@ const UserList = styled.div`
   }
 `;
 
-const User = styled.div<UserProps>`
+const User = styled.div<{ selected: boolean }>`
   display: flex;
   width: 21.75rem;
   height: 4.25rem;
@@ -422,7 +453,7 @@ const Name = styled.div`
   background: #fff;
   font-size: 1.5rem;
   font-weight: 600;
-
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
 
@@ -502,6 +533,7 @@ const Round = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3.125rem;
+  cursor: pointer;
   border-radius: 6.25rem;
   border: 1px solid ${theme.pointColor};
   background: #fff;

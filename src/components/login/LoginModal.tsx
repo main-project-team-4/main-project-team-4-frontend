@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 
-type PropsType = {
-  closeModal: () => void;
-};
 export default function LoginModal({ closeModal }: PropsType) {
   return (
     <>
@@ -75,6 +72,12 @@ export default function LoginModal({ closeModal }: PropsType) {
   );
 }
 
+// 타입
+type PropsType = {
+  closeModal: () => void;
+};
+
+// 스타일
 const Layout = styled.div`
   display: flex;
   flex-direction: column;
@@ -92,10 +95,9 @@ const Layout = styled.div`
 
 const Close = styled.div`
   span {
-    /* align-self: right; */ /* 이 부분 삭제 */
     text-align: right;
     margin-top: 1rem;
-    margin-left: 28rem; /* 오른쪽 여백 추가 */
+    margin-left: 28rem;
     cursor: pointer;
     color: #a0a0a0;
   }

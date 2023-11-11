@@ -123,7 +123,7 @@ export default function Store() {
 
   // 별점관리
   const stars = [];
-  const rate = Math.round(shopInfo.review_rating_avg);
+  const rate = Math.round(shopInfo?.review_rating_avg);
   for (let i = 0; i < rate; i++) {
     stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" />);
   }
@@ -137,7 +137,7 @@ export default function Store() {
             <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
             <Name starlength={stars.length}>
               <h3>
-                {shopInfo.shop_name}
+                {shopInfo?.shop_name}
                 {stars.length > 0 ? (
                   <div>
                     <h4>
@@ -218,9 +218,7 @@ export default function Store() {
             ]}
           ></Tab>
         </TabBox>
-        {/* <FollowerCard /> */}
       </Container>
-      {/* )} */}
     </>
   );
 }

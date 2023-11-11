@@ -2,21 +2,6 @@ import ReviewCard from '../store/ReviewCard';
 import styled from 'styled-components';
 import TabLayout from './TabLayout';
 
-type ReviewData = {
-  reviewData: ItemType[];
-};
-type ItemType = {
-  item_id: number;
-  item_main_image: string;
-  item_name: string;
-  member_id: number;
-  member_nickname: string;
-  review_comment: string;
-  review_created_at: string;
-  review_id: number;
-  review_rating: number;
-  item_image_list: string[];
-};
 export default function ReviewLayout({ reviewData }: ReviewData) {
   return (
     <Container reviewwidth={reviewData.length === 0 ? 1 : 0}>
@@ -39,6 +24,24 @@ export default function ReviewLayout({ reviewData }: ReviewData) {
   );
 }
 
+// 타입
+type ReviewData = {
+  reviewData: ItemType[];
+};
+type ItemType = {
+  item_id: number;
+  item_main_image: string;
+  item_name: string;
+  member_id: number;
+  member_nickname: string;
+  review_comment: string;
+  review_created_at: string;
+  review_id: number;
+  review_rating: number;
+  item_image_list: string[];
+};
+
+// 스타일
 const Container = styled.div<{ reviewwidth: number }>`
   display: flex;
   width: ${props => (props.reviewwidth === 1 ? '73.75rem' : '78.125rem')};

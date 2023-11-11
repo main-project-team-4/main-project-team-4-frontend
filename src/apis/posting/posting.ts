@@ -61,10 +61,8 @@ export const changeItemState = async ({ data, token }: ChangeItemStateType) => {
 
 // 상품 등록
 type UploadItem = {
-  data?: FormData;
-  token?: string;
-  itemId?: number;
-  memberId?: number;
+  data: FormData;
+  token: string;
 };
 export const uploadItem = async ({ token, data }: UploadItem) => {
   try {
@@ -80,7 +78,12 @@ export const uploadItem = async ({ token, data }: UploadItem) => {
 };
 
 // 상품 수정
-export const modifyItem = async ({ token, data, itemId }: UploadItem) => {
+type ModifyType = {
+  token?: string;
+  data: FormData;
+  itemId: number;
+};
+export const modifyItem = async ({ token, data, itemId }: ModifyType) => {
   try {
     const response = await baseInstance.put(`api/items/${itemId}`, data, {
       headers: {
@@ -94,7 +97,7 @@ export const modifyItem = async ({ token, data, itemId }: UploadItem) => {
 };
 
 // 이미지 변환
-export const changeImage = async ({ data, itemId }: UploadItem) => {
+export const changeImage = async ({ data, itemId }: ModifyType) => {
   try {
     const response = await baseInstance.post(`api/items/${itemId}/images`, data);
     return response;
@@ -104,7 +107,12 @@ export const changeImage = async ({ data, itemId }: UploadItem) => {
 };
 
 // 상품 삭제
-export const deleteItem = async ({ token, itemId }: UploadItem) => {
+type DeleteType = {
+  token: string;
+  itemId: number;
+  memberId?: number;
+};
+export const deleteItem = async ({ token, itemId }: DeleteType) => {
   try {
     const response = await baseInstance.delete(`/api/items/${itemId}`, {
       headers: {
@@ -118,7 +126,7 @@ export const deleteItem = async ({ token, itemId }: UploadItem) => {
 };
 
 // 상품 판매자 고르기
-export const selectBuyer = async ({ token, itemId }: UploadItem) => {
+export const selectBuyer = async ({ token, itemId }: DeleteType) => {
   try {
     const response = await baseInstance.get(`/api/items/${itemId}/chatrooms`, {
       headers: {
@@ -132,7 +140,7 @@ export const selectBuyer = async ({ token, itemId }: UploadItem) => {
 };
 
 // 거래 기록 기입
-export const confirmBuyer = async ({ token, itemId, memberId }: UploadItem) => {
+export const confirmBuyer = async ({ token, itemId, memberId }: DeleteType) => {
   try {
     const response = await baseInstance.post(
       `/api/items/${itemId}/trades`,
