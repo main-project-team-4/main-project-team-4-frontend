@@ -30,19 +30,30 @@ export default function Root() {
       eventSource.addEventListener('WISH', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
-        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 5000 });
       });
       eventSource.addEventListener('FOLLOW', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
-        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 5000 });
       });
       eventSource.addEventListener('CHAT', event => {
         const messageEvent = event as MessageEvent;
-        console.log(event);
-        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+        console.log(messageEvent);
+        const inputStr = messageEvent.data;
+        const parts = inputStr.split('|||');
+        toast(
+          <Layout>
+            {/* <img src="https://ifh.cc/g/kXNjcT.jpg"></img> */}
+            <img src={parts[1]}></img>
+            <TextLayout>
+              <Name>{parts[0]}</Name>
+              <Message>{parts[2]}</Message>
+            </TextLayout>
+          </Layout>,
+          { position: 'top-right', draggable: true, autoClose: 5000 },
+        );
       });
-
       return () => {
         eventSource.close();
       };
@@ -63,6 +74,27 @@ export default function Root() {
     </>
   );
 }
+
+const Layout = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.62rem;
+  img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid ${theme.outline};
+  }
+`;
+const TextLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+`;
+const Name = styled.p`
+  font-size: 14px;
+`;
+const Message = styled.p``;
 
 const Content = styled.div`
   max-width: 78.125rem;
