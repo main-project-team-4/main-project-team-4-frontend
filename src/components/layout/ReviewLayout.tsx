@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import TabLayout from './TabLayout';
 
 export default function ReviewLayout({ reviewData }: ReviewData) {
-  console.log('reviewData', reviewData);
 
   return (
     <Container reviewwidth={reviewData.length === 0 ? 1 : 0}>

@@ -45,7 +45,7 @@ export default function Root() {
         toast(
           <Layout>
             {/* <img src="https://ifh.cc/g/kXNjcT.jpg"></img> */}
-            <img src={parts[1]}></img>
+            <img src={parts[1] ? parts[1] : 'https://ifh.cc/g/kXNjcT.jpg'}></img>
             <TextLayout>
               <Name>{parts[0]}</Name>
               <Message>{parts[2]}</Message>
