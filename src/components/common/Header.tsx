@@ -220,7 +220,7 @@ const ProfileContainer = styled.div`
 
   border-left: 0.0625rem solid ${theme.outline};
   padding-left: 1.5rem;
-  width: 9rem;
+  max-width: 13.3rem;
 `;
 const ProfileBox = styled.div`
   cursor: pointer;

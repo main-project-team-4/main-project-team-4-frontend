@@ -59,11 +59,13 @@ function Welcome() {
       setIsNickName(true);
       return;
     }
-    if (!/^\S.{0,19}$/.test(nickName)) {
+    if (/^(?![가-힣\x20][^\s]{0,7}$)/.test(nickName)) {
       setValidation(true);
       setIsNickName(false);
+      setNickDuplicated(false);
       return;
     }
+
     nicknameMutation.mutate({ token, nickName });
   };
 
@@ -105,7 +107,7 @@ function Welcome() {
           </div>
           {nickDuplicated && <span>중복된 상점명입니다.</span>}
           {isNickname && <span>상점명을 입력해주세요.</span>}
-          {validation && <span>상점명은 첫 문자에 공백이 올 수 없으며, 최대 20자를 초과할 수 없습니다.</span>}
+          {validation && <span>상점명은 공백, 숫자만 올 수 없으며, 최대 9자를 초과할 수 없습니다.</span>}
         </InputBox>
 
         <InputBox>
