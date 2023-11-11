@@ -39,8 +39,10 @@ export default function Chat() {
   const [consumerName, setConsumerName] = useState<string | undefined>('');
   const [price, setPrice] = useState(0);
   const [img, setImg] = useState<string | undefined>('');
+  const [shopId, setShopId] = useState<number | null>(null);
+  const [id, setId] = useState<number | null>(null);
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice, shopId, itemId }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
@@ -53,6 +55,8 @@ export default function Chat() {
     setConsumerName(consumerName);
     setImg(mainImg);
     setPrice(itemPrice);
+    setShopId(shopId);
+    setId(itemId);
   };
 
   // posting에서 채팅으로 이동시 해당 채팅룸으로 이동
@@ -69,9 +73,12 @@ export default function Chat() {
         mainImg: chatData.item_main_image,
         itemPrice: chatData.item_price,
         consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.chatroom_seller_name : chatData.chatroom_consumer_name,
+        shopId: chatData.shop_id,
+        itemId: chatData.item_id,
       });
     }
   }, []);
+  console.log('chatData', chatData);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -175,6 +182,7 @@ export default function Chat() {
       }
     }
   };
+  console.log('ChatUserList', ChatUserList);
 
   const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
@@ -250,6 +258,8 @@ export default function Chat() {
                     mainImg: user.item_main_image,
                     consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name,
                     itemPrice: user.item_price,
+                    shopId: user.shop_id,
+                    itemId: user.item_id,
                   })
                 }
                 selected={selectedUser === user.chatroom_id}
@@ -269,13 +279,19 @@ export default function Chat() {
       </ChatList>
       {modalState && <ModalWithClose modalConfirm={modalConfirm} modalClose={modalClose} modalInfo={'채팅방을 나가시겠습니까?'} />}
       <ChatContainer>
-        <Name>
+        <Name
+          onClick={() => {
+            if (shopId) {
+              navigate(`/store/${shopId}`, { state: shopId });
+            }
+          }}
+        >
           {consumerName} {itemName && <button onClick={onClickGoOutChat}>채팅방 나가기</button>}
         </Name>
         <MessageLayout ref={messageLayoutRef}>
           {selectedUser && (
             <ItemInfo>
-              <Round>
+              <Round onClick={() => navigate(`/posting/${itemName}`, { state: { id } })}>
                 <div>
                   <img src={img} alt="" />
                   <p>{itemName}</p>
@@ -317,6 +333,8 @@ type ChatRoomType = {
   mainImg?: string;
   consumerName?: string;
   itemPrice: number;
+  shopId: number;
+  itemId: number;
 };
 
 type UserType = {
@@ -334,6 +352,8 @@ type UserType = {
   chatroom_seller_image?: string;
   chatroom_consumer_image?: string;
   item_price: number;
+  shop_id: number;
+  item_id: number;
 };
 type RoomType = {
   chatroom_consumer_image: string | null;
@@ -432,7 +452,7 @@ const Name = styled.div`
   background: #fff;
   font-size: 1.5rem;
   font-weight: 600;
-
+  cursor: pointer;
   display: flex;
   justify-content: space-between;
 
@@ -512,6 +532,7 @@ const Round = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3.125rem;
+  cursor: pointer;
   border-radius: 6.25rem;
   border: 1px solid ${theme.pointColor};
   background: #fff;
