@@ -173,11 +173,11 @@ export default function Store() {
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <FollowPart>
                 <h3>팔로워</h3>
-                <p>{shopInfo.num_followers}</p>
+                <p>{shopInfo?.num_followers}</p>
               </FollowPart>
               <FollowPart>
                 <h3>팔로잉</h3>
-                <p>{shopInfo.num_followings}</p>
+                <p>{shopInfo?.num_followings}</p>
               </FollowPart>
             </div>
             {!checkMine &&

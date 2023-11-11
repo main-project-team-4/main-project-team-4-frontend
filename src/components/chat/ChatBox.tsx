@@ -3,7 +3,10 @@ import { theme } from '../../styles/theme';
 
 export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
   // 시간 포맷 함수
-  const formatTime = (dateTimeString: string) => {
+  const formatTime = (dateTimeString?: string) => {
+    if (!dateTimeString) {
+      return '';
+    }
     const tIndex = dateTimeString.indexOf('T');
     if (tIndex !== -1) {
       return dateTimeString.substring(tIndex + 1, tIndex + 6);
@@ -15,7 +18,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
     <>
       {messages?.map((message, index) => {
         const formattedTime = formatTime(message.chat_created_at);
-        return message.chat_type === 'ENTER' ? (
+        return message.chat_type === 'QUIT' ? (
           <Server key={index}>{message.chat_message}</Server>
         ) : message.chatroom_sender === sender ? (
           <MyMessageContainer key={index}>
