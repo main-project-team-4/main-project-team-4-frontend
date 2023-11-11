@@ -72,7 +72,7 @@ export default function Chat() {
         sellerName: chatData.chatroom_seller_name,
         mainImg: chatData.item_main_image,
         itemPrice: chatData.item_price,
-        consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.chatroom_seller_name : chatData.chatroom_consumer_name,
+        consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.seller_shop_name : chatData.consumer_shop_name,
         shopId: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.seller_shop_id : chatData.consumer_shop_id,
         itemId: chatData.item_id,
       });
@@ -261,7 +261,7 @@ export default function Chat() {
                     consumerImage: user.chatroom_consumer_image,
                     sellerName: user.chatroom_seller_name,
                     mainImg: user.item_main_image,
-                    consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name,
+                    consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.seller_shop_name : user.consumer_shop_name,
                     itemPrice: user.item_price,
                     shopId: myInfo.member_nickname === user.chatroom_consumer_name ? user.seller_shop_id : user.consumer_shop_id,
                     itemId: user.item_id,
@@ -275,7 +275,7 @@ export default function Chat() {
                     src={getImage({ sender: myInfo?.member_nickname, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
                     alt={user.sellerName}
                   />
-                  {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
+                  {user.chatroom_sender === user.chatroom_consumer_name ? user.seller_shop_name : user.consumer_shop_name}
                 </Profile>
                 <ItemImg src={user.item_main_image} />
               </User>

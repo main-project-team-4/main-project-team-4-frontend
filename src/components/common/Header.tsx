@@ -92,7 +92,7 @@ export default function Header() {
             {token ? (
               <div onClick={toggleMypage}>
                 <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
-                <h3>{myData?.member_nickname}</h3>
+                <h3>{myData?.shop_name}</h3>
                 <button aria-label="toggle">
                   {token && visibleMypage ? (
                     <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none" style={{ transform: 'rotate(180deg)' }}>

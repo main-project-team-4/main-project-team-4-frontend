@@ -43,6 +43,7 @@ export default function Store() {
   const followers = queryResults[2].data;
   const followings = queryResults[3].data;
   const shopItem = queryResults[4].data;
+  console.log('reviewData', reviewData);
 
   // 상점소개 상태관리
   const [introState, setIntroState] = useState(false);
@@ -82,6 +83,8 @@ export default function Store() {
 
   const followMutation = useMutation(Follow, {
     onSuccess: ({ data }) => {
+      console.log('data', data);
+
       queryClient.invalidateQueries(['followCheck', state]);
       followCheckRefetch();
       shopInfoRefetch();

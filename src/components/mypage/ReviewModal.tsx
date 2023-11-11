@@ -153,13 +153,12 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
           <hr style={{ backgroundColor: '#E7E8EA', position: 'absolute', top: '4.56rem', left: '0rem', border: 'none', height: '1px', width: '100%' }} />
           <Layout>
             <ProfileContainer>
-              {reviewInfo?.member_image ? <img src={reviewInfo?.member_image} alt="picture" /> : <ProfileImg />}
-              <div>{reviewInfo?.member_nickname}</div>
+              {reviewInfo?.member_image ? <img src={reviewInfo?.member_image} alt="picture" /> : <img src="https://ifh.cc/g/kXNjcT.jpg" />}
+              <div>{reviewInfo?.consumer_shop_name}</div>
             </ProfileContainer>
             <ItemContainer>
               <h3>상품 이미지</h3>
               <ImgList>{reviewInfo?.item_image_list?.map((img: string) => <img key={img} src={img} alt="pic" />)}</ImgList>
-
             </ItemContainer>
             <StarContainer>
               <h3>별점</h3>
