@@ -1,7 +1,6 @@
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { searchItems } from '../../apis/header/Header';
 import React, { useState, useEffect, useRef } from 'react';
 import LoginModal from '../login/LoginModal';
 import { getCookie } from '../../utils/cookie';
@@ -35,8 +34,6 @@ export default function Header() {
   };
 
   // 검색 기능
-  const { refetch } = useQuery('search', () => searchItems(itemName), { enabled: false });
-
   const onChangeItem = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     setItemName(value);
@@ -47,15 +44,7 @@ export default function Header() {
     }
   };
   const onClickSearch = async () => {
-    try {
-      const { data: refetchedData } = await refetch();
-      if (refetchedData && itemName) {
-        navigate(`items/search?keyword=${itemName}`, { state: refetchedData });
-        setItemName('');
-      }
-    } catch (error) {
-      console.error('Error refetching data:', error);
-    }
+    navigate(`items/search?keyword=${itemName}`, { state: itemName });
   };
 
   // 유저 정보 가져오기

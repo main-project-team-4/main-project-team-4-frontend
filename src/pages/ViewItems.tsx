@@ -6,6 +6,7 @@ import Card from '../components/common/Card';
 import { useParams, useLocation } from 'react-router-dom';
 import { theme } from '../styles/theme';
 import { getCookie } from '../utils/cookie';
+import { searchItems } from '../apis/header/Header';
 
 export default function ViewItems() {
   const params = useParams();
@@ -30,6 +31,14 @@ export default function ViewItems() {
     setSellingState('SELLING');
     refetch();
   };
+  useEffect(() => {
+    setButtonState(false);
+    setSellingState('');
+  }, [location]);
+
+  useEffect(() => {
+    refetch();
+  }, [decodedString]);
 
   useEffect(() => {
     setKeyword(decodedString);
@@ -46,17 +55,20 @@ export default function ViewItems() {
     } else if (params.items === '내 주위 상품') {
       return nearByItem({ token, page: pageParam, pageSize, Selling: sellingState });
     } else if (params.items === 'category') {
-      return CategoryItem(location.state?.id, location.state?.layer, pageParam);
+      return CategoryItem(location.state?.id, location.state?.layer, pageParam, sellingState, pageSize);
+    } else if (params.items === 'search') {
+      return searchItems(location.state, sellingState, pageParam, pageSize);
     } else {
       throw new Error('Unknown item type');
     }
   };
+
   const {
     data: infiniteQueryData,
     fetchNextPage,
     refetch,
     isSuccess,
-  } = useInfiniteQuery(['items', params.items, path, sellingState], fetchItems, {
+  } = useInfiniteQuery(['items', params.items, path, sellingState, keyword], fetchItems, {
     getNextPageParam: (_, pages) => {
       return pages.length;
     },
@@ -69,17 +81,20 @@ export default function ViewItems() {
   useEffect(() => {
     const handleScroll = () => {
       const { scrollTop, offsetHeight } = document.documentElement;
-      if (window.innerHeight + scrollTop >= offsetHeight) {
+      if (window.innerHeight + scrollTop >= offsetHeight - 50) {
         fetchNextPage();
       }
     };
+
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  let dataToRender;
+  const totalCount = infiniteQueryData?.pages[0].totalElements;
+  let dataToRender = [];
   if (params.items === 'search') {
-    dataToRender = location.state;
+    dataToRender = infiniteQueryData?.pages.flatMap(page => page.content) || [];
   }
   if (params.items !== 'search') {
     dataToRender = infiniteQueryData?.pages.flat() || [];
@@ -89,16 +104,26 @@ export default function ViewItems() {
     <Layout>
       <Title>
         {params.items === 'search' ? (
-          <h4>
-            <span>"{keyword}"</span>의 검색결과 {dataToRender?.length}개
-          </h4>
+          <>
+            <h4>
+              <span>"{keyword}"</span>의 검색결과 {totalCount}개
+            </h4>
+            <div>
+              <Allbutton buttonstate={buttonState ? 1 : 0} onClick={onClickAllItemState}>
+                전체 상품 보기
+              </Allbutton>
+              <Sellbutton buttonstate={buttonState ? 1 : 0} onClick={onClickSellItemState}>
+                구매가능 상품 보기
+              </Sellbutton>
+            </div>
+          </>
         ) : (
           <>
-            {params.items == 'category' ? (
-              ''
-            ) : (
+            {
               <>
-                {params.items}
+                {params.items !== 'category' && params.items}
+                {params.LargeCategory}
+                {params.midCategoryId && ` - ${params.midCategoryId}`}
                 <div>
                   <Allbutton buttonstate={buttonState ? 1 : 0} onClick={onClickAllItemState}>
                     전체 상품 보기
@@ -108,10 +133,7 @@ export default function ViewItems() {
                   </Sellbutton>
                 </div>
               </>
-            )}
-
-            {params.LargeCategory}
-            {params.midCategoryId && ` - ${params.midCategoryId}`}
+            }
           </>
         )}
       </Title>
