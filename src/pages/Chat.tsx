@@ -159,9 +159,6 @@ export default function Chat() {
     };
   }, [ChatUserList]);
 
-  enum QuitType {
-    QUIT,
-  }
   const sendMessage = () => {
     const data = {
       chat_type: 'TALK',
@@ -213,9 +210,12 @@ export default function Chat() {
     e.stopPropagation();
     setModalState(true);
   };
+  enum QuitType {
+    A = 'QUIT',
+  }
   const modalConfirm = () => {
     const data = {
-      chat_type: QuitType.QUIT,
+      chat_type: QuitType.A,
       chatroom_sender: sender,
       chatroom_id: chatRoom,
       chat_message: `${sender}님이 채팅방을 나가셨습니다`,

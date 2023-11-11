@@ -170,7 +170,7 @@ export default function DetailPosting() {
             <h1>{detailItems.item_name}</h1>
             {myData?.member_id === detailItems?.member_id && <DropBar itemId={detailItems.item_id} itemState={selected} setSelected={setSelected} />}
           </div>
-          <h3>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h3>
+          <h2>{`${detailItems?.category_l_name} > ${detailItems?.category_m_name}`}</h2>
           <div className="content">{detailItems.item_comment}</div>
         </PostingBox>
         <PriceBox>
@@ -265,7 +265,7 @@ const PostingBox = styled.div`
     line-height: normal;
   }
 
-  h3 {
+  h2 {
     font-size: 1.5rem;
     font-weight: 500;
   }

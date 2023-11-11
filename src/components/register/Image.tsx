@@ -72,14 +72,14 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
       const fileArrays = Array.from(files);
 
       const option = {
-        maxSizeMB: 0.3,
+        maxSizeMB: 0.1,
         maxWidthOrHeight: 720,
         useWebWorker: true,
       };
       // 이미지 최적화
       const newFileArray = fileArrays.map(file => imageCompression(file, option));
       const compressedFiles = await Promise.all(newFileArray);
-      const fileArray = compressedFiles.map(file => new File([file], `image-${file}`, { type: 'image/jpeg' }));
+      const fileArray = compressedFiles.map(file => new File([file], `image-${file}`, { type: 'WebP' }));
 
       if (fileArray.length + images.length <= 5) {
         const imageArray = fileArray.map(file => URL.createObjectURL(file));

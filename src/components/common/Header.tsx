@@ -91,9 +91,9 @@ export default function Header() {
           <ProfileBox>
             {token ? (
               <div onClick={toggleMypage}>
-                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
+                <img className="my-img" src={myData?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
                 <h3>{myData?.member_nickname}</h3>
-                <button>
+                <button aria-label="toggle">
                   {token && visibleMypage ? (
                     <Arrow width="21" height="20" viewBox="0 0 21 20" fill="none" style={{ transform: 'rotate(180deg)' }}>
                       <path d="M16.3327 7.5L10.4993 13.3333L4.66602 7.5" stroke="#0F172A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
