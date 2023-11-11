@@ -78,7 +78,7 @@ export default function Chat() {
       });
     }
   }, []);
-  console.log('chatData', chatData);
+  // console.log('chatData', chatData);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -179,7 +179,6 @@ export default function Chat() {
       }
     }
   };
-  console.log('ChatUserList', ChatUserList);
 
   const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
@@ -225,8 +224,6 @@ export default function Chat() {
     };
 
     if (stompClientRef.current && stompClientRef.current.connected) {
-      console.log('가니');
-
       stompClientRef.current.publish({
         destination: `/pub/chat/message`,
         body: JSON.stringify(data),

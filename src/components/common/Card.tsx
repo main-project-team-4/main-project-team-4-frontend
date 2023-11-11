@@ -50,7 +50,6 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
 
   //리뷰 정보 가져오기
   const { data: reviewInfo, refetch } = useQuery('reviewData', () => getReviews({ itemId: id, token }), { enabled: false });
-console.log(reviewInfo);
 
   const ReviewOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
