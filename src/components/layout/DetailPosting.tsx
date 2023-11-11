@@ -22,7 +22,7 @@ export default function DetailPosting() {
   const queryClient = useQueryClient();
   const [selected, setSelected] = useState<string>('');
   const [modal, setModal] = useState(false);
-  console.log('디테일 포스팅', id);
+
   // 모달 열기 함수
   const openModal = () => {
     setModal(true);

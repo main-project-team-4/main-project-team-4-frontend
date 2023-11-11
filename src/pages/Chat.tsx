@@ -78,7 +78,6 @@ export default function Chat() {
       });
     }
   }, []);
-  console.log('chatData', chatData);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -144,9 +143,9 @@ export default function Chat() {
           });
         }
       },
-      debug: str => {
-        console.log('STOMP DEBUG: ', str);
-      },
+      // debug: str => {
+      //   console.log('STOMP DEBUG: ', str);
+      // },
     });
     stompClient.activate();
 
@@ -182,7 +181,6 @@ export default function Chat() {
       }
     }
   };
-  console.log('ChatUserList', ChatUserList);
 
   const activeEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.nativeEvent.isComposing) return;
@@ -282,7 +280,6 @@ export default function Chat() {
       <ChatContainer>
         <Name
           onClick={() => {
-            console.log('이름 온클릭', shopId);
             if (shopId) {
               navigate(`/store/${shopId}`, { state: shopId });
             }
