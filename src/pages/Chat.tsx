@@ -119,8 +119,8 @@ export default function Chat() {
     if (!token) navigate('/');
 
     // WebSocket 연결 설정
-    // const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
-    const sock = new SockJS('https://api.re-use.store/ws-stomp'); // 웹소켓 서버 주소
+    const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
+    // const sock = new SockJS('https://api.re-use.store/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
       webSocketFactory: () => sock,
       reconnectDelay: 200,
@@ -282,6 +282,7 @@ export default function Chat() {
       <ChatContainer>
         <Name
           onClick={() => {
+            console.log('이름 온클릭');
             if (shopId) {
               navigate(`/store/${shopId}`, { state: shopId });
             }
