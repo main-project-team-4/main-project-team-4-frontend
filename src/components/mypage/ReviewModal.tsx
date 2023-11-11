@@ -159,6 +159,7 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
             <ItemContainer>
               <h3>상품 이미지</h3>
               <ImgList>{reviewInfo?.item_image_list?.map((img: string) => <img key={img} src={img} alt="pic" />)}</ImgList>
+
             </ItemContainer>
             <StarContainer>
               <h3>별점</h3>
