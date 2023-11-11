@@ -13,7 +13,7 @@ export default function Root() {
   const token = getCookie('token');
   useEffect(() => {
     if (token) {
-      const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
+      const eventSource = new EventSourcePolyfill('https://api.re-use.store/api/subscribe', {
         headers: {
           Authorization: token,
         },
