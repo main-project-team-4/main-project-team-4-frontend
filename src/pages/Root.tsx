@@ -27,7 +27,17 @@ export default function Root() {
       eventSource.onerror = error => {
         console.log(error);
       };
-      eventSource.addEventListener('sse', event => {
+      eventSource.addEventListener('WISH', event => {
+        const messageEvent = event as MessageEvent;
+        console.log(event);
+        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+      });
+      eventSource.addEventListener('FOLLOW', event => {
+        const messageEvent = event as MessageEvent;
+        console.log(event);
+        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+      });
+      eventSource.addEventListener('CHAT', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
         toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
