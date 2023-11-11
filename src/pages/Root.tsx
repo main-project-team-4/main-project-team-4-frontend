@@ -24,18 +24,18 @@ export default function Root() {
       eventSource.onopen = () => {
         console.log('open');
       };
-      eventSource.onerror = error => {
-        console.log(error);
-      };
+      // eventSource.onerror = error => {
+      //   console.log(error);
+      // };
       eventSource.addEventListener('WISH', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
-        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 5000 });
+        toast.success(messageEvent.data, { icon: <img style={{ width: '20px', height: '20px' }} src="https://ifh.cc/g/00y5Y2.png" />, position: 'top-right', draggable: true, autoClose: 5000 });
       });
       eventSource.addEventListener('FOLLOW', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
-        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 5000 });
+        toast.success(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 5000 });
       });
       eventSource.addEventListener('CHAT', event => {
         const messageEvent = event as MessageEvent;
