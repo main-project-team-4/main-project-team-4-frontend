@@ -95,7 +95,7 @@ export default function Card({ id, img, itemTitle, price, itemState, categoryTit
         storepath={storePath ? 1 : 0}
         sales={dataName === 'sales' || dataName === 'ordered' ? 1 : 2}
       >
-        <Image src={img} />
+        <Image src={img} alt="pic" />
         <TextLayout>
           {categoryTitle !== '인기 상품' && categoryTitle !== '최신 상품' && categoryTitle !== '내 주위 상품' && <Sale>{displayItemState}</Sale>}
           <h1>{itemTitle}</h1>

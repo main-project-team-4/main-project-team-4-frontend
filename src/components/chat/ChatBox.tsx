@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage }: ChatBoxType) {
+export default function ChatBox({ messages, sender, sellerName, sellerImage, consumerImage, consumerName }: ChatBoxType) {
   // 시간 포맷 함수
-  const formatTime = (dateTimeString: string) => {
+  const formatTime = (dateTimeString?: string) => {
+    if (!dateTimeString) {
+      return '';
+    }
     const tIndex = dateTimeString.indexOf('T');
     if (tIndex !== -1) {
       return dateTimeString.substring(tIndex + 1, tIndex + 6);
@@ -15,7 +18,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
     <>
       {messages?.map((message, index) => {
         const formattedTime = formatTime(message.chat_created_at);
-        return message.chat_type === 'ENTER' ? (
+        return message.chat_type === 'QUIT' ? (
           <Server key={index}>{message.chat_message}</Server>
         ) : message.chatroom_sender === sender ? (
           <MyMessageContainer key={index}>
@@ -26,7 +29,7 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
           <YourMessageContainer key={index}>
             <img src={sender === sellerName ? consumerImage || 'https://ifh.cc/g/kXNjcT.jpg' : sellerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
             {/* <img src={message.member_image ? message.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" /> */}
-            <Name>{message.chatroom_sender}</Name>
+            <Name>{consumerName}</Name>
             <YourMessage>{message.chat_message}</YourMessage>
             <YourTime>{formattedTime}</YourTime>
           </YourMessageContainer>
@@ -43,6 +46,7 @@ type ChatBoxType = {
   sellerName?: string;
   sellerImage?: string | null;
   consumerImage?: string | null;
+  consumerName?: string | null;
 };
 type MessageType = {
   chatroom_sender: string;

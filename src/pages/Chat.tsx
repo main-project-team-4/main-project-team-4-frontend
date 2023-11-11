@@ -42,7 +42,7 @@ export default function Chat() {
   const [shopId, setShopId] = useState<number | null>(null);
   const [id, setId] = useState<number | null>(null);
 
-  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice, shopId, itemId }: ChatRoomType) => {
+  const chatRoomHandler = ({ roomId, roomName, sender, itemName, sellerImage, consumerImage, sellerName, mainImg, consumerName, itemPrice, itemId, shopId }: ChatRoomType) => {
     setSelectedUser(roomId);
     setChatRoom(roomId);
     setRoomName(roomName);
@@ -72,8 +72,8 @@ export default function Chat() {
         sellerName: chatData.chatroom_seller_name,
         mainImg: chatData.item_main_image,
         itemPrice: chatData.item_price,
-        consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.chatroom_seller_name : chatData.chatroom_consumer_name,
-        shopId: chatData.shop_id,
+        consumerName: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.seller_shop_name : chatData.consumer_shop_name,
+        shopId: myInfo.member_nickname === chatData.chatroom_consumer_name ? chatData.seller_shop_id : chatData.consumer_shop_id,
         itemId: chatData.item_id,
       });
     }
@@ -158,9 +158,6 @@ export default function Chat() {
     };
   }, [ChatUserList]);
 
-  enum QuitType {
-    QUIT,
-  }
   const sendMessage = () => {
     const data = {
       chat_type: 'TALK',
@@ -211,9 +208,14 @@ export default function Chat() {
     e.stopPropagation();
     setModalState(true);
   };
+  // enum QuitType {
+  //   A = 'QUIT',
+  // }
+  // console.log(typeof QuitType.A);
+
   const modalConfirm = () => {
     const data = {
-      chat_type: QuitType.QUIT,
+      chat_type: 'QUIT',
       chatroom_sender: sender,
       chatroom_id: chatRoom,
       chat_message: `${sender}님이 채팅방을 나가셨습니다`,
@@ -255,9 +257,9 @@ export default function Chat() {
                     consumerImage: user.chatroom_consumer_image,
                     sellerName: user.chatroom_seller_name,
                     mainImg: user.item_main_image,
-                    consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name,
+                    consumerName: user.chatroom_sender === user.chatroom_consumer_name ? user.seller_shop_name : user.consumer_shop_name,
                     itemPrice: user.item_price,
-                    shopId: user.shop_id,
+                    shopId: myInfo.member_nickname === user.chatroom_consumer_name ? user.seller_shop_id : user.consumer_shop_id,
                     itemId: user.item_id,
                   })
                 }
@@ -269,7 +271,7 @@ export default function Chat() {
                     src={getImage({ sender: myInfo?.member_nickname, seller: user.chatroom_seller_name, sellerImage: user.chatroom_seller_image, consumerImage: user.chatroom_consumer_image })}
                     alt={user.sellerName}
                   />
-                  {user.chatroom_sender === user.chatroom_consumer_name ? user.chatroom_seller_name : user.chatroom_consumer_name}
+                  {user.chatroom_sender === user.chatroom_consumer_name ? user.seller_shop_name : user.consumer_shop_name}
                 </Profile>
                 <ItemImg src={user.item_main_image} />
               </User>
@@ -300,7 +302,7 @@ export default function Chat() {
             </ItemInfo>
           )}
 
-          {selectedUser ? <ChatBox messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
+          {selectedUser ? <ChatBox consumerName={consumerName} messages={messages} sender={sender} sellerImage={sellerImage} consumerImage={consumerImage} sellerName={sellerName} /> : <FirstChat />}
         </MessageLayout>
         <ChatInputLayout>
           {selectedUser && (
@@ -351,8 +353,11 @@ type UserType = {
   chatroom_seller_image?: string;
   chatroom_consumer_image?: string;
   item_price: number;
-  shop_id: number;
+  consumer_shop_id: number;
+  seller_shop_id: number;
   item_id: number;
+  seller_shop_name: string;
+  consumer_shop_name: string;
 };
 type RoomType = {
   chatroom_consumer_image: string | null;
