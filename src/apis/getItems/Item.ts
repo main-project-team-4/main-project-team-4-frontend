@@ -44,9 +44,9 @@ export const nearByItem = async ({ token, page, pageSize, Selling }: ItemsType) 
 };
 
 //카테고리별 아이템 조회
-export const CategoryItem = async (categoryID: number, layer: number, page: number) => {
+export const CategoryItem = async (categoryID: number, layer: number, page: number, Selling: string, pageSize: number) => {
   try {
-    const response = await baseInstance.get(`api/categories/${categoryID}/items?page=${page}&layer=${layer}`);
+    const response = await baseInstance.get(`api/categories/${categoryID}/items?state=${Selling}&page=${page}&size=${pageSize}&layer=${layer}`);
     return response.data.content;
   } catch (error) {
     console.log(error);
