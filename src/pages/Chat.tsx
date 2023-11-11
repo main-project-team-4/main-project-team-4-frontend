@@ -209,7 +209,8 @@ export default function Chat() {
       queryClient.invalidateQueries('chatList');
     },
   });
-  const onClickGoOutChat = () => {
+  const onClickGoOutChat = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setModalState(true);
   };
   const modalConfirm = () => {
