@@ -78,7 +78,6 @@ export default function Chat() {
       });
     }
   }, []);
-  // console.log('chatData', chatData);
 
   useEffect(() => {
     localStorage.setItem('chatRoom', JSON.stringify(chatRoom));
@@ -144,9 +143,9 @@ export default function Chat() {
           });
         }
       },
-      debug: str => {
-        console.log('STOMP DEBUG: ', str);
-      },
+      // debug: str => {
+      //   console.log('STOMP DEBUG: ', str);
+      // },
     });
     stompClient.activate();
 
