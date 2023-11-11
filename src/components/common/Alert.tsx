@@ -10,8 +10,13 @@ export const StyledToastContainer = styled(ToastContainer)`
     color: black;
     font-size: 16px;
     font-weight: 500;
+
+    display: flex;
+  }
+  .Toastify__toast-icon svg {
+    fill: ${theme.pointColor};
   }
   .Toastify__progress-bar {
-    background: ${theme.pointColor}; // 진행 바의 색상을 파란색으로 설정
+    background: ${theme.pointColor};
   }
 `;
