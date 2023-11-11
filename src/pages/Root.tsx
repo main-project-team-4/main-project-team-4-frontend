@@ -12,29 +12,31 @@ import { toast } from 'react-toastify';
 export default function Root() {
   const token = getCookie('token');
   useEffect(() => {
-    const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
-      headers: {
-        Authorization: token,
-      },
-      withCredentials: true,
-    });
+    if (token) {
+      const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
+        headers: {
+          Authorization: token,
+        },
+        withCredentials: true,
+      });
 
-    console.log(eventSource);
-    eventSource.onopen = () => {
-      console.log('open');
-    };
-    eventSource.addEventListener('sse', function (e) {
-      console.log(e.data);
-      toast(e.data, { position: 'top-right', draggable: 'true' });
-    });
-    eventSource.onerror = error => {
-      console.log(error);
-    };
+      // console.log(eventSource);
+      eventSource.onopen = () => {
+        console.log('open');
+      };
+      eventSource.onerror = error => {
+        console.log(error);
+      };
+      eventSource.addEventListener('sse', event => {
+        const messageEvent = event as MessageEvent;
+        console.log(event);
+        toast(messageEvent.data, { position: 'top-right', draggable: true, autoClose: 1000 });
+      });
 
-    // 컴포넌트 언마운트 시 이벤트 소스 닫기
-    return () => {
-      eventSource.close();
-    };
+      return () => {
+        eventSource.close();
+      };
+    }
   }, []);
 
   return (

@@ -191,6 +191,8 @@ const Allbutton = styled.button<{ buttonstate: number }>`
   border: ${props => (props.buttonstate === 1 ? '1px solid #2667ff' : 'none')};
   background: ${props => (props.buttonstate === 1 ? '#fff' : '#2667ff')};
   color: ${props => (props.buttonstate === 1 ? '#2667ff' : '#fff')};
+
+  cursor: pointer;
 `;
 const Sellbutton = styled.button<{ buttonstate: number }>`
   width: 7.2rem;
@@ -199,6 +201,8 @@ const Sellbutton = styled.button<{ buttonstate: number }>`
   border: ${props => (props.buttonstate === 0 ? '1px solid #2667ff' : 'none')};
   background: ${props => (props.buttonstate === 0 ? '#fff' : '#2667ff')};
   color: ${props => (props.buttonstate === 0 ? '#2667ff' : '#fff')};
+
+  cursor: pointer;
 `;
 
 const NotExits = styled.div`
