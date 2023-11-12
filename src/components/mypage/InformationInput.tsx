@@ -56,7 +56,7 @@ function InformationInput({ data }: DataInfo) {
     }
   };
   const completeNick = () => {
-    if (/^(?![가-힣\x20][^\s]{0,7}$)/.test(nickName)) {
+    if (/^(?![가-힣a-zA-Z0-9][^\s]{0,7}$)/.test(nickName)) {
       setValidation(true);
       return;
     }
@@ -137,7 +137,7 @@ function InformationInput({ data }: DataInfo) {
         )}
       </InputBox>
       {duplication && <span>중복된 상점명입니다.</span>}
-      {validation && <span>상점명은 공백, 숫자만 올 수 없으며, 최대 9자를 초과할 수 없습니다.</span>}
+      {validation && <span>상점명은 공백이 없으며, 최대 9자를 초과할 수 없습니다.</span>}
       <InputBox boxname="address" duplication={3}>
         <h3>주소</h3>
         {locBtnState ? (
