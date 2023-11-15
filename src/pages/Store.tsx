@@ -130,7 +130,6 @@ export default function Store() {
 
   return (
     <>
-      {/* {isSuccess && ( */}
       <Container>
         <ProfileContainer>
           <ProfileBox>
@@ -321,7 +320,6 @@ const ModifyBtn = styled.button`
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration-line: underline;
-  /* margin-left: auto; */
   text-underline-offset: 5px;
 
   cursor: pointer;
@@ -358,7 +356,6 @@ const TextLength = styled.div`
   color: gray;
 `;
 const Name = styled.div<{ starlength: number }>`
-  /* height: 9.375rem; */
   display: flex;
   flex-direction: column;
   gap: 0.31rem;

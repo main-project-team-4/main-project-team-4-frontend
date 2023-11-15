@@ -23,7 +23,7 @@ function RegistrationItem() {
   const [itemId, setItemId] = useState(0);
 
   //이미지 state 관리
-  const [images, setImages] = useState<File[]>([]); // 최초에 파일 형태 그대로 담기며, 전체 이미지
+  const [images, setImages] = useState<File[]>([]);
   const [selectedPicture, setSelectedPicture] = useState('');
   const [viewImages, setViewImages] = useState<string[]>([]);
   const [mainImg, setMainImg] = useState<any>();

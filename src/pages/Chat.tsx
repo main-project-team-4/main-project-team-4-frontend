@@ -118,7 +118,6 @@ export default function Chat() {
     if (!token) navigate('/');
 
     // WebSocket 연결 설정
-    // const sock = new SockJS('http://13.209.154.232/ws-stomp'); // 웹소켓 서버 주소
     const sock = new SockJS('https://api.re-use.store/ws-stomp'); // 웹소켓 서버 주소
     const stompClient = new Client({
       webSocketFactory: () => sock,
@@ -126,7 +125,7 @@ export default function Chat() {
       onConnect: () => {
         if (ChatUserList) {
           ChatUserList?.forEach((room: RoomType) => {
-            if (subscribedRooms.includes(room.chatroom_id)) return; // 이미 구독한 방은 스킵
+            if (subscribedRooms.includes(room.chatroom_id)) return;
 
             stompClient.subscribe(`/sub/chat/room/${room.chatroom_id}`, message => {
               const payload = JSON.parse(message.body);
@@ -135,17 +134,13 @@ export default function Chat() {
               const savedChatRoom = chatRoomData ? JSON.parse(chatRoomData) : null;
 
               if (savedChatRoom === payload.chatroom_id) {
-                // 현재 활성화된 채팅방 메시지만 상태 업데이트
                 setMessages(prev => [...prev, payload]);
               }
             });
-            setSubscribedRooms(prev => [...prev, room.chatroom_id]); // 방을 구독한 리스트에 추가
+            setSubscribedRooms(prev => [...prev, room.chatroom_id]);
           });
         }
       },
-      // debug: str => {
-      //   console.log('STOMP DEBUG: ', str);
-      // },
     });
     stompClient.activate();
 
@@ -174,7 +169,7 @@ export default function Chat() {
           body: JSON.stringify(data),
         });
 
-        setMessage(''); // 메시지 초기화
+        setMessage('');
       }
     }
   };
@@ -208,10 +203,6 @@ export default function Chat() {
     e.stopPropagation();
     setModalState(true);
   };
-  // enum QuitType {
-  //   A = 'QUIT',
-  // }
-  // console.log(typeof QuitType.A);
 
   const modalConfirm = () => {
     const data = {
@@ -499,7 +490,6 @@ const ItemInfo = styled.div`
   background-color: ${theme.blueBackground};
   z-index: 10;
   padding-top: 0.62rem;
-  /* border: 1px solid red; */
   div {
     display: flex;
     gap: 0.62rem;

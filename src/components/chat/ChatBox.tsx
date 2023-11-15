@@ -28,7 +28,6 @@ export default function ChatBox({ messages, sender, sellerName, sellerImage, con
         ) : (
           <YourMessageContainer key={index}>
             <img src={sender === sellerName ? consumerImage || 'https://ifh.cc/g/kXNjcT.jpg' : sellerImage || 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" />
-            {/* <img src={message.member_image ? message.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="profile" /> */}
             <Name>{consumerName}</Name>
             <YourMessage>{message.chat_message}</YourMessage>
             <YourTime>{formattedTime}</YourTime>

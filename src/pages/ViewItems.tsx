@@ -44,7 +44,6 @@ export default function ViewItems() {
     setKeyword(decodedString);
   }, [decodedString]);
 
-  // 무한스크롤
   const pageSize = 20;
 
   const fetchItems = ({ pageParam = 0 }) => {

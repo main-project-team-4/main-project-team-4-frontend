@@ -195,9 +195,9 @@ const Btn = styled.button`
   color: white;
   background-color: ${props => props.theme.pointColor};
 
-  transition: transform 0.3s ease-in-out; /* 부드러운 변환을 위해 transition 추가 */
+  transition: transform 0.3s ease-in-out;
 
   &:hover {
-    transform: scale(1.05); /* 호버 시에 크기를 1.2배로 증가 */
+    transform: scale(1.05);
   }
 `;
