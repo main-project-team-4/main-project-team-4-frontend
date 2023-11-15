@@ -13,11 +13,7 @@ export default function Tab({ tabs = [] }: PropsType) {
           </TabMenu>
         ))}
       </TabMenusContainer>
-      {tabs[currentTab] ? (
-        <Info>{tabs[currentTab].content}</Info>
-      ) : (
-        <Loading>Loading...</Loading> // 로딩 or 비어있는 상태 처리
-      )}
+      {tabs[currentTab] ? <Info>{tabs[currentTab].content}</Info> : <Loading>Loading...</Loading>}
     </TabLayout>
   );
 }
@@ -39,8 +35,6 @@ const TabLayout = styled.div`
   min-height: 44rem;
   display: flex;
   flex-direction: column;
-
-  /* border: 1px solid black; */
 `;
 
 const TabMenusContainer = styled.div`
@@ -73,10 +67,6 @@ const TabMenu = styled.button<{ active: number }>`
 
 const Info = styled.div`
   flex-grow: 1;
-  /* border-top: 1px solid #e0e0e0; */
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   font-weight: bold;
   white-space: pre-line;
   text-align: center;

@@ -94,7 +94,6 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
             event.currentTarget.value = '';
           }
         } else {
-          // 파일을 이미지 url로 변환
           const dataFormData = new FormData();
           if (fileArray) {
             fileArray.forEach(file => {
@@ -116,8 +115,8 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
   };
 
   useEffect(() => {
-    setMainImg(images[0]); // File 객체를 직접 설정
-    setSubImg(images.slice(1)); // File 객체 배열을 직접 설정
+    setMainImg(images[0]);
+    setSubImg(images.slice(1));
   }, [images]);
 
   useEffect(() => {
@@ -334,7 +333,6 @@ const ImgsLayout = styled.div`
 const Imgs = styled.div`
   display: flex;
   align-items: center;
-  /* width: 29rem; */
   gap: 0.8rem;
   flex-wrap: wrap;
   button {

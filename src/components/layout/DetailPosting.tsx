@@ -289,7 +289,6 @@ const PostingBox = styled.div`
 
 const PriceBox = styled.div`
   height: 8.5rem;
-  /* height: 6.8125rem; */
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -313,7 +312,6 @@ const PriceBox = styled.div`
     all: unset;
     background-color: transparent;
     display: flex;
-    /* width: 7.8rem; */
     height: 3.375rem;
     padding: 1rem 1.3rem;
     box-sizing: border-box;

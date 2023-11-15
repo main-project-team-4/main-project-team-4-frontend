@@ -13,21 +13,13 @@ export default function Root() {
   const token = getCookie('token');
   useEffect(() => {
     if (token) {
-      // const eventSource = new EventSourcePolyfill('https://api.re-use.store/api/subscribe', {
-      const eventSource = new EventSourcePolyfill('http://13.209.154.232/api/subscribe', {
+      const eventSource = new EventSourcePolyfill('https://api.re-use.store/api/subscribe', {
         headers: {
           Authorization: token,
         },
         withCredentials: true,
       });
 
-      // console.log(eventSource);
-      eventSource.onopen = () => {
-        console.log('open');
-      };
-      // eventSource.onerror = error => {
-      //   console.log(error);
-      // };
       eventSource.addEventListener('WISH', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);

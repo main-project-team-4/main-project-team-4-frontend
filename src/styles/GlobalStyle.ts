@@ -37,7 +37,6 @@ footer, header, hgroup, main, menu, nav, section {
     display: none;
 }
 body {  
-  /* max-width: 80rem; */
   width:100vw;
   margin-left: auto;
   margin-right: auto;

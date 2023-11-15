@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { theme } from '../../styles/theme';
 
 export const StyledToastContainer = styled(ToastContainer)`
-  /* margin-top: 60px; */
   .Toastify__toast {
     background-color: white;
     color: black;

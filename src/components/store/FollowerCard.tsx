@@ -106,7 +106,7 @@ const ProfileBox = styled.img`
   background-image: url(${props => props.src || 'https://ifh.cc/g/APoRmB.jpg'});
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover; // or 'contain' depending on your requirement
+  background-size: cover;
 
   span {
     font-size: 3rem;
@@ -122,7 +122,7 @@ const NameBox = styled.div<{ followstate: number }>`
   h3 {
     font-size: 1.5rem;
     font-weight: 700;
-    line-height: 2.25rem; /* 150% */
+    line-height: 2.25rem;
     letter-spacing: -0.015rem;
     margin-bottom: 0.5rem;
 
@@ -132,7 +132,7 @@ const NameBox = styled.div<{ followstate: number }>`
   p {
     font-size: 1rem;
     font-weight: 500;
-    line-height: 1.5rem; /* 150% */
+    line-height: 1.5rem;
     letter-spacing: -0.015rem;
 
     color: #7a7a7a;

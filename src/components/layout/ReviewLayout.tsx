@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import TabLayout from './TabLayout';
 
 export default function ReviewLayout({ reviewData }: ReviewData) {
-
   return (
     <Container reviewwidth={reviewData.length === 0 ? 1 : 0}>
       {reviewData.length === 0 ? (
@@ -15,7 +14,6 @@ export default function ReviewLayout({ reviewData }: ReviewData) {
           {reviewData.map((item: ItemType, index: number) => (
             <div key={index}>
               <ReviewCard reviewRate={item.review_rating} img={item.item_image_list[0]} name={item.consumer_shop_name} item={item.item_name} review={item.review_comment} />
-              {/* {(index + 1) % 2 === 0 && index !== reviewData.length - 1 && <Divider />} */}
               <Divider />
             </div>
           ))}

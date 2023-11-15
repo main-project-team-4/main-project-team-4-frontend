@@ -9,11 +9,7 @@ import NotFound from './NotFound';
 
 export default function Kakao() {
   const navigate = useNavigate();
-
-  // useSearchParams 훅을 사용하여 쿼리 매개변수를 읽어옴
   const [searchParams] = useSearchParams();
-
-  // code 값을 쿼리 매개변수로부터 가져옴
   const codeParam = searchParams.get('code');
 
   const { isSuccess, isLoading, isError, data } = useQuery('kakao ', () => kakaoLogin(codeParam as string));

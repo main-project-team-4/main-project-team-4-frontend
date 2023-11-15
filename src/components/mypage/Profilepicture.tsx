@@ -156,7 +156,6 @@ const ImgChangeBtn = styled.button<{ confirm: number }>`
   align-items: center;
   gap: 0.375rem;
   border-radius: 0.375rem;
-  /* background-color: ${props => (props.confirm ? theme.pointColor : '#0f172a')}; */
   background-color: #0f172a;
   color: white;
   box-sizing: border-box;
