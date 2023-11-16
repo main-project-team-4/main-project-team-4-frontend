@@ -4,6 +4,8 @@
 리유즈는 버려지는 옷에게 다시 새로운 주인을 찾아줄 수 있지 않을까라는 고민에서 고안된 
 옷 중심 중고거래 서비스입니다.
 
+프로젝트 링크: www.re-use.store
+
 [
 ![이미지600*340](https://github.com/main-project-team-4/main-project-team-4-frontend/assets/133847649/837868ee-6f52-42bd-92a2-84d271f3548b)
 ](url)
