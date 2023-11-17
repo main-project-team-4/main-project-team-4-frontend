@@ -125,7 +125,7 @@ export default function Store() {
   const stars = [];
   const rate = Math.round(shopInfo?.review_rating_avg);
   for (let i = 0; i < rate; i++) {
-    stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" />);
+    stars.push(<img key={i} src="https://ifh.cc/g/NZAWv7.png" alt="pic" />);
   }
 
   return (
@@ -133,7 +133,7 @@ export default function Store() {
       <Container>
         <ProfileContainer>
           <ProfileBox>
-            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} />
+            <Profile src={shopInfo?.member_image || 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic" />
             <Name starlength={stars.length}>
               <h3>
                 {shopInfo?.shop_name}

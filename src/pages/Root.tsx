@@ -23,7 +23,12 @@ export default function Root() {
       eventSource.addEventListener('WISH', event => {
         const messageEvent = event as MessageEvent;
         console.log(event);
-        toast.success(messageEvent.data, { icon: <img style={{ width: '20px', height: '20px' }} src="https://ifh.cc/g/00y5Y2.png" />, position: 'top-right', draggable: true, autoClose: 5000 });
+        toast.success(messageEvent.data, {
+          icon: <img style={{ width: '20px', height: '20px' }} src="https://ifh.cc/g/00y5Y2.png" alt="pic" />,
+          position: 'top-right',
+          draggable: true,
+          autoClose: 5000,
+        });
       });
       eventSource.addEventListener('FOLLOW', event => {
         const messageEvent = event as MessageEvent;
@@ -37,7 +42,7 @@ export default function Root() {
         const parts = inputStr.split('|||');
         toast(
           <Layout>
-            <img src={parts[1] !== 'null' ? parts[1] : 'https://ifh.cc/g/kXNjcT.jpg'}></img>
+            <img src={parts[1] !== 'null' ? parts[1] : 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic"></img>
             <TextLayout>
               <Name>{parts[0]}</Name>
               <Message>{parts[2]}</Message>

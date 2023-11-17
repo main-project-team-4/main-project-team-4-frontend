@@ -65,7 +65,7 @@ function Profilepicture({ data }: DataInfo) {
   };
   return (
     <Container>
-      <ProfileImage>{image !== '' ? <img src={image} /> : <ProfileSvg />}</ProfileImage>
+      <ProfileImage>{image !== '' ? <img src={image} alt="pic" /> : <ProfileSvg />}</ProfileImage>
 
       <h3>{data?.member_nickname}</h3>
 

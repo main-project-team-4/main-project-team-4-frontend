@@ -48,7 +48,7 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <img src="https://ifh.cc/g/rawFpy.png" />
+        <img src="https://ifh.cc/g/rawFpy.png" alt="pic" />
         <CardLayout title={'최신 상품'} data={itemsResult.data} />
         <RecommendLayout title={'추천 상품'} data={recommendResult.data} />
         <CardLayout title={'인기 상품'} data={topItemsResult.data} />

@@ -264,7 +264,7 @@ export default function Chat() {
                   />
                   {user.chatroom_sender === user.chatroom_consumer_name ? user.seller_shop_name : user.consumer_shop_name}
                 </Profile>
-                <ItemImg src={user.item_main_image} />
+                <ItemImg src={user.item_main_image} alt="pic" />
               </User>
             ))}
         </UserList>
@@ -285,7 +285,7 @@ export default function Chat() {
             <ItemInfo>
               <Round onClick={() => navigate(`/posting/${itemName}`, { state: { id } })}>
                 <div>
-                  <img src={img} alt="" />
+                  <img src={img} alt="pic" />
                   <p>{itemName}</p>
                 </div>
                 <Price>{price.toLocaleString()}원</Price>

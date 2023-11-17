@@ -33,7 +33,7 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
 
   return (
     <FollowerBox onClick={() => navigate(`/store/${name}`, { state: shop.shop_id })}>
-      <ProfileBox src={img || 'https://ifh.cc/g/kXNjcT.jpg'}></ProfileBox>
+      <ProfileBox src={img || 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic"></ProfileBox>
       <NameBox followstate={isFollowing ? 0 : 1}>
         <h3>{name}</h3>
         <p>상품 : {data?.length}개</p>
@@ -42,18 +42,18 @@ function FollowerCard({ img, name, shop, checkMine, follow, isFollowing }: Follo
             <>
               {isFollowing ? (
                 <button onClick={handleDeleteButtonClick}>
-                  <img src="https://ifh.cc/g/2hzdJS.png" />
+                  <img src="https://ifh.cc/g/2hzdJS.png" alt="pic" />
                   팔로잉
                 </button>
               ) : (
                 <button onClick={handleDeleteButtonClick}>
-                  <img src="https://ifh.cc/g/7qsV5L.png" /> 팔로우
+                  <img src="https://ifh.cc/g/7qsV5L.png" alt="pic" /> 팔로우
                 </button>
               )}
             </>
           ) : (
             <button onClick={handleFollowButtonClick}>
-              <img src="https://ifh.cc/g/2hzdJS.png" />
+              <img src="https://ifh.cc/g/2hzdJS.png" alt="pic" />
               팔로잉
             </button>
           ))}

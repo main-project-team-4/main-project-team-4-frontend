@@ -154,7 +154,7 @@ export function ReviewModal({ reviewInfo, modalClose }: ModalProps) {
           <hr style={{ backgroundColor: '#E7E8EA', position: 'absolute', top: '4.56rem', left: '0rem', border: 'none', height: '1px', width: '100%' }} />
           <Layout>
             <ProfileContainer>
-              {reviewInfo?.member_image ? <img src={reviewInfo?.member_image} alt="picture" /> : <img src="https://ifh.cc/g/kXNjcT.jpg" />}
+              {reviewInfo?.member_image ? <img src={reviewInfo?.member_image} alt="picture" /> : <img src="https://ifh.cc/g/kXNjcT.jpg" alt="pic" />}
               <div>{reviewInfo?.consumer_shop_name}</div>
             </ProfileContainer>
             <ItemContainer>

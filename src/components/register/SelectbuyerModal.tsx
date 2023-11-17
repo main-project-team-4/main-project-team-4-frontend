@@ -57,7 +57,7 @@ function SelectbuyerModal({ setSelectedView, setSelected, setSelectBuyer, setIsO
           {data?.map((buyer: BuyerType) => {
             return (
               <Chatbox isselected={buyerId === buyer.member_id ? 1 : 0} onClick={() => onClickPickBuyer(buyer.member_id)} key={buyer.member_id}>
-                <img src={buyer.member_image ? buyer.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} />
+                <img src={buyer.member_image ? buyer.member_image : 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic" />
                 <p>{buyer.member_nickname}</p>
               </Chatbox>
             );

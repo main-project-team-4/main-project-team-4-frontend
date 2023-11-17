@@ -172,7 +172,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
         <>
           {viewAlert && <Notice className="short">사진 첨부는 5개까지 가능합니다</Notice>}
           <MainImg>
-            <img src={selectedPicture} alt="" />
+            <img src={selectedPicture} alt="pic" />
             <span className="material-symbols-outlined" onClick={handleMainImageRemove}>
               close
             </span>
@@ -188,7 +188,7 @@ function Image({ detailItemId, detailItemState, setViewImages, viewImages, image
                         {provided => (
                           <Img ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} onClick={() => clickHandler(index)}>
                             {index === 0 && <div>대표 이미지</div>}
-                            <img src={image} alt="" />
+                            <img src={image} alt="pic" />
                             <span className="material-symbols-outlined" onClick={e => handleRemoveImage(e, index)}>
                               close
                             </span>
