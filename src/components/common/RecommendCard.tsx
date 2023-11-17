@@ -17,7 +17,7 @@ export default function RecommendCard({ shopName, id, img, itemTitle, price, mem
           <img src={memberImg ? memberImg : 'https://ifh.cc/g/kXNjcT.jpg'} alt="pic" />
           <p>{shopName}</p>
         </Profile>
-        <Image src={img} />
+        <Image src={img} alt="pic" />
         <TextLayout>
           <p>{itemTitle}</p>
           <Price>{formattedPrice}원</Price>
