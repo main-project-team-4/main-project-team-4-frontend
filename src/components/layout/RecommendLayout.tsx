@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import RecommendCard from '../common/RecommendCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay, EffectCoverflow } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -18,12 +18,11 @@ function RecommendLayout({ title, data }: RecommendType) {
         </h1>
         <CardWrapper>
           <StyledSwiper
-            modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
+            modules={[Navigation, Pagination, Autoplay]}
             slidesPerView={3}
             navigation
             centeredSlides
             speed={1000}
-            effect="coverflow"
             pagination={{ clickable: true, type: 'progressbar' }}
             autoplay={{ delay: 2000, disableOnInteraction: false }}
             loop={true}
